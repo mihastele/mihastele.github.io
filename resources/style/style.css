@@ -5,6 +5,10 @@
   font-family: "Share Tech Mono", monospace;
 }
 
+body {
+  background-color: #777;
+}
+
 @keyframes dummy {
   0% {
     color: yellow;
@@ -23,12 +27,9 @@
   }
 }
 .dummy-text {
+  word-wrap: break-word;
   display: inline-block;
-  width: 60rem;
-  position: absolute;
-  left: calc(50% - 30rem);
-  top: 50%;
-  font-size: 5rem;
+  font-size: 4rem;
   animation-name: dummy;
   animation-duration: 4s;
   animation-iteration-count: infinite;

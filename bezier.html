@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Bézier Curve Editor: 1-5 Points</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: sans-serif; margin: 0; background: #23272f; color: #dde0f5; }
+    h1 { text-align: center; }
+    #canvasWrapper { display: flex; justify-content: center; align-items: center; height: 80vh; }
+    #curveCanvas { background: #212834; border: 2px solid #334; border-radius: 8px; box-shadow: 0 6px 16px #0004; }
+    #info { max-width: 780px; margin: 24px auto; padding: 16px; background: #252b38; border-radius: 8px; }
+    .formula { background: #112; padding: 8px 20px; margin: 10px 0; border-radius: 4px; }
+    .ctrl-panel { margin: 18px 0 10px 0; display: flex; flex-wrap: wrap; gap: 15px; align-items: center;}
+    .ctrl-btn, .ctrl-sel { padding: 6px 22px; border: none; background: #395; color: #fff; border-radius: 4px; cursor: pointer; }
+    .ctrl-btn:hover, .ctrl-sel:focus { background: #4c7; }
+    .ctrl-sel { font-size: 1em;}
+  </style>
+</head>
+<body>
+  <h1>Bézier Curve Editor: 1-5 Control Points</h1>
+  <div id="info">
+    <div class="ctrl-panel">
+      <label for="degreeSelect">Number of control points:</label>
+      <select class="ctrl-sel" id="degreeSelect">
+        <option value="1">1 (Point)</option>
+        <option value="2">2 (Linear)</option>
+        <option value="3" selected>3 (Quadratic)</option>
+        <option value="4">4 (Cubic)</option>
+        <option value="5">5 (Quartic)</option>
+      </select>
+      <button class="ctrl-btn" id="resetBtn">Reset Points</button>
+      <button class="ctrl-btn" id="randomBtn">Randomize</button>
+    </div>
+    <div class="formula" id="formulaDisplay">
+      <strong>Quadratic Bézier formula:</strong><br>
+      B(t) = (1−t)<sup>2</sup>P<sub>0</sub> + 2(1−t)tP<sub>1</sub> + t<sup>2</sup>P<sub>2</sub>
+    </div>
+    <p>Drag a colored circle to move the control points and change the curve. Try different numbers of control points for more flexibility!</p>
+  </div>
+  <div id="canvasWrapper">
+    <canvas id="curveCanvas" width="800" height="500"></canvas>
+  </div>
+  <script>
+    const canvas = document.getElementById('curveCanvas');
+    const ctx = canvas.getContext('2d');
+    const degreeSelect = document.getElementById('degreeSelect');
+    const formulaDisplay = document.getElementById('formulaDisplay');
+    const resetBtn = document.getElementById('resetBtn');
+    const randomBtn = document.getElementById('randomBtn');
+    const pointColors = ['#eb476a','#44fddb','#3979fd','#f99e1a', '#c85aff'];
+    const pointRadius = 10;
+    let numPoints = Number(degreeSelect.value);
+    let controlPoints = [];
+
+    const formulas = [
+      "B(t) = P<sub>0</sub>",
+      "B(t) = (1−t)P<sub>0</sub> + tP<sub>1</sub>",
+      "B(t) = (1−t)<sup>2</sup>P<sub>0</sub> + 2(1−t)tP<sub>1</sub> + t<sup>2</sup>P<sub>2</sub>",
+      "B(t) = (1−t)<sup>3</sup>P<sub>0</sub> + 3(1−t)<sup>2</sup>tP<sub>1</sub> + 3(1−t)t<sup>2</sup>P<sub>2</sub> + t<sup>3</sup>P<sub>3</sub>",
+      "B(t) = (1−t)<sup>4</sup>P<sub>0</sub> + 4(1−t)<sup>3</sup>tP<sub>1</sub> + 6(1−t)<sup>2</sup>t<sup>2</sup>P<sub>2</sub> + 4(1−t)t<sup>3</sup>P<sub>3</sub> + t<sup>4</sup>P<sub>4</sub>"
+    ];
+
+    // Reset control points based on degree
+    function resetControlPoints() {
+      controlPoints = [];
+      if (numPoints === 1) {
+        // Special case for single point - place it in the center
+        controlPoints.push({
+          x: canvas.width / 2,
+          y: canvas.height / 2
+        });
+      } else {
+        // Normal case for multiple points
+        for (let i=0; i<numPoints; i++) {
+          controlPoints.push({
+            x: 120 + i * (canvas.width-240)/(numPoints-1),
+            y: 120 + (i%2 ? -60 : 60)
+          });
+        }
+      }
+      draw();
+    }
+
+    function randomizeControlPoints() {
+      for (let i=0; i<numPoints; i++) {
+        controlPoints[i] = {
+          x: Math.random()*(canvas.width-80)+40,
+          y: Math.random()*(canvas.height-80)+40,
+        };
+      }
+      draw();
+    }
+
+    // Bernstein polynomial - general for any degree
+    function bernstein(n, k, t) {
+      // Binomial coefficient nCk
+      let coeff = 1;
+      for(let i=1; i<=k; i++) coeff *= (n-i+1)/i;
+      return coeff * Math.pow(t,k) * Math.pow(1-t,n-k);
+    }
+
+    // Evaluates Bézier curve at parameter t for controlPoints
+    function getBezierPoint(t, pts) {
+      const n = pts.length-1;
+      let x = 0, y = 0;
+      for (let k=0; k<=n; k++) {
+        const b = bernstein(n,k,t);
+        x += b * pts[k].x;
+        y += b * pts[k].y;
+      }
+      return { x, y };
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw control polygon
+      if (controlPoints.length > 1) {
+        ctx.beginPath();
+        ctx.moveTo(controlPoints[0].x, controlPoints[0].y);
+        for (let i=1; i<controlPoints.length; i++) {
+          ctx.lineTo(controlPoints[i].x, controlPoints[i].y);
+        }
+        ctx.strokeStyle = "#e3e6ef33";
+        ctx.lineWidth = 4;
+        ctx.stroke();
+      }
+
+      // Draw the Bézier curve
+      if (controlPoints.length > 0) {
+        ctx.beginPath();
+        for (let t=0; t<=1; t+=0.008) {
+          const {x, y} = getBezierPoint(t, controlPoints);
+          if (t === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.strokeStyle = "#f2f911";
+        ctx.lineWidth = 5.5;
+        ctx.stroke();
+      }
+
+      // Draw control points
+      controlPoints.forEach((pt, i) => {
+        ctx.beginPath();
+        ctx.arc(pt.x, pt.y, pointRadius, 0, 2*Math.PI);
+        ctx.fillStyle = pointColors[i%pointColors.length];
+        ctx.shadowColor = "#000";
+        ctx.shadowBlur = draggedIdx === i ? 12 : 4;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+        ctx.strokeStyle = "#222";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.font = "bold 19px sans-serif";
+        ctx.fillStyle = "#fff";
+        ctx.fillText("P"+i, pt.x - 18, pt.y - 12);
+      });
+    }
+
+    // Drag interaction
+    let draggedIdx = null;
+    canvas.addEventListener("mousedown", function(e) {
+      const rect = canvas.getBoundingClientRect();
+      const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+      controlPoints.forEach((pt, i) => {
+        if (Math.hypot(pt.x-mx, pt.y-my)< pointRadius+2) draggedIdx = i;
+      });
+    });
+    canvas.addEventListener("mousemove", function(e) {
+      if (draggedIdx !== null) {
+        const rect = canvas.getBoundingClientRect();
+        controlPoints[draggedIdx].x = Math.max(0, Math.min(canvas.width, e.clientX - rect.left));
+        controlPoints[draggedIdx].y = Math.max(0, Math.min(canvas.height, e.clientY - rect.top));
+        draw();
+      }
+    });
+    canvas.addEventListener("mouseup", function() {
+      draggedIdx = null;
+    });
+    canvas.addEventListener("mouseleave", function() {
+      draggedIdx = null;
+    });
+
+    // Change degree
+    degreeSelect.addEventListener("change", function() {
+      numPoints = Number(degreeSelect.value);
+      formulaDisplay.innerHTML = "<strong>" +
+        ["Point", "Linear", "Quadratic", "Cubic", "Quartic"][numPoints-1] +
+        " Bézier formula:</strong><br>" + formulas[numPoints-1];
+      resetControlPoints();
+    });
+
+    resetBtn.onclick = resetControlPoints;
+    randomBtn.onclick = randomizeControlPoints;
+
+    // Initial setup
+    resetControlPoints();
+  </script>
+</body>
+</html>

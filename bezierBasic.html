@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Bézier Curve Drawing & Editing Demo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: sans-serif; margin: 0; background: #23272f; color: #dde0f5; }
+    h1 { text-align: center; }
+    #canvasWrapper { display: flex; justify-content: center; align-items: center; height: 80vh; }
+    #curveCanvas { background: #212834; border: 2px solid #334; border-radius: 8px; box-shadow: 0 6px 16px #0004; }
+    #info { max-width: 760px; margin: 24px auto; padding: 16px; background: #252b38; border-radius: 8px; }
+    .formula { background: #112; padding: 8px 20px; margin: 10px 0; border-radius: 4px; }
+    .ctrl-btn { padding: 4px 16px; border: none; background: #395; color: #fff; border-radius: 4px; cursor: pointer; margin: 0 6px; }
+    .ctrl-btn:hover { background: #4c7; }
+  </style>
+</head>
+<body>
+  <h1>Interactive Bézier Curve Demo</h1>
+
+  <div id="info">
+    <p>
+      Draw and edit a cubic Bézier curve by moving its control points. Drag the colored circles to reshape the curve!
+    </p>
+    <div class="formula">
+      <strong>Basic Bézier formula:</strong><br>
+      B(t) = (1−t)<sup>3</sup>P<sub>0</sub> + 3(1−t)<sup>2</sup>tP<sub>1</sub> + 3(1−t)t<sup>2</sup>P<sub>2</sub> + t<sup>3</sup>P<sub>3</sub>
+      <br>
+      <em>where <b>P<sub>0</sub></b>, <b>P<sub>1</sub></b>, <b>P<sub>2</sub></b>, <b>P<sub>3</sub></b> are the control points</em>
+    </div>
+    <button class="ctrl-btn" id="resetBtn">Reset Control Points</button>
+    <button class="ctrl-btn" id="randomBtn">Randomize Control Points</button>
+  </div>
+
+  <div id="canvasWrapper">
+    <canvas id="curveCanvas" width="800" height="500"></canvas>
+  </div>
+
+  <script>
+    // Get canvas and context
+    const canvas = document.getElementById('curveCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // Initial control points for a cubic Bézier
+    let controlPoints = [
+      { x: 100, y: 400 },
+      { x: 250, y: 100 },
+      { x: 550, y: 100 },
+      { x: 700, y: 400 }
+    ];
+
+    // Colors for control points
+    const pointColors = ['#eb476a', '#44fddb', '#3979fd', '#f99e1a'];
+    const pointRadius = 10;
+
+    // Dragging state
+    let draggedIdx = null;
+
+    // Bézier formula using Bernstein basis
+    function getBezierPoint(t, pts) {
+      const x = Math.pow(1-t,3)*pts[0].x +
+            3*Math.pow(1-t,2)*t*pts[1].x +
+            3*(1-t)*t*t*pts[2].x +
+            Math.pow(t,3)*pts[3].x;
+      const y = Math.pow(1-t,3)*pts[0].y +
+            3*Math.pow(1-t,2)*t*pts[1].y +
+            3*(1-t)*t*t*pts[2].y +
+            Math.pow(t,3)*pts[3].y;
+      return { x, y };
+    }
+
+    // Draw Bézier curve and control polygon
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw control polygon
+      ctx.beginPath();
+      ctx.moveTo(controlPoints[0].x, controlPoints[0].y);
+      for (let i=1; i<controlPoints.length; i++) {
+        ctx.lineTo(controlPoints[i].x, controlPoints[i].y);
+      }
+      ctx.strokeStyle = "#e3e6ef33";
+      ctx.lineWidth = 4;
+      ctx.stroke();
+
+      // Draw the Bézier curve
+      ctx.beginPath();
+      for (let t=0; t<=1; t+=0.008) {
+        const {x, y} = getBezierPoint(t, controlPoints);
+        if (t === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.strokeStyle = "#f2f911";
+      ctx.lineWidth = 5.5;
+      ctx.stroke();
+
+      // Draw control points
+      controlPoints.forEach((pt, i) => {
+        ctx.beginPath();
+        ctx.arc(pt.x, pt.y, pointRadius, 0, 2*Math.PI);
+        ctx.fillStyle = pointColors[i];
+        ctx.shadowColor = "#000";
+        ctx.shadowBlur = draggedIdx === i ? 12 : 4;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+        ctx.strokeStyle = "#222";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        // Apply label
+        ctx.font = "bold 19px sans-serif";
+        ctx.fillStyle = "#fff";
+        ctx.fillText("P"+i, pt.x - 18, pt.y - 12);
+      });
+    }
+
+    draw();
+
+    // Mouse events for dragging control points
+    canvas.addEventListener("mousedown", function(e) {
+      const rect = canvas.getBoundingClientRect();
+      const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+      controlPoints.forEach((pt, i) => {
+        if (Math.hypot(pt.x-mx, pt.y-my)< pointRadius+2) draggedIdx = i;
+      });
+    });
+
+    canvas.addEventListener("mousemove", function(e) {
+      if (draggedIdx !== null) {
+        const rect = canvas.getBoundingClientRect();
+        controlPoints[draggedIdx].x = Math.max(0, Math.min(canvas.width, e.clientX - rect.left));
+        controlPoints[draggedIdx].y = Math.max(0, Math.min(canvas.height, e.clientY - rect.top));
+        draw();
+      }
+    });
+
+    canvas.addEventListener("mouseup", function() {
+      draggedIdx = null;
+    });
+
+    canvas.addEventListener("mouseleave", function() {
+      draggedIdx = null;
+    });
+
+    // Reset control points
+    document.getElementById("resetBtn").onclick = () => {
+      controlPoints = [
+        { x: 100, y: 400 },
+        { x: 250, y: 100 },
+        { x: 550, y: 100 },
+        { x: 700, y: 400 }
+      ];
+      draw();
+    };
+
+    // Randomize control points fun!
+    document.getElementById("randomBtn").onclick = () => {
+      for (let i=0; i<controlPoints.length; i++) {
+        controlPoints[i] = {
+          x: Math.random()*(canvas.width-80)+40,
+          y: Math.random()*(canvas.height-80)+40,
+        };
+      }
+      draw();
+    };
+  </script>
+
+</body>
+</html>

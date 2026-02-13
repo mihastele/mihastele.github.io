@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VitalPath | Smart Health Tracker</title>
+    <title>VitalPath | Pametni merilnik zdravja</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -33,9 +33,9 @@
         <div class="max-w-4xl mx-auto px-6 h-16 flex items-center justify-between">
             <h1 class="text-xl font-bold bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">VitalPath</h1>
             <div class="flex gap-4">
-                <button onclick="switchTab('dashboard')" class="text-slate-600 hover:text-indigo-600 font-medium transition-colors">Daily</button>
-                <button onclick="switchTab('weight')" class="text-slate-600 hover:text-indigo-600 font-medium transition-colors">Weight</button>
-                <button onclick="switchTab('history')" class="text-slate-600 hover:text-indigo-600 font-medium transition-colors">History</button>
+                <button onclick="switchTab('dashboard')" id="nav-daily" class="text-slate-600 hover:text-indigo-600 font-medium transition-colors">Dnevnik</button>
+                <button onclick="switchTab('weight')" id="nav-weight" class="text-slate-600 hover:text-indigo-600 font-medium transition-colors">Teža</button>
+                <button onclick="switchTab('history')" id="nav-history" class="text-slate-600 hover:text-indigo-600 font-medium transition-colors">Zgodovina</button>
             </div>
         </div>
     </nav>
@@ -46,27 +46,27 @@
         <section id="tab-dashboard">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <div class="glass-card p-6 rounded-3xl custom-shadow text-center">
-                    <p class="text-slate-500 text-sm font-medium mb-1">Target Calories</p>
+                    <p id="label-target" class="text-slate-500 text-sm font-medium mb-1">Ciljne kalorije</p>
                     <h2 id="target-display" class="text-3xl font-bold text-slate-800">2,000</h2>
                 </div>
                 <div class="glass-card p-6 rounded-3xl custom-shadow text-center border-indigo-100 bg-indigo-50/30">
-                    <p class="text-slate-500 text-sm font-medium mb-1">Calories Consumed</p>
+                    <p id="label-consumed" class="text-slate-500 text-sm font-medium mb-1">Zaužite kalorije</p>
                     <h2 id="consumed-display" class="text-3xl font-bold text-indigo-600">0</h2>
                 </div>
                 <div class="glass-card p-6 rounded-3xl custom-shadow text-center">
-                    <p class="text-slate-500 text-sm font-medium mb-1">Remaining</p>
+                    <p id="label-remaining" class="text-slate-500 text-sm font-medium mb-1">Preostalo</p>
                     <h2 id="remaining-display" class="text-3xl font-bold text-emerald-500">2,000</h2>
                 </div>
             </div>
 
             <!-- Quick Log Meal -->
             <div class="glass-card p-8 rounded-3xl custom-shadow mb-8">
-                <h3 class="text-lg font-semibold text-slate-800 mb-6">Log Food Intake</h3>
+                <h3 id="label-log-food" class="text-lg font-semibold text-slate-800 mb-6">Vnos hrane</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <input type="text" id="food-name" placeholder="E.g. Chicken Breast" class="bg-slate-50 border border-slate-200 p-4 rounded-2xl w-full transition-all">
-                    <input type="number" id="food-calories" placeholder="Calories" class="bg-slate-50 border border-slate-200 p-4 rounded-2xl w-full transition-all">
-                    <button onclick="addMeal()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-4 px-6 rounded-2xl transition-all shadow-lg shadow-indigo-200">
-                        Add to Daily Log
+                    <input type="text" id="food-name" placeholder="Npr. Piščančje prsi" class="bg-slate-50 border border-slate-200 p-4 rounded-2xl w-full transition-all">
+                    <input type="number" id="food-calories" placeholder="Kalorije" class="bg-slate-50 border border-slate-200 p-4 rounded-2xl w-full transition-all">
+                    <button onclick="addMeal()" id="btn-add-food" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-4 px-6 rounded-2xl transition-all shadow-lg shadow-indigo-200">
+                        Dodaj v dnevnik
                     </button>
                 </div>
             </div>
@@ -80,11 +80,11 @@
         <!-- Tab: Weight Tracking -->
         <section id="tab-weight" class="hidden">
             <div class="glass-card p-8 rounded-3xl custom-shadow mb-8">
-                <h3 class="text-lg font-semibold text-slate-800 mb-6">Track Your Progress</h3>
+                <h3 id="label-track-weight" class="text-lg font-semibold text-slate-800 mb-6">Spremljaj napredek</h3>
                 <div class="flex gap-4 mb-8">
-                    <input type="number" step="0.1" id="weight-input" placeholder="Current Weight (kg)" class="bg-slate-50 border border-slate-200 p-4 rounded-2xl flex-grow transition-all">
-                    <button onclick="addWeight()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 rounded-2xl transition-all shadow-lg shadow-indigo-200">
-                        Log Weight
+                    <input type="number" step="0.1" id="weight-input" placeholder="Trenutna teža (kg)" class="bg-slate-50 border border-slate-200 p-4 rounded-2xl flex-grow transition-all">
+                    <button onclick="addWeight()" id="btn-log-weight" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 rounded-2xl transition-all shadow-lg shadow-indigo-200">
+                        Zabeleži težo
                     </button>
                 </div>
                 <div class="h-64">
@@ -96,8 +96,8 @@
         <!-- Tab: History -->
         <section id="tab-history" class="hidden">
             <div class="flex justify-between items-center mb-6">
-                <h3 class="text-lg font-semibold text-slate-800">Past Entries</h3>
-                <button onclick="clearAllData()" class="text-red-500 hover:text-red-700 text-sm font-medium">Clear All Data</button>
+                <h3 id="label-past-entries" class="text-lg font-semibold text-slate-800">Pretekli vnosi</h3>
+                <button onclick="clearAllData()" id="btn-clear-all" class="text-red-500 hover:text-red-700 text-sm font-medium">Izbriši vse podatke</button>
             </div>
             <div id="history-list" class="space-y-4">
                 <!-- History injected here -->
@@ -118,73 +118,109 @@
         <div class="bg-white p-8 rounded-[2rem] w-full max-w-lg custom-shadow max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-start mb-6">
                 <div>
-                    <h3 class="text-2xl font-bold text-slate-800">Profile & Goals</h3>
-                    <p class="text-slate-500 text-sm mt-1">Calculated using the Mifflin-St Jeor equation.</p>
+                    <h3 id="label-settings-title" class="text-2xl font-bold text-slate-800">Profil in cilji</h3>
+                    <p id="label-settings-desc" class="text-slate-500 text-sm mt-1">Izračunano po Mifflin-St Jeor enačbi.</p>
                 </div>
                 <button onclick="toggleSettings()" class="text-slate-400 hover:text-slate-600">✕</button>
             </div>
 
-            <div class="grid grid-cols-2 gap-4 mb-6">
+            <!-- Language Switcher -->
+            <div class="mb-6">
+                <label id="label-language" class="block text-xs font-bold text-slate-400 uppercase mb-2">Jezik / Language</label>
+                <div class="flex gap-2">
+                    <button onclick="updateLanguage('sl')" id="lang-sl" class="flex-grow py-2 rounded-xl border border-indigo-200 bg-indigo-50 text-indigo-700 font-bold">Slovenščina</button>
+                    <button onclick="updateLanguage('en')" id="lang-en" class="flex-grow py-2 rounded-xl border border-slate-200 text-slate-500 font-bold">English</button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 mb-6 border-t pt-6">
                 <div class="col-span-1">
-                    <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Biological Sex</label>
+                    <label id="label-sex" class="block text-xs font-bold text-slate-400 uppercase mb-2">Biološki spol</label>
                     <select id="user-sex" class="bg-slate-50 border border-slate-200 p-3 rounded-xl w-full">
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
+                        <option value="male" id="opt-male">Moški</option>
+                        <option value="female" id="opt-female">Ženska</option>
                     </select>
                 </div>
                 <div class="col-span-1">
-                    <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Age (Years)</label>
+                    <label id="label-age" class="block text-xs font-bold text-slate-400 uppercase mb-2">Starost (let)</label>
                     <input type="number" id="user-age" placeholder="25" class="bg-slate-50 border border-slate-200 p-3 rounded-xl w-full">
                 </div>
                 <div class="col-span-1">
-                    <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Height (cm)</label>
+                    <label id="label-height" class="block text-xs font-bold text-slate-400 uppercase mb-2">Višina (cm)</label>
                     <input type="number" id="user-height" placeholder="175" class="bg-slate-50 border border-slate-200 p-3 rounded-xl w-full">
                 </div>
                 <div class="col-span-1">
-                    <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Weight (kg)</label>
+                    <label id="label-weight-profile" class="block text-xs font-bold text-slate-400 uppercase mb-2">Teža (kg)</label>
                     <input type="number" id="user-weight" placeholder="70" class="bg-slate-50 border border-slate-200 p-3 rounded-xl w-full">
                 </div>
                 <div class="col-span-2">
-                    <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Activity Level</label>
+                    <label id="label-activity" class="block text-xs font-bold text-slate-400 uppercase mb-2">Stopnja aktivnosti</label>
                     <select id="user-activity" class="bg-slate-50 border border-slate-200 p-3 rounded-xl w-full">
-                        <option value="1.2">Sedentary (Little/No Exercise)</option>
-                        <option value="1.375">Lightly Active (1-3 days/week)</option>
-                        <option value="1.55">Moderately Active (3-5 days/week)</option>
-                        <option value="1.725">Very Active (6-7 days/week)</option>
-                        <option value="1.9">Extra Active (Physical Job/Pro Athlete)</option>
+                        <option value="1.2" id="act-1">Sedeče (brez vadbe)</option>
+                        <option value="1.375" id="act-2">Rahlo aktivno (1-3 dni/teden)</option>
+                        <option value="1.55" id="act-3">Zmerno aktivno (3-5 dni/teden)</option>
+                        <option value="1.725" id="act-4">Zelo aktivno (6-7 dni/teden)</option>
+                        <option value="1.9" id="act-5">Izjemno aktivno (fizično delo)</option>
                     </select>
                 </div>
             </div>
 
             <div class="bg-indigo-50 p-4 rounded-2xl mb-6 border border-indigo-100">
                 <div class="flex justify-between items-center mb-2">
-                    <span class="text-sm font-semibold text-indigo-900">Calculated TDEE:</span>
+                    <span id="label-tdee" class="text-sm font-semibold text-indigo-900">Izračunan TDEE:</span>
                     <span id="calc-tdee" class="text-lg font-bold text-indigo-600">--</span>
                 </div>
                 <div class="flex justify-between items-center">
-                    <span class="text-sm font-semibold text-indigo-900">Recommended Target:</span>
+                    <span id="label-rec-target" class="text-sm font-semibold text-indigo-900">Priporočen cilj:</span>
                     <span id="calc-target" class="text-lg font-bold text-emerald-600">--</span>
                 </div>
-                <p class="text-[10px] text-indigo-400 mt-2 italic">*Target includes a research-standard 500 kcal deficit.</p>
+                <p id="label-deficit-note" class="text-[10px] text-indigo-400 mt-2 italic">*Cilj vključuje standardni primanjkljaj 500 kcal.</p>
             </div>
 
             <div class="flex gap-3">
-                <button onclick="applyCalculatedTarget()" class="flex-grow bg-indigo-600 text-white py-4 rounded-2xl font-bold shadow-lg shadow-indigo-200">Apply New Goal</button>
+                <button onclick="applyCalculatedTarget()" id="btn-apply-goal" class="flex-grow bg-indigo-600 text-white py-4 rounded-2xl font-bold shadow-lg shadow-indigo-200">Uporabi nov cilj</button>
             </div>
         </div>
     </div>
 
     <script>
-        // State Management
+        const translations = {
+            sl: {
+                navDaily: "Dnevnik", navWeight: "Teža", navHistory: "Zgodovina",
+                labelTarget: "Ciljne kalorije", labelConsumed: "Zaužite kalorije", labelRemaining: "Preostalo",
+                labelLogFood: "Vnos hrane", foodPlaceholder: "Npr. Piščančje prsi", caloriesPlaceholder: "Kalorije",
+                btnAddFood: "Dodaj v dnevnik", labelTrackWeight: "Spremljaj napredek", weightPlaceholder: "Trenutna teža (kg)",
+                btnLogWeight: "Zabeleži težo", labelPastEntries: "Pretekli vnosi", btnClearAll: "Izbriši vse podatke",
+                labelSettingsTitle: "Profil in cilji", labelSettingsDesc: "Izračunano po Mifflin-St Jeor enačbi.",
+                labelSex: "Biološki spol", optMale: "Moški", optFemale: "Ženska",
+                labelAge: "Starost (let)", labelHeight: "Višina (cm)", labelWeightProfile: "Teža (kg)",
+                labelActivity: "Stopnja aktivnosti", act1: "Sedeče (brez vadbe)", act2: "Rahlo aktivno (1-3 dni/teden)",
+                act3: "Zmerno aktivno (3-5 dni/teden)", act4: "Zelo aktivno (6-7 dni/teden)", act5: "Izjemno aktivno (fizično delo)",
+                labelTdee: "Izračunan TDEE:", labelRecTarget: "Priporočen cilj:", labelDeficitNote: "*Cilj vključuje standardni primanjkljaj 500 kcal.",
+                btnApplyGoal: "Uporabi nov cilj", todayMeals: "Današnji obroki", totalKcal: "Skupaj kcal",
+                confirmDelete: "Izbrišem vse? To bo trajno izbrisalo vašo zgodovino in napredek.", labelLanguage: "Jezik / Language"
+            },
+            en: {
+                navDaily: "Daily", navWeight: "Weight", navHistory: "History",
+                labelTarget: "Target Calories", labelConsumed: "Consumed Calories", labelRemaining: "Remaining",
+                labelLogFood: "Log Food Intake", foodPlaceholder: "E.g. Chicken Breast", caloriesPlaceholder: "Calories",
+                btnAddFood: "Add to Daily Log", labelTrackWeight: "Track Your Progress", weightPlaceholder: "Current Weight (kg)",
+                btnLogWeight: "Log Weight", labelPastEntries: "Past Entries", btnClearAll: "Clear All Data",
+                labelSettingsTitle: "Profile & Goals", labelSettingsDesc: "Calculated using the Mifflin-St Jeor equation.",
+                labelSex: "Biological Sex", optMale: "Male", optFemale: "Female",
+                labelAge: "Age (Years)", labelHeight: "Height (cm)", labelWeightProfile: "Weight (kg)",
+                labelActivity: "Activity Level", act1: "Sedentary (Little Exercise)", act2: "Lightly Active (1-3 days/week)",
+                act3: "Moderately Active (3-5 days/week)", act4: "Very Active (6-7 days/week)", act5: "Extra Active (Physical Job)",
+                labelTdee: "Calculated TDEE:", labelRecTarget: "Recommended Target:", labelDeficitNote: "*Target includes a 500 kcal deficit.",
+                btnApplyGoal: "Apply New Goal", todayMeals: "Today's Meals", totalKcal: "Total kcal",
+                confirmDelete: "Delete everything? This is a permanent wipe of your history.", labelLanguage: "Jezik / Language"
+            }
+        };
+
         let appData = {
             targetCalories: 2000,
-            profile: {
-                sex: 'male',
-                age: 25,
-                height: 175,
-                weight: 70,
-                activity: '1.2'
-            },
+            language: 'sl',
+            profile: { sex: 'male', age: 25, height: 175, weight: 70, activity: '1.2' },
             meals: [], 
             weights: [] 
         };
@@ -197,12 +233,68 @@
             renderDashboard();
             switchTab('dashboard');
             
-            // Setup live calculation in modal
             const inputs = ['user-sex', 'user-age', 'user-height', 'user-weight', 'user-activity'];
             inputs.forEach(id => {
                 document.getElementById(id).addEventListener('input', calculateSuggestedTarget);
             });
         };
+
+        function updateLanguage(lang) {
+            appData.language = lang;
+            saveToStorage();
+            applyTranslations();
+            renderDashboard();
+            renderHistory();
+            
+            // UI Toggle States
+            const btnSl = document.getElementById('lang-sl');
+            const btnEn = document.getElementById('lang-en');
+            if(lang === 'sl') {
+                btnSl.className = "flex-grow py-2 rounded-xl border border-indigo-200 bg-indigo-50 text-indigo-700 font-bold";
+                btnEn.className = "flex-grow py-2 rounded-xl border border-slate-200 text-slate-500 font-bold";
+            } else {
+                btnEn.className = "flex-grow py-2 rounded-xl border border-indigo-200 bg-indigo-50 text-indigo-700 font-bold";
+                btnSl.className = "flex-grow py-2 rounded-xl border border-slate-200 text-slate-500 font-bold";
+            }
+        }
+
+        function applyTranslations() {
+            const t = translations[appData.language];
+            document.getElementById('nav-daily').innerText = t.navDaily;
+            document.getElementById('nav-weight').innerText = t.navWeight;
+            document.getElementById('nav-history').innerText = t.navHistory;
+            document.getElementById('label-target').innerText = t.labelTarget;
+            document.getElementById('label-consumed').innerText = t.labelConsumed;
+            document.getElementById('label-remaining').innerText = t.labelRemaining;
+            document.getElementById('label-log-food').innerText = t.labelLogFood;
+            document.getElementById('food-name').placeholder = t.foodPlaceholder;
+            document.getElementById('food-calories').placeholder = t.caloriesPlaceholder;
+            document.getElementById('btn-add-food').innerText = t.btnAddFood;
+            document.getElementById('label-track-weight').innerText = t.labelTrackWeight;
+            document.getElementById('weight-input').placeholder = t.weightPlaceholder;
+            document.getElementById('btn-log-weight').innerText = t.btnLogWeight;
+            document.getElementById('label-past-entries').innerText = t.labelPastEntries;
+            document.getElementById('btn-clear-all').innerText = t.btnClearAll;
+            document.getElementById('label-settings-title').innerText = t.labelSettingsTitle;
+            document.getElementById('label-settings-desc').innerText = t.labelSettingsDesc;
+            document.getElementById('label-sex').innerText = t.labelSex;
+            document.getElementById('opt-male').innerText = t.optMale;
+            document.getElementById('opt-female').innerText = t.optFemale;
+            document.getElementById('label-age').innerText = t.labelAge;
+            document.getElementById('label-height').innerText = t.labelHeight;
+            document.getElementById('label-weight-profile').innerText = t.labelWeightProfile;
+            document.getElementById('label-activity').innerText = t.labelActivity;
+            document.getElementById('act-1').innerText = t.act1;
+            document.getElementById('act-2').innerText = t.act2;
+            document.getElementById('act-3').innerText = t.act3;
+            document.getElementById('act-4').innerText = t.act4;
+            document.getElementById('act-5').innerText = t.act5;
+            document.getElementById('label-tdee').innerText = t.labelTdee;
+            document.getElementById('label-rec-target').innerText = t.labelRecTarget;
+            document.getElementById('label-deficit-note').innerText = t.labelDeficitNote;
+            document.getElementById('btn-apply-goal').innerText = t.btnApplyGoal;
+            document.getElementById('label-language').innerText = t.labelLanguage;
+        }
 
         function saveToStorage() {
             localStorage.setItem('vitalpath_data', JSON.stringify(appData));
@@ -214,7 +306,6 @@
                 appData = JSON.parse(stored);
             }
             
-            // Populate settings inputs
             if(appData.profile) {
                 document.getElementById('user-sex').value = appData.profile.sex;
                 document.getElementById('user-age').value = appData.profile.age;
@@ -224,10 +315,10 @@
             }
             
             document.getElementById('target-display').innerText = appData.targetCalories.toLocaleString();
+            updateLanguage(appData.language || 'sl');
             calculateSuggestedTarget();
         }
 
-        // Logic for Mifflin-St Jeor Calculation
         function calculateSuggestedTarget() {
             const sex = document.getElementById('user-sex').value;
             const age = parseFloat(document.getElementById('user-age').value);
@@ -237,7 +328,6 @@
 
             if (!age || !height || !weight) return;
 
-            // BMR Calculation
             let bmr;
             if (sex === 'male') {
                 bmr = (10 * weight) + (6.25 * height) - (5 * age) + 5;
@@ -246,7 +336,7 @@
             }
 
             const tdee = Math.round(bmr * activity);
-            const target = tdee - 500; // Standard weight loss deficit
+            const target = tdee - 500;
 
             document.getElementById('calc-tdee').innerText = `${tdee.toLocaleString()} kcal`;
             document.getElementById('calc-target').innerText = `${target.toLocaleString()} kcal`;
@@ -283,21 +373,12 @@
             if (tabId === 'dashboard') renderDashboard();
         }
 
-        // Calorie Logic
         function addMeal() {
             const name = document.getElementById('food-name').value;
             const calories = parseInt(document.getElementById('food-calories').value);
-            
             if (!name || isNaN(calories)) return;
 
-            const meal = {
-                id: Date.now(),
-                date: new Date().toLocaleDateString(),
-                name,
-                calories,
-                timestamp: Date.now()
-            };
-
+            const meal = { id: Date.now(), date: new Date().toLocaleDateString(), name, calories, timestamp: Date.now() };
             appData.meals.unshift(meal);
             saveToStorage();
             renderDashboard();
@@ -314,6 +395,7 @@
         }
 
         function renderDashboard() {
+            const t = translations[appData.language];
             const today = new Date().toLocaleDateString();
             const todaysMeals = appData.meals.filter(m => m.date === today);
             const totalConsumed = todaysMeals.reduce((sum, m) => sum + m.calories, 0);
@@ -322,7 +404,6 @@
             document.getElementById('consumed-display').innerText = totalConsumed.toLocaleString();
             document.getElementById('remaining-display').innerText = remaining.toLocaleString();
             
-            // Change color of remaining if negative
             const remainingDisp = document.getElementById('remaining-display');
             if (remaining < 0) {
                 remainingDisp.classList.replace('text-emerald-500', 'text-rose-500');
@@ -331,7 +412,7 @@
             }
             
             const listContainer = document.getElementById('today-list');
-            listContainer.innerHTML = todaysMeals.length ? '<h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Today\'s Meals</h4>' : '';
+            listContainer.innerHTML = todaysMeals.length ? `<h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">${t.todayMeals}</h4>` : '';
             
             todaysMeals.forEach(meal => {
                 const el = document.createElement('div');
@@ -350,17 +431,11 @@
             });
         }
 
-        // Weight Logic
         function addWeight() {
             const val = parseFloat(document.getElementById('weight-input').value);
             if (isNaN(val)) return;
 
-            const entry = {
-                date: new Date().toLocaleDateString(),
-                value: val,
-                timestamp: Date.now()
-            };
-
+            const entry = { date: new Date().toLocaleDateString(), value: val, timestamp: Date.now() };
             const existingIndex = appData.weights.findIndex(w => w.date === entry.date);
             if (existingIndex > -1) {
                 appData.weights[existingIndex] = entry;
@@ -368,9 +443,7 @@
                 appData.weights.push(entry);
             }
 
-            // Sync profile weight with latest log for calculator
             document.getElementById('user-weight').value = val;
-
             saveToStorage();
             updateChart();
             document.getElementById('weight-input').value = '';
@@ -383,7 +456,7 @@
                 data: {
                     labels: [],
                     datasets: [{
-                        label: 'Weight (kg)',
+                        label: 'kg',
                         data: [],
                         borderColor: '#6366f1',
                         backgroundColor: 'rgba(99, 102, 241, 0.1)',
@@ -415,8 +488,8 @@
             chart.update();
         }
 
-        // History Logic
         function renderHistory() {
+            const t = translations[appData.language];
             const container = document.getElementById('history-list');
             container.innerHTML = '';
             
@@ -435,7 +508,7 @@
                 section.innerHTML = `
                     <div class="flex justify-between items-center mb-2 px-2">
                         <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">${date}</span>
-                        <span class="text-xs font-bold text-indigo-400">${dayTotal} Total kcal</span>
+                        <span class="text-xs font-bold text-indigo-400">${dayTotal} ${t.totalKcal}</span>
                     </div>
                     <div class="space-y-2">
                         ${grouped[date].map(m => `
@@ -455,7 +528,7 @@
         }
 
         function clearAllData() {
-            if (confirm("Delete everything? This is a permanent wipe of your history and progress.")) {
+            if (confirm(translations[appData.language].confirmDelete)) {
                 localStorage.removeItem('vitalpath_data');
                 window.location.reload();
             }

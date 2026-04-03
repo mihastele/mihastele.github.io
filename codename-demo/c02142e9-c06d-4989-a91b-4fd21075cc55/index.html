@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLMs4EU Catalogue MVP Demo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <i class="fa-solid fa-cube logo-icon"></i>
+                <h1>LLMs4EU <span class="highlight">Catalogue</span></h1>
+            </div>
+            <nav class="view-toggle">
+                <button id="btn-traditional" class="toggle-btn active">Traditional Search</button>
+                <button id="btn-agentic" class="toggle-btn">Agentic Search</button>
+            </nav>
+            <div class="user-actions">
+                <button class="icon-btn"><i class="fa-regular fa-bell"></i></button>
+                <div class="avatar">U</div>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            
+            <!-- TRADITIONAL SEARCH VIEW -->
+            <section id="view-traditional" class="view-section active">
+                <!-- Search Bar -->
+                <div class="search-hero">
+                    <div class="search-input-container">
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                        <input type="text" id="traditional-search-input" placeholder="Search for truly open source LLMs, datasets, or fine-tunes..." autocomplete="off">
+                        <button class="search-submit">Search</button>
+                        
+                        <!-- Query Suggestions Mock -->
+                        <div class="query-suggestions" id="query-suggestions" style="display: none;">
+                            <div class="suggestion-item"><i class="fa-solid fa-clock-rotate-left"></i> open source models 7b</div>
+                            <div class="suggestion-item"><i class="fa-solid fa-bolt"></i> <span class="match">apache 2.0</span> license models</div>
+                            <div class="suggestion-item"><i class="fa-solid fa-bolt"></i> best <span class="match">multilingual</span> llm</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="catalogue-container">
+                    <!-- Faceted Sidebar -->
+                    <aside class="sidebar filters">
+                        <h3>Filters</h3>
+                        
+                        <div class="facet-group">
+                            <h4>Tasks</h4>
+                            <label class="facet-label"><input type="checkbox" data-facet="task" value="Text Generation"> Text Generation</label>
+                            <label class="facet-label"><input type="checkbox" data-facet="task" value="Translation"> Translation</label>
+                            <label class="facet-label"><input type="checkbox" data-facet="task" value="Summarization"> Summarization</label>
+                            <label class="facet-label"><input type="checkbox" data-facet="task" value="Code Generation"> Code Generation</label>
+                            <label class="facet-label"><input type="checkbox" data-facet="task" value="Interpretability"> Interpretability</label>
+                        </div>
+
+                        <div class="facet-group">
+                            <h4>License</h4>
+                            <label class="facet-label"><input type="checkbox" data-facet="license" value="Apache 2.0"> Apache 2.0</label>
+                            <label class="facet-label"><input type="checkbox" data-facet="license" value="MIT"> MIT</label>
+                            <label class="facet-label"><input type="checkbox" data-facet="license" value="Llama 3"> Llama 3</label>
+                        </div>
+                        
+                        <div class="facet-group">
+                            <h4>Parameters</h4>
+                            <label class="facet-label"><input type="checkbox" data-facet="parameters" value="< 3B"> &lt; 3B</label>
+                            <label class="facet-label"><input type="checkbox" data-facet="parameters" value="3B - 10B"> 3B - 10B</label>
+                            <label class="facet-label"><input type="checkbox" data-facet="parameters" value="10B - 40B"> 10B - 40B</label>
+                            <label class="facet-label"><input type="checkbox" data-facet="parameters" value="> 40B"> &gt; 40B</label>
+                        </div>
+                        
+                        <div class="facet-group">
+                            <h4>Languages</h4>
+                            <label class="facet-label"><input type="checkbox" data-facet="language" value="English"> English</label>
+                            <label class="facet-label"><input type="checkbox" data-facet="language" value="Multilingual"> Multilingual</label>
+                            <label class="facet-label"><input type="checkbox" data-facet="language" value="Slovenian"> Slovenian</label>
+                        </div>
+                    </aside>
+
+                    <!-- Results List -->
+                    <div class="results-area">
+                        <div class="results-header">
+                            <span class="results-count" id="results-count">Showing 0 results</span>
+                            <div class="sort-dropdown">
+                                Sort by: <select><option>Relevance</option><option>Most Downloads</option><option>Recently Updated</option></select>
+                            </div>
+                        </div>
+
+                        <div class="cards-grid" id="traditional-results">
+                            <!-- JS will populate model cards here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- AGENTIC SEARCH VIEW -->
+            <section id="view-agentic" class="view-section">
+                <div class="chat-container">
+                    <div class="chat-header">
+                        <h2><i class="fa-solid fa-robot"></i> LLMs4EU Assistant</h2>
+                        <p>Powered by OpenRouter API <input type="password" id="api-key-input" placeholder="Paste free-tier OpenRouter API Key" class="api-key-input"></p>
+                    </div>
+                    
+                    <div class="chat-messages" id="chat-messages">
+                        <!-- Welcome message -->
+                        <div class="message ai-message">
+                            <div class="msg-avatar"><i class="fa-solid fa-robot"></i></div>
+                            <div class="msg-content">
+                                <p>Hello! I am your catalogue agent. What kind of language resources or models do you need today?</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Chat Input -->
+                    <div class="chat-input-area">
+                        <div class="input-wrapper">
+                            <input type="text" id="agent-input" class="agent-input" placeholder="e.g., I need a truly open source model for Slovenian translation..." autocomplete="off">
+                            <button id="agent-send-btn" class="send-btn"><i class="fa-solid fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

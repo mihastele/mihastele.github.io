@@ -121,6 +121,18 @@ document.addEventListener('DOMContentLoaded', () => {
             language: 'Slovenian',
             iconClass: 'alt-icon-1',
             updated: '2 weeks ago'
+        },
+        {
+            id: 'vigogne-2-7b',
+            title: 'Vigogne-2-7B-Instruct',
+            provider: 'Bofenghuang',
+            license: 'Apache 2.0',
+            desc: 'A 7B parameter open-source French instruction-following model.',
+            task: 'Text Generation',
+            params: '3B - 10B',
+            language: 'French',
+            iconClass: 'alt-icon-1',
+            updated: '3 months ago'
         }
     ];
 
@@ -141,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         models.forEach(model => {
             const iconHTML = model.iconClass ? `<div class="model-icon ${model.iconClass}"><i class="fa-solid fa-cube"></i></div>` : `<div class="model-icon"><i class="fa-solid fa-language"></i></div>`;
-
+            
             const cardHTML = `
                 <div class="model-card">
                     <div class="card-header">
@@ -272,7 +284,15 @@ document.addEventListener('DOMContentLoaded', () => {
     let chatHistory = [
         {
             role: "system",
-            content: "You are the LLMs4EU Assistant, a helpful catalogue agent. Briefly guide the user to find language models based on their needs. The database only contains: Mistral-7B, OLMo-7B, Pythia-12B, Falcon-40B, Llama-3-8B, Qwen1.5-7B, StarCoder-15B, BLOOM, NLLB-200, Slo-T5-Base. Keep responses short and conversational. When you have enough requirements to recommend one of these models, make a recommendation."
+            content: "You are the LLMs4EU Assistant, a helpful catalogue agent. Briefly guide the user to find language models based on their needs. The database only contains: Mistral-7B, OLMo-7B, Pythia-12B, Falcon-40B, Llama-3-8B, Qwen1.5-7B, StarCoder-15B, BLOOM, NLLB-200, Slo-T5-Base, Vigogne-2-7B-Instruct. Keep responses short and conversational. When you have enough requirements to recommend one of these models, make a recommendation."
+        },
+        {
+            role: "user",
+            content: "Give me a suggestion for an Open Source French Model under 10BN parameters"
+        },
+        {
+            role: "assistant",
+            content: "I recommend the Vigogne-2-7B-Instruct model, which is a 7-billion parameter open-source instruction-following model tailored for French."
         }
     ];
 
@@ -295,7 +315,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Trigger AI reply
         showTypingIndicator();
-
+        
         try {
             const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
                 method: "POST",
@@ -306,7 +326,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    "model": "nvidia/nemotron-nano-12b-v2-vl:free", // using a reliable free model
+                    "model": "meta-llama/llama-3.1-8b-instruct:free", // using a reliable free model
                     "messages": chatHistory
                 })
             });
@@ -322,7 +342,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const data = await response.json();
             const aiText = data.choices[0].message.content;
-
+            
             chatHistory.push({ role: "assistant", content: aiText });
             addAIMessage(aiText);
 
@@ -357,7 +377,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
             .replace(/\*(.*?)\*/g, '<em>$1</em>')
             .replace(/\n/g, '<br>');
-
+            
         msg.innerHTML = `
             <div class="msg-avatar"><i class="fa-solid fa-robot"></i></div>
             <div class="msg-content"><p>${formattedText}</p></div>
@@ -397,7 +417,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function escapeHTML(str) {
-        return str.replace(/[&<>'"]/g,
+        return str.replace(/[&<>'"]/g, 
             tag => ({
                 '&': '&amp;',
                 '<': '&lt;',

@@ -83,6 +83,7 @@
                             <label class="facet-label"><input type="checkbox" data-facet="language" value="English"> English</label>
                             <label class="facet-label"><input type="checkbox" data-facet="language" value="Multilingual"> Multilingual</label>
                             <label class="facet-label"><input type="checkbox" data-facet="language" value="Slovenian"> Slovenian</label>
+                            <label class="facet-label"><input type="checkbox" data-facet="language" value="French"> French</label>
                         </div>
                     </aside>
 
@@ -116,6 +117,39 @@
                             <div class="msg-avatar"><i class="fa-solid fa-robot"></i></div>
                             <div class="msg-content">
                                 <p>Hello! I am your catalogue agent. What kind of language resources or models do you need today?</p>
+                            </div>
+                        </div>
+
+                        <!-- Hardcoded Interaction -->
+                        <div class="message user-message">
+                            <div class="msg-avatar">U</div>
+                            <div class="msg-content"><p>Give me a suggestion for an Open Source French Model under 10BN parameters</p></div>
+                        </div>
+
+                        <div class="message ai-message">
+                            <div class="msg-avatar"><i class="fa-solid fa-robot"></i></div>
+                            <div class="msg-content">
+                                <p>I recommend the <strong>Vigogne-2-7B-Instruct</strong> model, which is a 7-billion parameter open-source instruction-following model tailored for French.</p>
+                                <div class="model-card" style="margin-top: 1rem; cursor: default;">
+                                    <div class="card-header">
+                                        <div class="model-icon alt-icon-1"><i class="fa-solid fa-cube"></i></div>
+                                        <div class="model-title-group">
+                                            <h3 class="model-title">Vigogne-2-7B-Instruct</h3>
+                                            <span class="provider">Bofenghuang</span>
+                                        </div>
+                                        <div class="badge badge-license">Apache 2.0</div>
+                                    </div>
+                                    <p class="model-desc">A 7B parameter open-source French instruction-following model.</p>
+                                    <div class="card-tags">
+                                        <span class="tag">Text Generation</span>
+                                        <span class="tag">3B - 10B</span>
+                                        <span class="tag">French</span>
+                                    </div>
+                                    <div class="card-footer">
+                                        <span class="update-time"><i class="fa-regular fa-clock"></i> Updated 3 months ago</span>
+                                        <button class="btn-primary btn-sm">View Model Card</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

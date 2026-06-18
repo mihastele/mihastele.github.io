@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>STEM Genius — AI Math & Physics Tutor</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>∑</text></svg>">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <span class="brand-icon">∑</span>
+          <span class="brand-text">STEM Genius</span>
+        </div>
+        <button class="sidebar-close" onclick="toggleSidebar()" title="Close sidebar">✕</button>
+      </div>
+      <div class="sidebar-content">
+        <button class="btn btn-primary btn-block" onclick="newChat()">
+          <span class="btn-icon">+</span> New Chat
+        </button>
+        <div class="setting-group">
+          <label class="setting-label" for="apiKeyInput">OpenRouter API Key</label>
+          <div class="api-key-wrapper">
+            <input type="password" id="apiKeyInput" placeholder="sk-or-v1-..." autocomplete="off">
+            <button class="btn-icon-only" onclick="toggleApiKeyVisibility()" title="Toggle visibility">
+              <span id="apiKeyToggleIcon">👁</span>
+            </button>
+          </div>
+          <small class="setting-hint">Your key stays local & is never sent anywhere except OpenRouter.</small>
+        </div>
+        <div class="setting-group">
+          <label class="setting-label" for="modelSelect">Model</label>
+          <select id="modelSelect"></select>
+          <div id="customModelGroup" style="display:none; margin-top:8px;">
+            <input type="text" id="customModelInput" placeholder="e.g. google/gemini-2.5-pro" autocomplete="off">
+            <div style="display:flex; gap:6px; margin-top:4px;">
+              <label style="display:flex; align-items:center; gap:4px; cursor:pointer; font-size:12px; color:var(--text-secondary);">
+                <input type="checkbox" id="customModelVision"> Vision
+              </label>
+            </div>
+            <small class="setting-hint">Enter any OpenRouter model ID. Check <a href="https://openrouter.ai/models" target="_blank" rel="noopener" style="color:var(--accent-hover)">openrouter.ai/models</a> for available models.</small>
+          </div>
+        </div>
+        <div class="model-info" id="modelInfo"></div>
+        <div class="sidebar-footer">
+          <small>STEM Genius v1.0 · Powered by OpenRouter</small>
+        </div>
+      </div>
+    </aside>
+
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+    <main class="chat-container">
+      <header class="chat-header">
+        <button class="btn-icon-only" onclick="toggleSidebar()" title="Open settings">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+        <div class="header-title">
+          <span class="header-brand">∑ STEM Genius</span>
+        </div>
+        <span class="model-badge" id="modelBadge"></span>
+      </header>
+
+      <div class="messages" id="messages">
+        <div class="welcome" id="welcome">
+          <div class="welcome-icon">∑</div>
+          <h2>Welcome to STEM Genius</h2>
+          <p>Your AI tutor for mathematics, physics, chemistry & engineering.</p>
+          <p class="welcome-hint">Beautiful math rendering · Vision support · Step-by-step solutions</p>
+          <div class="suggestions">
+            <button class="suggestion-btn" onclick="useSuggestion('Explain the derivation of the quadratic formula step by step')">
+              <span class="suggestion-icon">📐</span> Derive the quadratic formula
+            </button>
+            <button class="suggestion-btn" onclick="useSuggestion('Solve the integral: ∫(sin²x)dx')">
+              <span class="suggestion-icon">∫</span> Solve ∫sin²(x)dx
+            </button>
+            <button class="suggestion-btn" onclick="useSuggestion('Explain Schrödinger\'s equation and its physical meaning')">
+              <span class="suggestion-icon">⚛</span> Schrödinger's equation
+            </button>
+            <button class="suggestion-btn" onclick="useSuggestion('Derive Newton\'s laws of motion from first principles')">
+              <span class="suggestion-icon">🍎</span> Newton's laws
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-area" id="inputArea">
+        <div class="image-preview" id="imagePreview" style="display:none;">
+          <img id="previewImg" alt="Preview">
+          <button class="preview-remove" onclick="removeImage()" title="Remove image">✕</button>
+          <div class="preview-label" id="previewLabel"></div>
+        </div>
+        <div class="input-row">
+          <button class="btn-icon-only" onclick="document.getElementById('imageUpload').click()" title="Upload image" id="attachBtn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"></path></svg>
+          </button>
+          <input type="file" id="imageUpload" accept="image/*" style="display:none;" onchange="handleImageUpload(event)">
+          <textarea id="messageInput" placeholder="Ask about math, physics, chemistry…" rows="1" onkeydown="handleKeyDown(event)" oninput="autoResize(this)"></textarea>
+          <button class="btn-send" id="sendBtn" onclick="sendMessage()" title="Send message">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+          </button>
+        </div>
+        <small class="input-hint">Press Enter to send · Shift+Enter for new line · Attach images for vision models</small>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

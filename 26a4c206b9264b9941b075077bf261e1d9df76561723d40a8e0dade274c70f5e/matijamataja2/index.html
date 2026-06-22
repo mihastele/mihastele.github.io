@@ -1,0 +1,561 @@
+<!doctype html>
+<html lang="sl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Lista Mateja Slaparja — Kamnik. Predlagani člani občinskega sveta. | Election list Matej Slapar — Kamnik."
+    />
+    <title>Lista Mateja Slaparja — Kamnik</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&family=Space+Grotesk:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230057B7'/%3E%3Cpath d='M9 22V10h4l3 9 3-9h4v12h-3v-7l-3 7h-2l-3-7v7z' fill='white'/%3E%3C/svg%3E"
+    />
+  </head>
+  <body data-lang="sl" data-fontscale="1" data-contrast="off" data-motion="on">
+    <a class="skip-link" href="#main" data-i18n="skip">Preskoči na vsebino</a>
+
+    <!-- Accessibility panel -->
+    <button
+      class="a11y-fab"
+      id="a11yToggle"
+      aria-expanded="false"
+      aria-controls="a11yPanel"
+      aria-label="Dostopnost / Accessibility"
+    >
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+        <path
+          fill="currentColor"
+          d="M12 2a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm5 7c-1.4-.5-3.2-.8-5-.8s-3.6.3-5 .8c-.8.3-1 .4-1 1.2v.3c0 .6.5 1 1.1 1 .2 0 .4 0 .6-.1l1.3-.5v6.1c0 .6.4 1 1 1s1-.4 1-1v-3.5h.8V17c0 .6.4 1 1 1s1-.4 1-1v-6.1l1.3.5c.2.1.4.1.6.1.6 0 1.1-.4 1.1-1v-.3c0-.8-.2-.9-1-1.2z"
+        />
+      </svg>
+    </button>
+    <aside
+      class="a11y-panel"
+      id="a11yPanel"
+      hidden
+      role="region"
+      aria-label="Nastavitve dostopnosti"
+    >
+      <h3 class="a11y-panel__title" data-i18n="a11yTitle">Dostopnost</h3>
+      <div class="a11y-row">
+        <span data-i18n="font">Velikost pisave</span>
+        <div class="a11y-btns" role="group" aria-label="Font scale">
+          <button class="a11y-btn" data-scale="-0.1" aria-label="Manjša pisava">
+            A−
+          </button>
+          <button class="a11y-btn" data-scale="0" aria-label="Ponastavi">
+            A
+          </button>
+          <button class="a11y-btn" data-scale="0.1" aria-label="Večja pisava">
+            A+
+          </button>
+        </div>
+      </div>
+      <div class="a11y-row">
+        <span data-i18n="contrast">Visok kontrast</span>
+        <button
+          class="a11y-btn a11y-switch"
+          id="contrastBtn"
+          aria-pressed="false"
+          data-i18n="off"
+        >
+          Izklopljeno
+        </button>
+      </div>
+      <div class="a11y-row">
+        <span data-i18n="motion">Animacije</span>
+        <button
+          class="a11y-btn a11y-switch"
+          id="motionBtn"
+          aria-pressed="true"
+          data-i18n="on"
+        >
+          Vkljupljeno
+        </button>
+      </div>
+    </aside>
+
+    <!-- Header -->
+    <header class="nav" id="top">
+      <div class="nav__inner container">
+        <a class="brand" href="#top" aria-label="Domov — Lista Mateja Slaparja">
+          <span class="brand__mark" aria-hidden="true"
+            >M<span class="brand__dot"></span
+          ></span>
+          <span class="brand__text">
+            <strong>Lista Mateja Slaparja</strong>
+            <small>Kamnik · Volitve 2026</small>
+          </span>
+        </a>
+        <nav class="nav__links" aria-label="Glavna navigacija">
+          <a href="#o-listi" data-i18n="nav-about">O listi</a>
+          <a href="#kandidati" data-i18n="nav-candidates">Kandidati</a>
+          <a href="#program" data-i18n="nav-program">Program</a>
+          <a href="#projekti" data-i18n="nav-projects">Projekti</a>
+          <a href="#kontakt" data-i18n="nav-contact">Kontakt</a>
+        </nav>
+        <div class="nav__tools">
+          <div class="lang" role="group" aria-label="Jezik / Language">
+            <button class="lang__btn is-active" data-lang-btn="sl">SL</button>
+            <button class="lang__btn" data-lang-btn="en">EN</button>
+          </div>
+          <button
+            class="nav__burger"
+            id="burger"
+            aria-label="Meni"
+            aria-expanded="false"
+            aria-controls="mobileMenu"
+          >
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+      </div>
+      <div class="nav__mobile" id="mobileMenu" hidden>
+        <a href="#o-listi" data-i18n="nav-about">O listi</a>
+        <a href="#kandidati" data-i18n="nav-candidates">Kandidati</a>
+        <a href="#program" data-i18n="nav-program">Program</a>
+        <a href="#projekti" data-i18n="nav-projects">Projekti</a>
+        <a href="#kontakt" data-i18n="nav-contact">Kontakt</a>
+      </div>
+    </header>
+
+    <main id="main">
+      <!-- Hero -->
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero__bg" aria-hidden="true">
+          <div class="hero__glow"></div>
+          <div class="hero__grid"></div>
+        </div>
+        <div class="container hero__inner">
+          <div class="hero__copy reveal">
+            <span class="eyebrow" data-i18n="hero-eyebrow"
+              >Lokalne volitve 2026</span
+            >
+            <h1 id="hero-title" class="hero__title">
+              <span data-i18n="hero-title-1">Kamnik, ki</span>
+              <span class="accent" data-i18n="hero-title-2">diha z nami.</span>
+            </h1>
+            <p class="hero__lead" data-i18n="hero-lead">
+              Lista Mateja Slaparja povezuje ljudi, ki Kamnik vidijo kot mesto
+              skupnosti, sonaravnega razvoja in odprtosti. Predlagani člani
+              občinskega sveta so ljudje iz sosesk, društev in podjetij.
+            </p>
+            <div class="hero__cta">
+              <a
+                href="#kandidati"
+                class="btn btn--primary"
+                data-i18n="hero-cta-1"
+                >Spoznaj kandidate</a
+              >
+              <a href="#program" class="btn btn--ghost" data-i18n="hero-cta-2"
+                >Preberi program</a
+              >
+            </div>
+            <ul class="hero__stats" role="list">
+              <li>
+                <strong>26</strong
+                ><span data-i18n="hero-stat-1">predlogov</span>
+              </li>
+              <li>
+                <strong>2</strong><span data-i18n="hero-stat-2">imeni</span>
+              </li>
+              <li>
+                <strong>1</strong><span data-i18n="hero-stat-3">Kamnik</span>
+              </li>
+            </ul>
+          </div>
+          <div class="hero__media reveal" aria-hidden="true">
+            <div
+              class="card-stack"
+              role="img"
+              aria-label="Sestavljena ilustracija mestne hiže Kamnik"
+            >
+              <div class="card-stack__layer card-stack__layer--sky"></div>
+              <div class="card-stack__layer card-stack__layer--city"></div>
+              <div class="card-stack__layer card-stack__layer--front"></div>
+              <div class="card-stack__badge">
+                <span data-i18n="hero-badge"> Glas ljudi · 2026 </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <a href="#o-listi" class="hero__scroll" aria-label="Premakni dol">
+          <span></span>
+        </a>
+      </section>
+
+      <!-- About / O listi -->
+      <section id="o-listi" class="section" aria-labelledby="about-title">
+        <div class="container about">
+          <div class="about__intro reveal">
+            <span class="eyebrow" data-i18n="about-eyebrow">O listi</span>
+            <h2 id="about-title" class="section__title" data-i18n="about-title">
+              Povezani z mestom in njegovimi ljudmi
+            </h2>
+            <p class="section__lead" data-i18n="about-lead">
+              Verjamemo, da se dobro mesto gradi odspodaj — iz sosesk, zelenih
+              površin, čistega zraka in odprtih odločitev. Lista Mateja Slaparja
+              združuje neodvisne kandidate, stroko in prostovoljce.
+            </p>
+          </div>
+          <div class="about__grid">
+            <article class="value reveal">
+              <div class="value__icon" aria-hidden="true">◆</div>
+              <h3 data-i18n="value-1-title">Soseska</h3>
+              <p data-i18n="value-1-text">
+                Močne soseske, varne ulice, žive stičišča za vse generacije.
+              </p>
+            </article>
+            <article class="value reveal">
+              <div class="value__icon" aria-hidden="true">❀</div>
+              <h3 data-i18n="value-2-title">Narava</h3>
+              <p data-i18n="value-2-text">
+                Ohranitev Tuhinjske doline, Kamniške Bistrice in zelenih vhodov
+                v mesto.
+              </p>
+            </article>
+            <article class="value reveal">
+              <div class="value__icon" aria-hidden="true">⊕</div>
+              <h3 data-i18n="value-3-title">Odprtost</h3>
+              <p data-i18n="value-3-text">
+                Javne seje, pregledne odločitve in e-sodelovanje za vsakogar.
+              </p>
+            </article>
+            <article class="value reveal">
+              <div class="value__icon" aria-hidden="true">⌂</div>
+              <h3 data-i18n="value-4-title">Ravnovesje</h3>
+              <p data-i18n="value-4-text">
+                Stanovanjske potrebe mladih družin in dostopna raba prostora.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- Candidates / Kandidati carousel -->
+      <section
+        id="kandidati"
+        class="section section--tint"
+        aria-labelledby="cand-title"
+      >
+        <div class="container">
+          <div class="section__head reveal">
+            <span class="eyebrow" data-i18n="cand-eyebrow">Kandidati</span>
+            <h2 id="cand-title" class="section__title" data-i18n="cand-title">
+              Predlagani člani občinskega sveta
+            </h2>
+            <p class="section__lead" data-i18n="cand-lead">
+              Kandidate bomo spoznali skozi zgodbe o njihovem delu in navezavi
+              na Kamnik.
+            </p>
+          </div>
+
+          <div
+            class="carousel"
+            aria-roledescription="carousel"
+            aria-label="Kandidati liste"
+          >
+            <button
+              class="carousel__nav carousel__nav--prev"
+              aria-label="Prejšnji"
+              data-prev
+            >
+              <svg
+                viewBox="0 0 24 24"
+                width="22"
+                height="22"
+                aria-hidden="true"
+              >
+                <path fill="currentColor" d="M15 5l-7 7 7 7z" />
+              </svg>
+            </button>
+            <div
+              class="carousel__viewport"
+              id="candViewport"
+              tabindex="0"
+              aria-live="polite"
+            >
+              <ul class="carousel__track" id="candTrack" role="list">
+                <!-- cards injected by JS -->
+              </ul>
+            </div>
+            <button
+              class="carousel__nav carousel__nav--next"
+              aria-label="Naslednji"
+              data-next
+            >
+              <svg
+                viewBox="0 0 24 24"
+                width="22"
+                height="22"
+                aria-hidden="true"
+              >
+                <path fill="currentColor" d="M9 5l7 7-7 7z" />
+              </svg>
+            </button>
+          </div>
+          <div
+            class="carousel__dots"
+            id="candDots"
+            role="tablist"
+            aria-label="Strani kandidatov"
+          ></div>
+        </div>
+      </section>
+
+      <!-- Program -->
+      <section id="program" class="section" aria-labelledby="program-title">
+        <div class="container">
+          <div class="section__head reveal">
+            <span class="eyebrow" data-i18n="program-eyebrow">Program</span>
+            <h2
+              id="program-title"
+              class="section__title"
+              data-i18n="program-title"
+            >
+              Šest področij, en mesto
+            </h2>
+            <p class="section__lead" data-i18n="program-lead">
+              Kratko, jasno in izvedljivo — predlogi, ki jih bomo potisnili v
+              svet v prvih sto dneh.
+            </p>
+          </div>
+          <ul class="program" role="list">
+            <li class="program__item reveal">
+              <span class="program__num">01</span>
+              <h3 data-i18n="program-1-title">Zeleni staro mestni jedri</h3>
+              <p data-i18n="program-1-text">
+                Zmanjšanje prometa v jedru, širje pešpoti, senca in pitne
+                fontanice.
+              </p>
+            </li>
+            <li class="program__item reveal">
+              <span class="program__num">02</span>
+              <h3 data-i18n="program-2-title">Cenejše stanovanje za mlade</h3>
+              <p data-i18n="program-2-text">
+                Zakupi zemljišč in jamčila za dostopne najemnine najetim krije.
+              </p>
+            </li>
+            <li class="program__item reveal">
+              <span class="program__num">03</span>
+              <h3 data-i18n="program-3-title">Čist zrak in transport</h3>
+              <p data-i18n="program-3-text">
+                Šolski avtobusi, vozni redi usklajen z vlakom, polnilnice za
+                e-kolesa.
+              </p>
+            </li>
+            <li class="program__item reveal">
+              <span class="program__num">04</span>
+              <h3 data-i18n="program-4-title">Odprt občinski svet</h3>
+              <p data-i18n="program-4-text">
+                Spletno objavljeni predlogi, glasovanja in zapisniki vseh
+                odborov.
+              </p>
+            </li>
+            <li class="program__item reveal">
+              <span class="program__num">05</span>
+              <h3 data-i18n="program-5-title">Kultura in večernja mesta</h3>
+              <p data-i18n="program-5-text">
+                Podpora prostovoljnim društvom, odprta prizorišča in poletni
+                oder.
+              </p>
+            </li>
+            <li class="program__item reveal">
+              <span class="program__num">06</span>
+              <h3 data-i18n="program-6-title">Sonaravna kmetija</h3>
+              <p data-i18n="program-6-text">
+                Kmalovrstni nabava za šole in domove, znatna pomoč lokalnim
+                pridelovalcem.
+              </p>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Projects gallery carousel -->
+      <section
+        id="projekti"
+        class="section section--dark"
+        aria-labelledby="proj-title"
+      >
+        <div class="container">
+          <div class="section__head reveal">
+            <span class="eyebrow eyebrow--light" data-i18n="proj-eyebrow"
+              >Projekti</span
+            >
+            <h2
+              id="proj-title"
+              class="section__title section__title--light"
+              data-i18n="proj-title"
+            >
+              Kamnik, ki gagradimo skupaj
+            </h2>
+            <p class="section__lead section__lead--light" data-i18n="proj-lead">
+              Iniciative, ki jih bomo ovrednotili v sodelovanju z dravljanji.
+            </p>
+          </div>
+
+          <div
+            class="gallery"
+            id="gallery"
+            aria-roledescription="carousel"
+            aria-label="Projekti"
+          >
+            <div class="gallery__strip" id="galleryStrip" role="list"></div>
+          </div>
+          <div class="gallery__bar">
+            <button
+              class="btn btn--light btn--ghost"
+              data-gal-prev
+              data-i18n="proj-prev"
+            >
+              ◄ Nazaj
+            </button>
+            <span class="gallery__count" id="galleryCount" aria-live="polite"
+              >1 / 4</span
+            >
+            <button
+              class="btn btn--light btn--ghost"
+              data-gal-next
+              data-i18n="proj-next"
+            >
+              Naprej ►
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Quote callout -->
+      <section class="section" aria-label="Izjava">
+        <div class="container">
+          <blockquote class="quote reveal">
+            <p data-i18n="quote-text">
+              ”Kamnik ni le naslov, ampak skupnost, kjer se vsakogar spomnimo po
+              imenu. Zato gremo v svet — da bo mestni glas slišan kot glas
+              ljudi.”
+            </p>
+            <footer>— <cite>Matej Slapar</cite></footer>
+          </blockquote>
+        </div>
+      </section>
+
+      <!-- Contact / Kontakt -->
+      <section
+        id="kontakt"
+        class="section section--tint"
+        aria-labelledby="contact-title"
+      >
+        <div class="container contact">
+          <div class="contact__copy">
+            <span class="eyebrow" data-i18n="contact-eyebrow">Kontakt</span>
+            <h2
+              id="contact-title"
+              class="section__title"
+              data-i18n="contact-title"
+            >
+              Pridruži se nam
+            </h2>
+            <p class="section__lead" data-i18n="contact-lead">
+              Pojdi v ekipo kot prostovoljec, predlagaj idejo ali nas pokliči na
+              info točka.
+            </p>
+            <ul class="contact__info" role="list">
+              <li>
+                ✉
+                <a href="mailto:info@listamatejslapar.si"
+                  >info@listamatejslapar.si</a
+                >
+              </li>
+              <li>☎ <a href="tel:+38651234567">+386 51 234 567</a></li>
+              <li>
+                ⌖
+                <span data-i18n="contact-addr">Glavni trg 1, 1241 Kamnik</span>
+              </li>
+            </ul>
+          </div>
+          <form class="contact__form" id="contactForm" novalidate>
+            <div class="field">
+              <label for="cf-name" data-i18n="form-name">Ime in priimek</label>
+              <input
+                id="cf-name"
+                name="name"
+                type="text"
+                required
+                autocomplete="name"
+              />
+            </div>
+            <div class="field">
+              <label for="cf-email" data-i18n="form-email">E-pošta</label>
+              <input
+                id="cf-email"
+                name="email"
+                type="email"
+                required
+                autocomplete="email"
+              />
+            </div>
+            <div class="field">
+              <label for="cf-msg" data-i18n="form-msg">Sporočilo</label>
+              <textarea id="cf-msg" name="message" rows="4" required></textarea>
+            </div>
+            <label class="check">
+              <input type="checkbox" name="consent" required />
+              <span data-i18n="form-consent"
+                >Strinjam se z obdelavo podatkov za namen odgovora.</span
+              >
+            </label>
+            <button
+              type="submit"
+              class="btn btn--primary"
+              data-i18n="form-submit"
+            >
+              Pošlji
+            </button>
+            <p
+              class="form-feedback"
+              id="formFeedback"
+              role="status"
+              aria-live="polite"
+              hidden
+            ></p>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer__inner">
+        <div>
+          <span class="brand__mark brand__mark--sm" aria-hidden="true"
+            >M<span class="brand__dot"></span
+          ></span>
+          <strong>Lista Mateja Slaparja</strong>
+        </div>
+        <nav class="footer__nav" aria-label="Noga">
+          <a href="#o-listi" data-i18n="nav-about">O listi</a>
+          <a href="#kandidati" data-i18n="nav-candidates">Kandidati</a>
+          <a href="#program" data-i18n="nav-program">Program</a>
+          <a href="#kontakt" data-i18n="nav-contact">Kontakt</a>
+        </nav>
+        <p class="footer__meta">
+          © 2026 Lista Mateja Slaparja ·
+          <span data-i18n="footer-note"
+            >Izdelano z odprtim srcem v Kamniku.</span
+          >
+        </p>
+      </div>
+    </footer>
+
+    <script src="js/main.js" defer></script>
+  </body>
+</html>

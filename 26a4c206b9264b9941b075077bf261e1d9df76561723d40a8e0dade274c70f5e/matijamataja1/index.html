@@ -1,0 +1,512 @@
+<!doctype html>
+<html
+  lang="sl"
+  data-lang="sl"
+  data-font-size="1"
+  data-contrast="normal"
+  data-font="default"
+  data-motion="on"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Lista Mateja Slaparja — lokalne volitve v Kamniku. Matija Podjed za občinski svet. Lista Mateja Slaparja — local elections in Kamnik."
+    />
+    <meta name="theme-color" content="#1e3a8a" />
+    <title>Lista Mateja Slaparja — Kamnik 2026</title>
+    <link rel="stylesheet" href="assets/css/styles.css" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%231e3a8a'/><text x='50' y='70' font-size='58' text-anchor='middle' fill='%23f59e0b' font-family='Arial' font-weight='bold'>S</text></svg>"
+    />
+  </head>
+  <body>
+    <a class="skip-link" href="#main" data-i18n="skipToContent"
+      >Preskoči na vsebino</a
+    >
+
+    <header class="site-header" role="banner">
+      <div class="container header-inner">
+        <a
+          class="brand"
+          href="#main"
+          aria-label="Lista Mateja Slaparja — domov"
+        >
+          <span class="brand-mark" aria-hidden="true">S</span>
+          <span class="brand-text">
+            <span class="brand-title">Lista Mateja Slaparja</span>
+            <span class="brand-sub" data-i18n="brandSub"
+              >Lokalne volitve · Kamnik 2026</span
+            >
+          </span>
+        </a>
+
+        <nav class="header-nav" aria-label="Glavna navigacija">
+          <ul>
+            <li><a href="#lista" data-i18n="navList">Lista</a></li>
+            <li>
+              <a href="#kandidati" data-i18n="navCandidates">Kandidati</a>
+            </li>
+            <li><a href="#program" data-i18n="navProgram">Program</a></li>
+            <li><a href="#podpri" data-i18n="navSupport">Podpri</a></li>
+          </ul>
+        </nav>
+
+        <div class="header-tools">
+          <div class="a11y-menu">
+            <button
+              id="a11yToggle"
+              class="tool-btn"
+              aria-expanded="false"
+              aria-controls="a11yPanel"
+              aria-label="Nastavitve dostopnosti / Accessibility settings"
+              title="Nastavitve dostopnosti"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                width="20"
+                height="20"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path
+                  fill="currentColor"
+                  d="M12 2a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm6 6c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v1h4v9h2v-4h2v4h2V9h4V8z"
+                />
+              </svg>
+              <span data-i18n="a11ySettings">Dostopnost</span>
+            </button>
+            <div
+              id="a11yPanel"
+              class="a11y-panel"
+              role="region"
+              aria-label="Nastavitve dostopnosti"
+              hidden
+            >
+              <div class="a11y-group">
+                <span class="a11y-label" data-i18n="fontSize"
+                  >Velikost pisave</span
+                >
+                <div
+                  class="a11y-controls"
+                  role="group"
+                  aria-label="Velikost pisave"
+                >
+                  <button
+                    class="font-btn"
+                    data-font-action="decrease"
+                    aria-label="Manjša pisava"
+                  >
+                    A−
+                  </button>
+                  <button
+                    class="font-btn"
+                    data-font-action="reset"
+                    aria-label="Ponastavi pisavo"
+                  >
+                    A
+                  </button>
+                  <button
+                    class="font-btn"
+                    data-font-action="increase"
+                    aria-label="Večja pisava"
+                  >
+                    A+
+                  </button>
+                </div>
+              </div>
+              <div class="a11y-group">
+                <span class="a11y-label" data-i18n="contrast">Kontrast</span>
+                <div class="a11y-controls" role="group" aria-label="Kontrast">
+                  <button
+                    class="contrast-btn"
+                    data-contrast="normal"
+                    aria-pressed="true"
+                    data-i18n="contrastNormal"
+                  >
+                    Normalno
+                  </button>
+                  <button
+                    class="contrast-btn"
+                    data-contrast="high"
+                    aria-pressed="false"
+                    data-i18n="contrastHigh"
+                  >
+                    Visok
+                  </button>
+                </div>
+              </div>
+              <div class="a11y-group">
+                <span class="a11y-label" data-i18n="fontType">Tip pisave</span>
+                <div class="a11y-controls" role="group" aria-label="Tip pisave">
+                  <button
+                    class="font-type-btn"
+                    data-font-type="default"
+                    aria-pressed="true"
+                    data-i18n="fontDefault"
+                  >
+                    Privzeto
+                  </button>
+                  <button
+                    class="font-type-btn"
+                    data-font-type="dyslexic"
+                    aria-pressed="false"
+                    data-i18n="fontDyslexic"
+                  >
+                    Za disleksijo
+                  </button>
+                </div>
+              </div>
+              <div class="a11y-group">
+                <span class="a11y-label" data-i18n="motion">Animacije</span>
+                <div class="a11y-controls" role="group" aria-label="Animacije">
+                  <button
+                    class="motion-btn"
+                    data-motion="on"
+                    aria-pressed="true"
+                    data-i18n="motionOn"
+                  >
+                    Vključene
+                  </button>
+                  <button
+                    class="motion-btn"
+                    data-motion="off"
+                    aria-pressed="false"
+                    data-i18n="motionOff"
+                  >
+                    Izključene
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="lang-switch" role="group" aria-label="Jezik / Language">
+            <button class="lang-btn" data-lang="sl" aria-pressed="true">
+              SL
+            </button>
+            <span class="lang-sep" aria-hidden="true">|</span>
+            <button class="lang-btn" data-lang="en" aria-pressed="false">
+              EN
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main id="main" tabindex="-1">
+      <!-- ============ HERO CAROUSEL ============ -->
+      <section
+        class="carousel"
+        id="carousel"
+        aria-roledescription="carousel"
+        aria-label="Predstavitev liste"
+        tabindex="0"
+      >
+        <div class="carousel-viewport">
+          <div class="carousel-track" id="carouselTrack">
+            <article
+              class="slide slide--1"
+              role="group"
+              aria-roledescription="slide"
+              aria-label="1 od 4"
+            >
+              <div class="slide-bg" aria-hidden="true"></div>
+              <div class="slide-overlay" aria-hidden="true"></div>
+              <div class="container slide-content">
+                <p class="eyebrow" data-i18n="s1Eyebrow">
+                  Lokalne volitve · Kamnik 2026
+                </p>
+                <h1 data-i18n="s1Title">Za boljši Kamnik</h1>
+                <p class="slide-lead" data-i18n="s1Lead">
+                  Lista Mateja Slaparja — skupaj gradimo mesto, v katerem je
+                  dobro živeti.
+                </p>
+                <div class="slide-actions">
+                  <a href="#lista" class="btn btn-primary" data-i18n="s1Cta1"
+                    >Spoznaj listo</a
+                  >
+                  <a href="#podpri" class="btn btn-ghost" data-i18n="s1Cta2"
+                    >Podpri nas</a
+                  >
+                </div>
+              </div>
+            </article>
+
+            <article
+              class="slide slide--2"
+              role="group"
+              aria-roledescription="slide"
+              aria-label="2 od 4"
+              aria-hidden="true"
+            >
+              <div class="slide-bg" aria-hidden="true"></div>
+              <div class="slide-overlay" aria-hidden="true"></div>
+              <div class="container slide-content">
+                <p class="eyebrow" data-i18n="s2Eyebrow">Kandidat za župana</p>
+                <h1 data-i18n="s2Title">Matej Slapar</h1>
+                <p class="slide-lead" data-i18n="s2Lead">
+                  Lokalni prebivalec, ki pozna vsak kotiček Kamnika. Za odprto,
+                  zeleno in skupnostno občino.
+                </p>
+                <div class="slide-actions">
+                  <a href="#kandidati" class="btn btn-primary" data-i18n="s2Cta"
+                    >Spoznaj kandidata</a
+                  >
+                </div>
+              </div>
+            </article>
+
+            <article
+              class="slide slide--3"
+              role="group"
+              aria-roledescription="slide"
+              aria-label="3 od 4"
+              aria-hidden="true"
+            >
+              <div class="slide-bg" aria-hidden="true"></div>
+              <div class="slide-overlay" aria-hidden="true"></div>
+              <div class="container slide-content">
+                <p class="eyebrow" data-i18n="s3Eyebrow">
+                  Kandidat za občinski svet
+                </p>
+                <h1 data-i18n="s3Title">Matija Podjed</h1>
+                <p class="slide-lead" data-i18n="s3Lead">
+                  Vaš glas v občinskem svetu — za transparentne odločitve in
+                  sosedsko skupnost.
+                </p>
+                <div class="slide-actions">
+                  <a href="#kandidati" class="btn btn-primary" data-i18n="s3Cta"
+                    >Spoznaj Matijo</a
+                  >
+                </div>
+              </div>
+            </article>
+
+            <article
+              class="slide slide--4"
+              role="group"
+              aria-roledescription="slide"
+              aria-label="4 od 4"
+              aria-hidden="true"
+            >
+              <div class="slide-bg" aria-hidden="true"></div>
+              <div class="slide-overlay" aria-hidden="true"></div>
+              <div class="container slide-content">
+                <p class="eyebrow" data-i18n="s4Eyebrow">Tvoja odločitev</p>
+                <h1 data-i18n="s4Title">Podpri Listo Mateja Slaparja</h1>
+                <p class="slide-lead" data-i18n="s4Lead">
+                  Glasuj za Mateja Slaparja in Matijo Podjeda. Vsak glas šteje za
+                  naš Kamnik.
+                </p>
+                <div class="slide-actions">
+                  <a href="#program" class="btn btn-primary" data-i18n="s4Cta"
+                    >Spoznaj program</a
+                  >
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <button
+          class="carousel-arrow carousel-prev"
+          id="carouselPrev"
+          type="button"
+          aria-label="Prejšnji diapozitiv"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            width="26"
+            height="26"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path
+              fill="currentColor"
+              d="M15.4 7.4L10.8 12l4.6 4.6L14 18l-6-6 6-6z"
+            />
+          </svg>
+        </button>
+        <button
+          class="carousel-arrow carousel-next"
+          id="carouselNext"
+          type="button"
+          aria-label="Naslednji diapozitiv"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            width="26"
+            height="26"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path
+              fill="currentColor"
+              d="M8.6 7.4L13.2 12l-4.6 4.6L10 18l6-6-6-6z"
+            />
+          </svg>
+        </button>
+
+        <div
+          class="carousel-dots"
+          id="carouselDots"
+          role="tablist"
+          aria-label="Izbor diapozitiva"
+        ></div>
+
+        <p
+          class="sr-only"
+          id="carouselLive"
+          role="status"
+          aria-live="polite"
+        ></p>
+      </section>
+
+      <!-- ============ LISTA ============ -->
+      <section id="lista" class="section" aria-labelledby="listaTitle">
+        <div class="container two-col">
+          <div class="prose">
+            <p class="eyebrow eyebrow--inline" data-i18n="listaEyebrow">
+              Lista
+            </p>
+            <h2 id="listaTitle" data-i18n="listaTitle">
+              Lista Mateja Slaparja
+            </h2>
+            <p data-i18n="listaP1">
+              Neodvisna lista lokalnih ljudi, ki ljubijo Kamnik. Povezujemo
+              sosede, družine in podjetnike okoli skupne vizije: zelene, odprte
+              in žive občine.
+            </p>
+            <p data-i18n="listaP2">
+              Ne obljubamo čudežev — obljubimo prisotnost, poslušanje in delo.
+              Od prve do zadnje seje sveta.
+            </p>
+            <p>
+              <a href="#program" class="link-arrow" data-i18n="listaCta"
+                >Preberi naš program <span aria-hidden="true">→</span></a
+              >
+            </p>
+          </div>
+          <aside class="card card-stats" aria-label="Števke">
+            <h3 data-i18n="statsTitle">V številkah</h3>
+            <dl class="stats-grid">
+              <div>
+                <dt data-i18n="statPeople">Ljudi na listi</dt>
+                <dd>2</dd>
+              </div>
+              <div>
+                <dt data-i18n="statFocus">Področij programa</dt>
+                <dd id="statFocusVal">6</dd>
+              </div>
+              <div>
+                <dt data-i18n="statYears">Let v Kamniku</dt>
+                <dd>2026</dd>
+              </div>
+            </dl>
+          </aside>
+        </div>
+      </section>
+
+      <!-- ============ KANDIDATI ============ -->
+      <section
+        id="kandidati"
+        class="section section-alt"
+        aria-labelledby="kandTitle"
+      >
+        <div class="container">
+          <div class="section-head center">
+            <p class="eyebrow eyebrow--inline" data-i18n="kandEyebrow">
+              Kandidati
+            </p>
+            <h2 id="kandTitle" data-i18n="kandTitle">Spoznaj naše kandidate</h2>
+            <p class="section-sub" data-i18n="kandSub">
+              Dve imeni, ena vizija za Kamnik.
+            </p>
+          </div>
+          <div id="peopleGrid" class="people-grid" aria-label="Kandidati"></div>
+        </div>
+      </section>
+
+      <!-- ============ PROGRAM ============ -->
+      <section id="program" class="section" aria-labelledby="progTitle">
+        <div class="container">
+          <div class="section-head center">
+            <p class="eyebrow eyebrow--inline" data-i18n="progEyebrow">
+              Program
+            </p>
+            <h2 id="progTitle" data-i18n="progTitle">Naš program za Kamnik</h2>
+            <p class="section-sub" data-i18n="progSub">
+              Šest področij, na katera se bomo zares zavezali.
+            </p>
+          </div>
+          <ul
+            id="programGrid"
+            class="program-grid"
+            aria-label="Programske točke"
+          ></ul>
+        </div>
+      </section>
+
+      <!-- ============ PODPRI / CTA ============ -->
+      <section
+        id="podpri"
+        class="section cta-section"
+        aria-labelledby="ctaTitle"
+      >
+        <div class="container cta-inner">
+          <p class="eyebrow eyebrow--light" data-i18n="ctaEyebrow">
+            Pridruži se
+          </p>
+          <h2 id="ctaTitle" data-i18n="ctaTitle">
+            Podpri Listo Mateja Slaparja
+          </h2>
+          <p class="cta-lead" data-i18n="ctaLead">
+            Vsak glas šteje. Glasuj za Mateja Slaparja za župana in Matijo Podjeda
+            za občinski svet.
+          </p>
+          <div class="cta-actions">
+            <a href="#program" class="btn btn-primary" data-i18n="ctaBtn1"
+              >Spoznaj program</a
+            >
+            <a href="#kandidati" class="btn btn-ghost" data-i18n="ctaBtn2"
+              >Spoznaj kandidate</a
+            >
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer" role="contentinfo">
+      <div class="container footer-inner">
+        <div>
+          <p class="footer-brand">Lista Mateja Slaparja</p>
+          <p class="footer-note" data-i18n="footerNote">
+            Neodvisna lista za lokalne volitve v Občini Kamnik.
+          </p>
+        </div>
+        <nav aria-label="Povezave v nogi">
+          <ul class="footer-links">
+            <li><a href="#lista" data-i18n="navList">Lista</a></li>
+            <li>
+              <a href="#kandidati" data-i18n="navCandidates">Kandidati</a>
+            </li>
+            <li><a href="#program" data-i18n="navProgram">Program</a></li>
+            <li><a href="#podpri" data-i18n="navSupport">Podpri</a></li>
+          </ul>
+        </nav>
+        <p class="footer-meta">
+          © 2026 · <span data-i18n="footerRights">Vse pravice pridržane.</span>
+        </p>
+      </div>
+    </footer>
+
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+    <script src="assets/js/i18n.js"></script>
+    <script src="assets/js/candidates.js"></script>
+    <script src="assets/js/main.js"></script>
+  </body>
+</html>

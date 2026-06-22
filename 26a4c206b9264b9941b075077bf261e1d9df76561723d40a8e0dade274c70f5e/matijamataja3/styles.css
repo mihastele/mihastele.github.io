@@ -1,0 +1,955 @@
+/* 
+   Lista Mateja Slaparja - Web Portal Styling
+   Design System & Premium Aesthetics
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap');
+
+/* ==========================================================================
+   1. Design System & CSS Variables
+   ========================================================================== */
+:root {
+  /* Colors */
+  --primary-h: 224;
+  --primary-s: 64%;
+  --primary-l: 33%;
+  --primary: hsl(var(--primary-h), var(--primary-s), var(--primary-l));
+  --primary-light: hsl(var(--primary-h), var(--primary-s), 45%);
+  --primary-dark: hsl(var(--primary-h), var(--primary-s), 20%);
+  
+  --secondary-h: 35;
+  --secondary-s: 84%;
+  --secondary-l: 53%;
+  --secondary: hsl(var(--secondary-h), var(--secondary-s), var(--secondary-l));
+  --secondary-light: hsl(var(--secondary-h), var(--secondary-s), 65%);
+  
+  --bg-color: #f8fafc;
+  --bg-card: #ffffff;
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+  
+  /* Glassmorphism settings */
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.4);
+  --glass-shadow: rgba(30, 41, 59, 0.08);
+  --glass-blur: 12px;
+
+  /* Sizing and spacings */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  --font-scale: 1;
+}
+
+/* --- Theme Override: Dark Mode --- */
+body.theme-dark {
+  --bg-color: #0f172a;
+  --bg-card: #1e293b;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --border-color: #334155;
+  
+  --primary-light: hsl(var(--primary-h), var(--primary-s), 55%);
+  --primary-dark: hsl(var(--primary-h), var(--primary-s), 15%);
+  
+  --glass-bg: rgba(15, 23, 42, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-shadow: rgba(0, 0, 0, 0.3);
+}
+
+/* --- Theme Override: High Contrast Mode --- */
+body.theme-high-contrast {
+  --bg-color: #000000;
+  --bg-card: #000000;
+  --text-main: #ffffff;
+  --text-muted: #ffff00; /* High contrast yellow */
+  --border-color: #ffffff;
+  
+  --primary: #0000ff;
+  --primary-light: #5555ff;
+  --primary-dark: #000088;
+  
+  --secondary: #ffff00;
+  --secondary-light: #ffff88;
+  
+  --glass-bg: #000000;
+  --glass-border: #ffffff;
+  --glass-shadow: none;
+  --glass-blur: 0px;
+  
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+}
+
+/* ==========================================================================
+   2. Reset & Typography Setup
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: calc(1rem * var(--font-scale));
+  line-height: 1.6;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  transition: var(--transition-smooth);
+  overflow-x: hidden;
+}
+
+/* Focus outline for keyboard accessibility */
+*:focus-visible {
+  outline: 3px solid var(--secondary);
+  outline-offset: 4px;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--text-main);
+}
+
+h1 { font-size: calc(2.8rem * var(--font-scale)); }
+h2 { font-size: calc(2.2rem * var(--font-scale)); }
+h3 { font-size: calc(1.5rem * var(--font-scale)); }
+p { font-size: calc(1rem * var(--font-scale)); }
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: var(--transition-smooth);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ==========================================================================
+   3. Accessibility Filters (Colorblindness Simulation/Correction)
+   ========================================================================== */
+body.filter-protanopia { filter: url('#filter-protanopia'); }
+body.filter-deuteranopia { filter: url('#filter-deuteranopia'); }
+body.filter-tritanopia { filter: url('#filter-tritanopia'); }
+
+/* ==========================================================================
+   4. Layout & Grid Systems
+   ========================================================================== */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ==========================================================================
+   5. Header & Navigation (Glassmorphic)
+   ========================================================================== */
+.main-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border-bottom: 1px solid var(--glass-border);
+  box-shadow: 0 4px 30px var(--glass-shadow);
+  transition: var(--transition-smooth);
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 80px;
+}
+
+.logo-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-text {
+  font-size: calc(1.4rem * var(--font-scale));
+  font-weight: 800;
+  color: var(--primary);
+  font-family: 'Outfit', sans-serif;
+  letter-spacing: -0.5px;
+}
+
+.logo-text span {
+  color: var(--secondary);
+}
+
+.main-nav ul {
+  display: flex;
+  list-style: none;
+  gap: 32px;
+  align-items: center;
+}
+
+.nav-link {
+  font-weight: 500;
+  font-size: calc(0.95rem * var(--font-scale));
+  color: var(--text-main);
+  opacity: 0.85;
+  position: relative;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--secondary);
+  transition: var(--transition-smooth);
+}
+
+.nav-link:hover {
+  opacity: 1;
+  color: var(--primary-light);
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Language Switcher */
+.lang-switcher {
+  display: flex;
+  background: var(--border-color);
+  padding: 4px;
+  border-radius: 20px;
+  border: 1px solid var(--glass-border);
+}
+
+.lang-btn {
+  background: none;
+  border: none;
+  color: var(--text-main);
+  padding: 6px 12px;
+  border-radius: 16px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.8rem;
+  transition: var(--transition-smooth);
+}
+
+.lang-btn.active {
+  background: var(--primary);
+  color: #ffffff;
+}
+
+.accessibility-toggle-btn {
+  background: var(--border-color);
+  border: 1px solid var(--glass-border);
+  color: var(--text-main);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.accessibility-toggle-btn:hover {
+  background: var(--primary);
+  color: #ffffff;
+  transform: rotate(30deg);
+}
+
+/* Mobile Menu Toggle */
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text-main);
+  font-size: 1.8rem;
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   6. Accessibility Panel
+   ========================================================================== */
+.accessibility-panel {
+  position: fixed;
+  top: 90px;
+  right: -360px;
+  width: 320px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  padding: 24px;
+  z-index: 1000;
+  transition: var(--transition-smooth);
+}
+
+.accessibility-panel.open {
+  right: 24px;
+}
+
+.acc-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 10px;
+}
+
+.acc-close-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.acc-group {
+  margin-bottom: 20px;
+}
+
+.acc-group h4 {
+  font-size: 1rem;
+  margin-bottom: 10px;
+  color: var(--text-main);
+}
+
+.acc-options {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.acc-btn {
+  background: var(--bg-color);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  flex: 1 1 calc(50% - 8px);
+  transition: var(--transition-smooth);
+}
+
+.acc-btn:hover, .acc-btn.active {
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
+}
+
+/* ==========================================================================
+   7. Hero Section
+   ========================================================================== */
+.hero-section {
+  padding: 160px 0 100px;
+  background: radial-gradient(circle at 80% 20%, rgba(var(--secondary-h), var(--secondary-s), 90%, 0.08) 0%, transparent 60%);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.hero-tagline {
+  background: rgba(var(--primary-h), var(--primary-s), 50%, 0.1);
+  color: var(--primary);
+  padding: 6px 16px;
+  border-radius: 30px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: inline-block;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.hero-title {
+  margin-bottom: 24px;
+}
+
+.hero-title span {
+  color: var(--secondary);
+}
+
+.hero-description {
+  font-size: calc(1.15rem * var(--font-scale));
+  color: var(--text-muted);
+  margin-bottom: 40px;
+  max-width: 580px;
+}
+
+.hero-cta {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 14px 28px;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: #ffffff;
+  border: 1px solid var(--primary);
+}
+
+.btn-primary:hover {
+  background: var(--primary-light);
+  border-color: var(--primary-light);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(var(--primary-h), var(--primary-s), 30%, 0.25);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+  background: var(--border-color);
+  transform: translateY(-2px);
+}
+
+.hero-visual {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-image-wrapper {
+  position: relative;
+  z-index: 2;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+  border: 4px solid var(--bg-card);
+}
+
+.hero-backdrop-shape {
+  position: absolute;
+  width: 120%;
+  height: 120%;
+  background: radial-gradient(circle, var(--secondary-light) 0%, transparent 70%);
+  opacity: 0.15;
+  top: -10%;
+  left: -10%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   8. Campaign Vision & Carousel Section
+   ========================================================================== */
+.program-section {
+  padding: 100px 0;
+  background-color: var(--bg-card);
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.section-header {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 60px;
+}
+
+.section-subtitle {
+  color: var(--secondary);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-size: 0.9rem;
+  margin-bottom: 12px;
+}
+
+.section-title {
+  margin-bottom: 20px;
+}
+
+.carousel-container {
+  position: relative;
+  max-width: 900px;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 10px 40px var(--glass-shadow);
+  border: 1px solid var(--border-color);
+}
+
+.carousel-wrapper {
+  display: flex;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  width: 100%;
+}
+
+.carousel-slide {
+  min-width: 100%;
+  padding: 60px;
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 40px;
+  align-items: center;
+  background: var(--bg-card);
+}
+
+.slide-icon {
+  width: 80px;
+  height: 80px;
+  background: rgba(var(--primary-h), var(--primary-s), 50%, 0.1);
+  color: var(--primary);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  margin-bottom: 24px;
+}
+
+.slide-title {
+  margin-bottom: 16px;
+}
+
+.slide-text {
+  color: var(--text-muted);
+  margin-bottom: 24px;
+}
+
+.slide-list {
+  list-style: none;
+}
+
+.slide-list li {
+  position: relative;
+  padding-left: 24px;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.slide-list li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--secondary);
+  font-weight: bold;
+}
+
+.slide-image {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+}
+
+.carousel-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: var(--transition-smooth);
+}
+
+.carousel-nav-btn:hover {
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
+}
+
+.carousel-prev { left: 20px; }
+.carousel-next { right: 20px; }
+
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 30px;
+}
+
+.carousel-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--border-color);
+  border: none;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.carousel-dot.active {
+  background: var(--primary);
+  width: 28px;
+  border-radius: 6px;
+}
+
+/* ==========================================================================
+   9. Candidates Section
+   ========================================================================== */
+.candidates-section {
+  padding: 100px 0;
+  background-color: var(--bg-color);
+}
+
+.candidates-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 48px;
+  align-items: stretch;
+}
+
+/* Candidate Card: Matej Slapar (Lead) */
+.candidate-card-featured {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 15px 35px var(--glass-shadow);
+  border: 1px solid var(--border-color);
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  transition: var(--transition-smooth);
+}
+
+.candidate-card-featured:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 45px rgba(0,0,0,0.08);
+}
+
+.candidate-photo-wrapper {
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+}
+
+.candidate-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: var(--transition-smooth);
+}
+
+.candidate-card-featured:hover .candidate-photo {
+  transform: scale(1.05);
+}
+
+.candidate-info {
+  padding: 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.candidate-role {
+  color: var(--secondary);
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 8px;
+}
+
+.candidate-name {
+  margin-bottom: 16px;
+  font-size: calc(2rem * var(--font-scale));
+}
+
+.candidate-quote {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--primary);
+  border-left: 3px solid var(--secondary);
+  padding-left: 16px;
+  margin-bottom: 24px;
+  font-size: calc(1.05rem * var(--font-scale));
+}
+
+.candidate-bio {
+  color: var(--text-muted);
+  margin-bottom: 30px;
+}
+
+/* Candidate Card: Matija Podjed (Council) */
+.candidate-card-regular {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 15px 35px var(--glass-shadow);
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  transition: var(--transition-smooth);
+}
+
+.candidate-card-regular:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 45px rgba(0,0,0,0.08);
+}
+
+.candidate-card-regular .candidate-photo-wrapper {
+  height: 320px;
+}
+
+.candidate-card-regular .candidate-info {
+  padding: 32px;
+}
+
+.candidate-card-regular .candidate-name {
+  font-size: calc(1.5rem * var(--font-scale));
+}
+
+/* ==========================================================================
+   10. Contact & Community Section
+   ========================================================================== */
+.contact-section {
+  padding: 100px 0;
+  background-color: var(--bg-card);
+  border-top: 1px solid var(--border-color);
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.contact-detail-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+.contact-icon {
+  width: 48px;
+  height: 48px;
+  background: rgba(var(--primary-h), var(--primary-s), 50%, 0.1);
+  color: var(--primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.contact-detail-text h4 {
+  font-size: 1rem;
+  margin-bottom: 4px;
+}
+
+.contact-detail-text p {
+  color: var(--text-muted);
+}
+
+.contact-form {
+  background: var(--bg-color);
+  padding: 40px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-main);
+  font-family: inherit;
+  font-size: 0.95rem;
+  transition: var(--transition-smooth);
+}
+
+.form-input:focus {
+  border-color: var(--primary);
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(var(--primary-h), var(--primary-s), 50%, 0.1);
+}
+
+textarea.form-input {
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* ==========================================================================
+   11. Footer
+   ========================================================================== */
+.main-footer {
+  background-color: #0b0f19;
+  color: #94a3b8;
+  padding: 60px 0 30px;
+  border-top: 1px solid #1e293b;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+.footer-brand h3 {
+  color: #ffffff;
+  margin-bottom: 16px;
+  font-size: 1.4rem;
+}
+
+.footer-links h4 {
+  color: #ffffff;
+  margin-bottom: 20px;
+  font-size: 1rem;
+}
+
+.footer-links ul {
+  list-style: none;
+}
+
+.footer-links li {
+  margin-bottom: 12px;
+}
+
+.footer-links a:hover {
+  color: #ffffff;
+  padding-left: 4px;
+}
+
+.footer-bottom {
+  border-top: 1px solid #1e293b;
+  padding-top: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  font-size: 0.85rem;
+}
+
+.footer-disclaimer {
+  max-width: 600px;
+  line-height: 1.4;
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+/* ==========================================================================
+   12. Responsive Adjustments
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 40px;
+  }
+  .hero-description {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .hero-cta {
+    justify-content: center;
+  }
+  .carousel-slide {
+    grid-template-columns: 1fr;
+    padding: 40px;
+    gap: 30px;
+  }
+  .slide-image {
+    order: -1;
+  }
+  .candidates-grid {
+    grid-template-columns: 1fr;
+  }
+  .candidate-card-featured {
+    grid-template-columns: 1fr;
+  }
+  .candidate-card-featured .candidate-photo-wrapper {
+    height: 380px;
+  }
+}
+
+@media (max-width: 768px) {
+  h1 { font-size: calc(2.2rem * var(--font-scale)); }
+  h2 { font-size: calc(1.8rem * var(--font-scale)); }
+  
+  .main-nav {
+    display: none; /* Mobile menu behavior */
+  }
+  
+  .menu-toggle {
+    display: block;
+  }
+  
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .footer-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .header-container {
+    height: 70px;
+  }
+  .hero-section {
+    padding: 120px 0 60px;
+  }
+}

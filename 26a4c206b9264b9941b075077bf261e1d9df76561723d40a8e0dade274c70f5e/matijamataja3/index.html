@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lista Mateja Slaparja - Kamnik</title>
+  <meta name="description" content="Uradni portal Liste Mateja Slaparja za lokalne volitve v občini Kamnik. Spoznajte naš program, vizijo in kandidate.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ==========================================================================
+       SVG Accessibility Filters (Colorblindness Simulation & Correction)
+       ========================================================================== -->
+  <svg style="position: absolute; width: 0; height: 0; pointer-events: none;" aria-hidden="true">
+    <defs>
+      <!-- Protanopia Filter -->
+      <filter id="filter-protanopia">
+        <feColorMatrix type="matrix" values="0.567, 0.433, 0, 0, 0, 0.558, 0.442, 0, 0, 0, 0, 0.242, 0.758, 0, 0, 0, 0, 0, 1, 0" />
+      </filter>
+      <!-- Deuteranopia Filter -->
+      <filter id="filter-deuteranopia">
+        <feColorMatrix type="matrix" values="0.625, 0.375, 0, 0, 0, 0.7, 0.3, 0, 0, 0, 0, 0.3, 0.7, 0, 0, 0, 0, 0, 1, 0" />
+      </filter>
+      <!-- Tritanopia Filter -->
+      <filter id="filter-tritanopia">
+        <feColorMatrix type="matrix" values="0.95, 0.05, 0, 0, 0, 0, 0.433, 0.567, 0, 0, 0, 0.475, 0.525, 0, 0, 0, 0, 0, 1, 0" />
+      </filter>
+    </defs>
+  </svg>
+
+  <!-- ==========================================================================
+       Header & Navigation
+       ========================================================================== -->
+  <header class="main-header" role="banner">
+    <div class="container header-container">
+      <a href="#home" class="logo-link" aria-label="Domov - Lista Mateja Slaparja">
+        <div class="logo-text">Lista Mateja <span>Slaparja</span></div>
+      </a>
+      
+      <button class="menu-toggle" id="mobile-menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        ☰
+      </button>
+
+      <nav class="main-nav" id="main-nav" role="navigation" aria-label="Main Navigation">
+        <ul>
+          <li><a href="#home" class="nav-link" data-i18n="nav_home">Domov</a></li>
+          <li><a href="#program" class="nav-link" data-i18n="nav_vision">Program</a></li>
+          <li><a href="#kandidati" class="nav-link" data-i18n="nav_candidates">Kandidati</a></li>
+          <li><a href="#kontakt" class="nav-link" data-i18n="nav_contact">Kontakt</a></li>
+        </ul>
+      </nav>
+
+      <div class="action-buttons">
+        <!-- Language Switcher -->
+        <div class="lang-switcher" role="group" aria-label="Language Switcher">
+          <button class="lang-btn active" data-lang="sl" aria-label="Slovenski jezik">SLO</button>
+          <button class="lang-btn" data-lang="en" aria-label="English language">ENG</button>
+        </div>
+
+        <!-- Accessibility Widget Trigger -->
+        <button class="accessibility-toggle-btn" id="acc-toggle-btn" aria-label="Možnosti dostopnosti" aria-haspopup="true" aria-expanded="false">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 8a2.5 2.5 0 0 1 2 2.5c0 1.5-1 2.5-2 2.5s-2-1-2-2.5A2.5 2.5 0 0 1 12 8z"></path>
+            <path d="M12 13v4"></path>
+            <path d="M9 16h6"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       Accessibility Options Control Panel
+       ========================================================================== -->
+  <section class="accessibility-panel" id="accessibility-panel" role="region" aria-labelledby="acc-panel-heading">
+    <div class="acc-panel-header">
+      <h3 id="acc-panel-heading" data-i18n="acc_title">Prilagajanje Dostopnosti</h3>
+      <button class="acc-close-btn" id="acc-close-btn" aria-label="Zapri ploščo dostopnosti">✕</button>
+    </div>
+
+    <!-- Theme & Contrast -->
+    <div class="acc-group">
+      <h4 data-i18n="acc_theme">Tema in Kontrast</h4>
+      <div class="acc-options">
+        <button class="acc-btn active" data-acc-theme="standard" data-i18n="acc_theme_standard">Standardna</button>
+        <button class="acc-btn" data-acc-theme="dark" data-i18n="acc_theme_dark">Temni Način</button>
+        <button class="acc-btn" data-acc-theme="contrast" data-i18n="acc_theme_contrast">Visok Kontrast</button>
+      </div>
+    </div>
+
+    <!-- Font Scaling -->
+    <div class="acc-group">
+      <h4 data-i18n="acc_size">Velikost Besedila</h4>
+      <div class="acc-options">
+        <button class="acc-btn active" data-acc-scale="normal" data-i18n="acc_size_normal">Normalno</button>
+        <button class="acc-btn" data-acc-scale="large" data-i18n="acc_size_large">Večje</button>
+        <button class="acc-btn" data-acc-scale="xlarge" data-i18n="acc_size_xl">Zelo Veliko</button>
+      </div>
+    </div>
+
+    <!-- Colorblindness filters -->
+    <div class="acc-group">
+      <h4 data-i18n="acc_colorblind">Barvna Slepota</h4>
+      <div class="acc-options">
+        <button class="acc-btn active" data-acc-filter="none" data-i18n="acc_cb_none">Brez Filtra</button>
+        <button class="acc-btn" data-acc-filter="protanopia" data-i18n="acc_cb_protan">Protanopija</button>
+        <button class="acc-btn" data-acc-filter="deuteranopia" data-i18n="acc_cb_deuteran">Deuteranopija</button>
+        <button class="acc-btn" data-acc-filter="tritanopia" data-i18n="acc_cb_tritan">Tritanopija</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Hero Section
+       ========================================================================== -->
+  <section class="hero-section" id="home">
+    <div class="container hero-grid">
+      <div class="hero-content">
+        <span class="hero-tagline" data-i18n="hero_tagline">Volitve v Občinski Svet Kamnik</span>
+        <h1 class="hero-title" data-i18n="hero_title">Za razvoj in prihodnost <span>Kamnika</span></h1>
+        <p class="hero-description" data-i18n="hero_description">Zavezani k trajnostnemu razvoju, napredni infrastrukturi in varnemu okolju za mlade, družine in starejše. Skupaj gradimo občino prihodnosti pod vodstvom Mateja Slaparja.</p>
+        <div class="hero-cta">
+          <a href="#program" class="btn btn-primary" data-i18n="hero_cta_primary">Preberite naš program</a>
+          <a href="#kandidati" class="btn btn-secondary" data-i18n="hero_cta_secondary">Spoznajte kandidate</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-image-wrapper">
+          <img src="assets/hero_kamnik.png" alt="Stylized illustration of historic Kamnik town against the Alps background" width="550" height="380">
+        </div>
+        <div class="hero-backdrop-shape"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Program / Vision (Carousel Section)
+       ========================================================================== -->
+  <section class="program-section" id="program" aria-labelledby="program-title">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-subtitle" data-i18n="vision_subtitle">Naša vizija za Kamnik</span>
+        <h2 class="section-title" id="program-title" data-i18n="vision_title">Ključni stebri razvoja</h2>
+      </div>
+
+      <div class="carousel-container" aria-roledescription="carousel" aria-label="Campaign key points">
+        <button class="carousel-nav-btn carousel-prev" aria-label="Prejšnja stran">❮</button>
+        <button class="carousel-nav-btn carousel-next" aria-label="Naslednja stran">❯</button>
+
+        <div class="carousel-wrapper">
+          <!-- Slide 1: Green Kamnik -->
+          <div class="carousel-slide" aria-roledescription="slide" aria-label="1 of 4">
+            <div class="slide-content">
+              <div class="slide-icon" aria-hidden="true">🌱</div>
+              <h3 class="slide-title" data-i18n="slide1_title">Trajnostni & Zeleni Kamnik</h3>
+              <p class="slide-text" data-i18n="slide1_text">Ohranjanje naravne dediščine Kamnika ter spodbujanje čiste energije in učinkovitega ravnanja z odpadki.</p>
+              <ul class="slide-list">
+                <li data-i18n="slide1_bullet1">Varovanje pitne vode in naravnih virov</li>
+                <li data-i18n="slide1_bullet2">Širitev kolesarskih stez in pešpoti</li>
+                <li data-i18n="slide1_bullet3">Energetska sanacija javnih stavb</li>
+              </ul>
+            </div>
+            <div class="slide-image">
+              <img src="assets/hero_kamnik.png" alt="Green and sustainable Kamnik scenery" width="400" height="280">
+            </div>
+          </div>
+
+          <!-- Slide 2: Infrastructure -->
+          <div class="carousel-slide" aria-roledescription="slide" aria-label="2 of 4">
+            <div class="slide-content">
+              <div class="slide-icon" aria-hidden="true">🚧</div>
+              <h3 class="slide-title" data-i18n="slide2_title">Sodobna Infrastruktura</h3>
+              <p class="slide-text" data-i18n="slide2_text">Gradnja varnih cest, obnova komunalnih omrežij ter urejanje parkirišč in javnih prostorov za večjo kakovost bivanja.</p>
+              <ul class="slide-list">
+                <li data-i18n="slide2_bullet1">Sanacija lokalnih cest in pločnikov</li>
+                <li data-i18n="slide2_bullet2">Posodobitev vodovodnega omrežja</li>
+                <li data-i18n="slide2_bullet3">Ureditev parkirišč v mestnem jedru</li>
+              </ul>
+            </div>
+            <div class="slide-image">
+              <img src="assets/hero_kamnik.png" alt="Infrastructure and transport planning" width="400" height="280">
+            </div>
+          </div>
+
+          <!-- Slide 3: Families & Youth -->
+          <div class="carousel-slide" aria-roledescription="slide" aria-label="3 of 4">
+            <div class="slide-content">
+              <div class="slide-icon" aria-hidden="true">👨‍👩‍👧‍👦</div>
+              <h3 class="slide-title" data-i18n="slide3_title">Mladi, Družine in Starejši</h3>
+              <p class="slide-text" data-i18n="slide3_text">Kamnik mora ostati varna in prijazna občina za vse generacije z ustreznimi socialnimi programi in javno infrastrukturo.</p>
+              <ul class="slide-list">
+                <li data-i18n="slide3_bullet1">Povečanje kapacitet v vrtcih in šolah</li>
+                <li data-i18n="slide3_bullet2">Izgradnja novih otroških in športnih igrišč</li>
+                <li data-i18n="slide3_bullet3">Podpora programom za pomoč starejšim na domu</li>
+              </ul>
+            </div>
+            <div class="slide-image">
+              <img src="assets/hero_kamnik.png" alt="Family friendly environments and communities" width="400" height="280">
+            </div>
+          </div>
+
+          <!-- Slide 4: Business & Tourism -->
+          <div class="carousel-slide" aria-roledescription="slide" aria-label="4 of 4">
+            <div class="slide-content">
+              <div class="slide-icon" aria-hidden="true">💼</div>
+              <h3 class="slide-title" data-i18n="slide4_title">Gospodarstvo in Turizem</h3>
+              <p class="slide-text" data-i18n="slide4_text">Ustvarjanje spodbudnega okolja za lokalna podjetja ter krepitev turistične znamke Kamnika kot zelene destinacije.</p>
+              <ul class="slide-list">
+                <li data-i18n="slide4_bullet1">Spodbude za mlade podjetnike in obrtnike</li>
+                <li data-i18n="slide4_bullet2">Razvoj trajnostnega turizma na Veliki planini</li>
+                <li data-i18n="slide4_bullet3">Povezovanje lokalnih kmetij z izobraževalnimi zavodi</li>
+              </ul>
+            </div>
+            <div class="slide-image">
+              <img src="assets/hero_kamnik.png" alt="Economic development and sustainable tourism in Kamnik" width="400" height="280">
+            </div>
+          </div>
+        </div>
+
+        <div class="carousel-dots">
+          <!-- Dots dynamically created via JS -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Candidates Section
+       ========================================================================== -->
+  <section class="candidates-section" id="kandidati" aria-labelledby="candidates-title">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-subtitle" data-i18n="candidates_subtitle">Ljudje, ki jim zaupamo</span>
+        <h2 class="section-title" id="candidates-title" data-i18n="candidates_title">Naša kandidata za vaš glas</h2>
+      </div>
+
+      <div class="candidates-grid">
+        <!-- Candidate 1: Matej Slapar (Featured) -->
+        <article class="candidate-card-featured">
+          <div class="candidate-photo-wrapper">
+            <img src="assets/portrait_matej.png" alt="Portrait of Matej Slapar - Mayoral Candidate" class="candidate-photo">
+          </div>
+          <div class="candidate-info">
+            <span class="candidate-role" data-i18n="cand1_role">Kandidat za Župana in Nosilec Liste</span>
+            <h3 class="candidate-name">Matej Slapar</h3>
+            <blockquote class="candidate-quote" data-i18n="cand1_quote">"Kamnik nosim v srcu. Verjamem v razvoj, varnost in povezovanje vseh prebivalcev naše čudovite občine."</blockquote>
+            <p class="candidate-bio" data-i18n="cand1_bio">Matej Slapar je izkušen voditelj z jasno vizijo za občino Kamnik. Z znanjem, predanostjo in nenehnim delom na terenu je dokazal, da zna povezati skupnost in realizirati ključne projekte za boljšo prihodnost vseh generacij.</p>
+          </div>
+        </article>
+
+        <!-- Candidate 2: Matija Podjed (Regular) -->
+        <article class="candidate-card-regular">
+          <div class="candidate-photo-wrapper">
+            <img src="assets/portrait_matija.png" alt="Portrait of Matija Podjed - Municipal Council Candidate" class="candidate-photo">
+          </div>
+          <div class="candidate-info">
+            <span class="candidate-role" data-i18n="cand2_role">Kandidat za Občinski Svet</span>
+            <h3 class="candidate-name">Matija Podjed</h3>
+            <blockquote class="candidate-quote" data-i18n="cand2_quote">"Za strokoven glas in svežo energijo, ki bo pospešila razvojne projekte ter prisluhnila vsakemu občanu."</blockquote>
+            <p class="candidate-bio" data-i18n="cand2_bio">Matija Podjed je kandidat za občinski svet (člani občinskega sveta), ki s svojo energijo, strokovnostjo in aktivnim delovanjem v lokalnem okolju prinaša svež pogled na reševanje vsakodnevnih izzivov naših občanov.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Contact & Community Section
+       ========================================================================== -->
+  <section class="contact-section" id="kontakt" aria-labelledby="contact-title">
+    <div class="container contact-grid">
+      <div class="contact-info">
+        <span class="section-subtitle" data-i18n="contact_subtitle">Stopite v stik z nami</span>
+        <h2 class="section-title" id="contact-title" data-i18n="contact_title">Vaše mnenje šteje</h2>
+        <p class="contact-desc" style="margin-bottom: 40px;" data-i18n="contact_desc">Imate predlog, vprašanje ali nam želite le nameniti besedo spodbude? Izpolnite spodnji obrazec ali pa nas obiščite.</p>
+        
+        <div class="contact-details">
+          <div class="contact-detail-item">
+            <div class="contact-icon" aria-hidden="true">📍</div>
+            <div class="contact-detail-text">
+              <h4>Lokacija</h4>
+              <p>Kamnik, Slovenija</p>
+            </div>
+          </div>
+          <div class="contact-detail-item">
+            <div class="contact-icon" aria-hidden="true">✉️</div>
+            <div class="contact-detail-text">
+              <h4>E-pošta</h4>
+              <p>info@lista-matejaslaparja.si</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <form class="contact-form" id="campaign-contact-form" aria-label="Contact form">
+        <div class="form-group">
+          <label for="form-name" class="form-label" data-i18n="contact_label_name">Vaše ime</label>
+          <input type="text" id="form-name" class="form-input" required data-i18n-placeholder="contact_label_name">
+        </div>
+        <div class="form-group">
+          <label for="form-email" class="form-label" data-i18n="contact_label_email">E-poštni naslov</label>
+          <input type="email" id="form-email" class="form-input" required data-i18n-placeholder="contact_label_email">
+        </div>
+        <div class="form-group">
+          <label for="form-message" class="form-label" data-i18n="contact_label_message">Vaše sporočilo</label>
+          <textarea id="form-message" class="form-input" required data-i18n-placeholder="contact_label_message"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;" data-i18n="contact_submit">Pošlji sporočilo</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Footer
+       ========================================================================== -->
+  <footer class="main-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3>Lista Mateja Slaparja</h3>
+          <p data-i18n="footer_desc">Lista Mateja Slaparja se zavzema za transparentno, učinkovito in trajnostno upravljanje občine Kamnik. Skupaj gradimo boljšo prihodnost.</p>
+        </div>
+        <div class="footer-links">
+          <h4 data-i18n="footer_quick_links">Hitre povezave</h4>
+          <ul>
+            <li><a href="#home" data-i18n="nav_home">Domov</a></li>
+            <li><a href="#program" data-i18n="nav_vision">Program</a></li>
+            <li><a href="#kandidati" data-i18n="nav_candidates">Kandidati</a></li>
+            <li><a href="#kontakt" data-i18n="nav_contact">Kontakt</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>Socialna omrežja</h4>
+          <ul>
+            <li><a href="#facebook" aria-label="Facebook (simulated)">Facebook</a></li>
+            <li><a href="#instagram" aria-label="Instagram (simulated)">Instagram</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Lista Mateja Slaparja. Vse pravice pridržane.</p>
+        <p class="footer-disclaimer" data-i18n="footer_disclaimer">Naročnik oglasnega sporočila je Lista Mateja Slaparja, z namenom predstavitve kandidatov in programa za lokalne volitve v občini Kamnik.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

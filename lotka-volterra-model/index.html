@@ -10,20 +10,20 @@
   <meta name="author" content="mathsimula1" />
   <meta name="keywords" content="Lotka-Volterra, predator-prey, ecosystem simulator, population dynamics, differential equations, interactive simulation, rabbits and foxes" />
   <meta name="theme-color" content="#0b1220" />
-  <link rel="canonical" href="https://mathsimula1.example.com/" />
+  <link rel="canonical" href="https://mihastele.github.io/lotka-volterra-model/" />
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="lotkavolterra.png" />
-  <link rel="apple-touch-icon" href="lotkavolterra.png" />
+  <link rel="icon" type="image/png" href="lotka-volterra-model/lotkavolterra.png" />
+  <link rel="apple-touch-icon" href="lotka-volterra-model/lotkavolterra.png" />
 
   <!-- Open Graph (Facebook / general social) -->
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Lotka–Volterra · Ecosystem Simulator" />
   <meta property="og:description" content="An interactive predator–prey ecosystem simulator. Watch rabbits and foxes oscillate in real time and tweak the Lotka–Volterra parameters." />
-  <meta property="og:image" content="lotkavolterra.png" />
+  <meta property="og:image" content="lotka-volterra-model/lotkavolterra.png" />
   <meta property="og:image:alt" content="Lotka–Volterra predator–prey ecosystem simulation preview" />
   <meta property="og:image:type" content="image/png" />
-  <meta property="og:url" content="https://mihastele.github.io/lotka-volterra-model/" />
+  <meta property="og:url" content="https://mathsimula1.example.com/" />
   <meta property="og:site_name" content="Lotka–Volterra Ecosystem" />
   <meta property="og:locale" content="en_US" />
 
@@ -31,7 +31,7 @@
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Lotka–Volterra · Ecosystem Simulator" />
   <meta name="twitter:description" content="An interactive predator–prey ecosystem simulator. Watch rabbits and foxes oscillate in real time and tweak the Lotka–Volterra parameters." />
-  <meta name="twitter:image" content="lotkavolterra.png" />
+  <meta name="twitter:image" content="lotka-volterra-model/lotkavolterra.png" />
   <meta name="twitter:image:alt" content="Lotka–Volterra predator–prey ecosystem simulation preview" />
 
   <!-- Tailwind CSS (CDN, no build step) -->
@@ -205,36 +205,36 @@
           <div class="mb-4">
             <div class="flex justify-between items-baseline mb-1.5">
               <label class="text-sm text-slate-200">α <span class="text-slate-500 text-xs">Rabbit birth rate</span></label>
-              <span id="alphaVal" class="font-mono text-xs text-emerald-300 bg-emerald-500/10 px-2 py-0.5 rounded">1.00</span>
+              <span id="alphaVal" class="font-mono text-xs text-emerald-300 bg-emerald-500/10 px-2 py-0.5 rounded">0.25</span>
             </div>
-            <input id="alpha" type="range" min="0.1" max="3" step="0.05" value="1" class="slider-rabbit" />
+            <input id="alpha" type="range" min="0.05" max="1.0" step="0.01" value="0.25" class="slider-rabbit" />
           </div>
 
           <!-- beta -->
           <div class="mb-4">
             <div class="flex justify-between items-baseline mb-1.5">
               <label class="text-sm text-slate-200">β <span class="text-slate-500 text-xs">Predation rate</span></label>
-              <span id="betaVal" class="font-mono text-xs text-rose-300 bg-rose-500/10 px-2 py-0.5 rounded">0.10</span>
+              <span id="betaVal" class="font-mono text-xs text-rose-300 bg-rose-500/10 px-2 py-0.5 rounded">0.012</span>
             </div>
-            <input id="beta" type="range" min="0.01" max="0.5" step="0.01" value="0.1" class="slider-fox" />
+            <input id="beta" type="range" min="0.005" max="0.08" step="0.001" value="0.012" class="slider-fox" />
           </div>
 
           <!-- gamma -->
           <div class="mb-4">
             <div class="flex justify-between items-baseline mb-1.5">
               <label class="text-sm text-slate-200">γ <span class="text-slate-500 text-xs">Fox starvation</span></label>
-              <span id="gammaVal" class="font-mono text-xs text-rose-300 bg-rose-500/10 px-2 py-0.5 rounded">1.50</span>
+              <span id="gammaVal" class="font-mono text-xs text-rose-300 bg-rose-500/10 px-2 py-0.5 rounded">0.20</span>
             </div>
-            <input id="gamma" type="range" min="0.1" max="3" step="0.05" value="1.5" class="slider-fox" />
+            <input id="gamma" type="range" min="0.05" max="1.0" step="0.01" value="0.2" class="slider-fox" />
           </div>
 
           <!-- delta -->
           <div class="mb-4">
             <div class="flex justify-between items-baseline mb-1.5">
               <label class="text-sm text-slate-200">δ <span class="text-slate-500 text-xs">Biomass conversion</span></label>
-              <span id="deltaVal" class="font-mono text-xs text-emerald-300 bg-emerald-500/10 px-2 py-0.5 rounded">0.075</span>
+              <span id="deltaVal" class="font-mono text-xs text-emerald-300 bg-emerald-500/10 px-2 py-0.5 rounded">0.004</span>
             </div>
-            <input id="delta" type="range" min="0.01" max="0.3" step="0.005" value="0.075" class="slider-rabbit" />
+            <input id="delta" type="range" min="0.001" max="0.03" step="0.001" value="0.004" class="slider-rabbit" />
           </div>
 
           <div class="h-px bg-white/10 my-4"></div>
@@ -245,18 +245,18 @@
           <div class="mb-4">
             <div class="flex justify-between items-baseline mb-1.5">
               <label class="text-sm text-slate-200">Rabbits <span class="text-slate-500 text-xs">Z₀</span></label>
-              <span id="initRabbitsVal" class="font-mono text-xs text-emerald-300 bg-emerald-500/10 px-2 py-0.5 rounded">40</span>
+              <span id="initRabbitsVal" class="font-mono text-xs text-emerald-300 bg-emerald-500/10 px-2 py-0.5 rounded">70</span>
             </div>
-            <input id="initRabbits" type="range" min="1" max="200" step="1" value="40" class="slider-rabbit" />
+            <input id="initRabbits" type="range" min="1" max="200" step="1" value="70" class="slider-rabbit" />
           </div>
 
           <!-- initial foxes -->
           <div class="mb-4">
             <div class="flex justify-between items-baseline mb-1.5">
               <label class="text-sm text-slate-200">Foxes <span class="text-slate-500 text-xs">L₀</span></label>
-              <span id="initFoxesVal" class="font-mono text-xs text-rose-300 bg-rose-500/10 px-2 py-0.5 rounded">9</span>
+              <span id="initFoxesVal" class="font-mono text-xs text-rose-300 bg-rose-500/10 px-2 py-0.5 rounded">12</span>
             </div>
-            <input id="initFoxes" type="range" min="1" max="100" step="1" value="9" class="slider-fox" />
+            <input id="initFoxes" type="range" min="1" max="100" step="1" value="12" class="slider-fox" />
           </div>
 
           <p class="text-[11px] text-slate-500 leading-relaxed mt-3">
@@ -311,7 +311,7 @@
 
   // ---------- Configuration ----------
   const DT = 0.01;                 // integration time step (small for stability)
-  const BASE_STEPS_PER_FRAME = 6;  // sub-steps per frame at 1x speed
+  const BASE_STEPS_PER_FRAME = 3;  // sub-steps per frame at 1x speed
   const MAX_POP = 5000;            // hard clamp to avoid numerical blow-up
   const MAX_RABBIT_DOTS = 140;     // visual cap for rabbits
   const MAX_FOX_DOTS = 45;         // visual cap for foxes
@@ -319,9 +319,9 @@
 
   // ---------- State ----------
   const state = {
-    Z: 40, L: 9,            // current populations
-    alpha: 1.0, beta: 0.1, gamma: 1.5, delta: 0.075,
-    initRabbits: 40, initFoxes: 9,
+    Z: 70, L: 12,           // current populations
+    alpha: 0.25, beta: 0.012, gamma: 0.2, delta: 0.004,
+    initRabbits: 70, initFoxes: 12,
     speed: 1,
     running: true,
     time: 0
@@ -681,7 +681,7 @@
   }
 
   bindSlider('alpha', 'alpha', 'alphaVal', v => v.toFixed(2));
-  bindSlider('beta', 'beta', 'betaVal', v => v.toFixed(2));
+  bindSlider('beta', 'beta', 'betaVal', v => v.toFixed(3));
   bindSlider('gamma', 'gamma', 'gammaVal', v => v.toFixed(2));
   bindSlider('delta', 'delta', 'deltaVal', v => v.toFixed(3));
   bindSlider('initRabbits', 'initRabbits', 'initRabbitsVal', v => v.toFixed(0));

@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lotka-Volterra · Ecosystem Simulator</title>
+
+  <!-- Tailwind CSS (CDN, no build step) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js (CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <style>
+    :root { color-scheme: dark; }
+    html, body { height: 100%; }
+    body {
+      background:
+        radial-gradient(1200px 600px at 80% -10%, rgba(16,185,129,0.10), transparent 60%),
+        radial-gradient(1000px 500px at 0% 110%, rgba(244,63,94,0.10), transparent 60%),
+        linear-gradient(160deg, #0b1220 0%, #0f172a 50%, #0b1220 100%);
+    }
+
+    /* Custom range slider styling */
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      border-radius: 9999px;
+      background: rgba(255,255,255,0.12);
+      outline: none;
+      cursor: pointer;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      background: #e2e8f0;
+      border: 3px solid var(--thumb, #10b981);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+      transition: transform .12s ease;
+    }
+    input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+    input[type="range"]::-moz-range-thumb {
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      background: #e2e8f0;
+      border: 3px solid var(--thumb, #10b981);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    }
+    .slider-rabbit { --thumb: #10b981; }
+    .slider-fox    { --thumb: #f43f5e; }
+    .slider-neutral{ --thumb: #38bdf8; }
+
+    .glass {
+      background: rgba(15, 23, 42, 0.55);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .seg-btn { transition: all .15s ease; }
+    .seg-btn.active {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #04140d;
+      box-shadow: 0 4px 14px rgba(16,185,129,0.35);
+    }
+
+    /* Subtle pulse for live indicator */
+    @keyframes livePulse { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+    .live-dot { animation: livePulse 1.4s ease-in-out infinite; }
+
+    /* Thin scrollbar for control panel */
+    .scroll-thin::-webkit-scrollbar { width: 8px; }
+    .scroll-thin::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 9999px; }
+    .scroll-thin::-webkit-scrollbar-track { background: transparent; }
+
+    canvas { display: block; }
+  </style>
+</head>
+
+<body class="text-slate-100 antialiased">
+  <div class="min-h-screen w-full flex flex-col">
+
+    <!-- Header -->
+    <header class="px-5 sm:px-8 pt-6 pb-4 border-b border-white/5">
+      <div class="flex items-center justify-between flex-wrap gap-3">
+        <div>
+          <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight">
+            <span class="bg-gradient-to-r from-emerald-400 via-teal-300 to-rose-400 bg-clip-text text-transparent">
+              Lotka–Volterra Ecosystem
+            </span>
+          </h1>
+          <p class="text-slate-400 text-sm mt-1">
+            An interactive predator–prey simulation · Rabbits
+            <span class="text-emerald-400 font-semibold">Z</span> vs Foxes
+            <span class="text-rose-400 font-semibold">L</span>
+          </p>
+        </div>
+        <div class="flex items-center gap-2 text-xs text-slate-400">
+          <span id="statusDot" class="live-dot inline-block w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+          <span id="statusText">Running</span>
+          <span class="mx-2 text-slate-600">|</span>
+          <span>t = <span id="timeReadout" class="font-mono text-slate-200">0.0</span>s</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main layout -->
+    <main class="flex-1 grid grid-cols-1 lg:grid-cols-[370px_1fr] gap-5 p-5 sm:p-6">
+
+      <!-- ============ LEFT: CONTROL PANEL ============ -->
+      <aside class="glass rounded-2xl p-5 lg:max-h-[calc(100vh-130px)] lg:overflow-y-auto scroll-thin">
+
+        <!-- Live counters -->
+        <div class="grid grid-cols-2 gap-3 mb-5">
+          <div class="rounded-xl p-3 bg-emerald-500/10 border border-emerald-400/20">
+            <div class="flex items-center gap-2 text-emerald-300 text-xs font-semibold uppercase tracking-wider">
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Rabbits
+            </div>
+            <div id="rabbitCount" class="text-3xl font-extrabold text-emerald-300 mt-1 font-mono">0</div>
+            <div class="text-[11px] text-emerald-200/60">Z(t)</div>
+          </div>
+          <div class="rounded-xl p-3 bg-rose-500/10 border border-rose-400/20">
+            <div class="flex items-center gap-2 text-rose-300 text-xs font-semibold uppercase tracking-wider">
+              <span class="w-2 h-2 rounded-full bg-rose-400"></span> Foxes
+            </div>
+            <div id="foxCount" class="text-3xl font-extrabold text-rose-300 mt-1 font-mono">0</div>
+            <div class="text-[11px] text-rose-200/60">L(t)</div>
+          </div>
+        </div>
+
+        <!-- Playback controls -->
+        <div class="mb-5">
+          <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Simulation</h2>
+          <div class="flex gap-2 mb-3">
+            <button id="playPauseBtn" class="flex-1 seg-btn active py-2.5 rounded-lg font-semibold text-sm bg-white/5 hover:bg-white/10">
+              ⏸ Pause
+            </button>
+            <button id="resetBtn" class="flex-1 seg-btn py-2.5 rounded-lg font-semibold text-sm bg-white/5 hover:bg-white/10">
+              ↺ Reset
+            </button>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs text-slate-400 w-14">Speed</span>
+            <div class="flex flex-1 gap-1.5">
+              <button data-speed="1" class="speed-btn seg-btn active flex-1 py-1.5 rounded-md text-xs font-semibold bg-white/5 hover:bg-white/10">1×</button>
+              <button data-speed="2" class="speed-btn seg-btn flex-1 py-1.5 rounded-md text-xs font-semibold bg-white/5 hover:bg-white/10">2×</button>
+              <button data-speed="5" class="speed-btn seg-btn flex-1 py-1.5 rounded-md text-xs font-semibold bg-white/5 hover:bg-white/10">5×</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Re-seed / inject -->
+        <div class="mb-5">
+          <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Re-populate</h2>
+          <div class="grid grid-cols-2 gap-2">
+            <button id="injectRabbits" class="seg-btn py-2 rounded-lg text-xs font-semibold bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-200 border border-emerald-400/20">
+              +10 Rabbits
+            </button>
+            <button id="injectFoxes" class="seg-btn py-2 rounded-lg text-xs font-semibold bg-rose-500/15 hover:bg-rose-500/25 text-rose-200 border border-rose-400/20">
+              +5 Foxes
+            </button>
+          </div>
+          <p id="extinctNote" class="hidden mt-2 text-[11px] text-amber-300/80 bg-amber-500/10 border border-amber-400/20 rounded-md px-2 py-1.5">
+            ⚠ A population hit zero. Inject animals to restart the cycle.
+          </p>
+        </div>
+
+        <!-- Parameter sliders -->
+        <div class="mb-2">
+          <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">Parameters</h2>
+
+          <!-- alpha -->
+          <div class="mb-4">
+            <div class="flex justify-between items-baseline mb-1.5">
+              <label class="text-sm text-slate-200">α <span class="text-slate-500 text-xs">Rabbit birth rate</span></label>
+              <span id="alphaVal" class="font-mono text-xs text-emerald-300 bg-emerald-500/10 px-2 py-0.5 rounded">1.00</span>
+            </div>
+            <input id="alpha" type="range" min="0.1" max="3" step="0.05" value="1" class="slider-rabbit" />
+          </div>
+
+          <!-- beta -->
+          <div class="mb-4">
+            <div class="flex justify-between items-baseline mb-1.5">
+              <label class="text-sm text-slate-200">β <span class="text-slate-500 text-xs">Predation rate</span></label>
+              <span id="betaVal" class="font-mono text-xs text-rose-300 bg-rose-500/10 px-2 py-0.5 rounded">0.10</span>
+            </div>
+            <input id="beta" type="range" min="0.01" max="0.5" step="0.01" value="0.1" class="slider-fox" />
+          </div>
+
+          <!-- gamma -->
+          <div class="mb-4">
+            <div class="flex justify-between items-baseline mb-1.5">
+              <label class="text-sm text-slate-200">γ <span class="text-slate-500 text-xs">Fox starvation</span></label>
+              <span id="gammaVal" class="font-mono text-xs text-rose-300 bg-rose-500/10 px-2 py-0.5 rounded">1.50</span>
+            </div>
+            <input id="gamma" type="range" min="0.1" max="3" step="0.05" value="1.5" class="slider-fox" />
+          </div>
+
+          <!-- delta -->
+          <div class="mb-4">
+            <div class="flex justify-between items-baseline mb-1.5">
+              <label class="text-sm text-slate-200">δ <span class="text-slate-500 text-xs">Biomass conversion</span></label>
+              <span id="deltaVal" class="font-mono text-xs text-emerald-300 bg-emerald-500/10 px-2 py-0.5 rounded">0.075</span>
+            </div>
+            <input id="delta" type="range" min="0.01" max="0.3" step="0.005" value="0.075" class="slider-rabbit" />
+          </div>
+
+          <div class="h-px bg-white/10 my-4"></div>
+
+          <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">Initial Populations</h2>
+
+          <!-- initial rabbits -->
+          <div class="mb-4">
+            <div class="flex justify-between items-baseline mb-1.5">
+              <label class="text-sm text-slate-200">Rabbits <span class="text-slate-500 text-xs">Z₀</span></label>
+              <span id="initRabbitsVal" class="font-mono text-xs text-emerald-300 bg-emerald-500/10 px-2 py-0.5 rounded">40</span>
+            </div>
+            <input id="initRabbits" type="range" min="1" max="200" step="1" value="40" class="slider-rabbit" />
+          </div>
+
+          <!-- initial foxes -->
+          <div class="mb-4">
+            <div class="flex justify-between items-baseline mb-1.5">
+              <label class="text-sm text-slate-200">Foxes <span class="text-slate-500 text-xs">L₀</span></label>
+              <span id="initFoxesVal" class="font-mono text-xs text-rose-300 bg-rose-500/10 px-2 py-0.5 rounded">9</span>
+            </div>
+            <input id="initFoxes" type="range" min="1" max="100" step="1" value="9" class="slider-fox" />
+          </div>
+
+          <p class="text-[11px] text-slate-500 leading-relaxed mt-3">
+            Adjusting α, β, γ, δ takes effect live. Changing initial populations only applies on <span class="text-slate-300">Reset</span>.
+          </p>
+        </div>
+      </aside>
+
+      <!-- ============ RIGHT: VISUALIZATION ============ -->
+      <section class="flex flex-col gap-5 min-w-0">
+
+        <!-- Ecosystem canvas -->
+        <div class="glass rounded-2xl p-3 sm:p-4 flex-1 flex flex-col min-h-[320px]">
+          <div class="flex items-center justify-between mb-2 px-1">
+            <h2 class="text-sm font-semibold text-slate-200">The Meadow</h2>
+            <div class="flex items-center gap-3 text-[11px] text-slate-400">
+              <span id="scaleNote" class="hidden text-amber-300/80">1 dot ≈ <span id="scaleVal">1</span> animals</span>
+              <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>Rabbits</span>
+              <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-rose-400"></span>Foxes</span>
+            </div>
+          </div>
+          <div class="relative flex-1 rounded-xl overflow-hidden border border-white/10 bg-gradient-to-b from-emerald-950/40 to-slate-950/60">
+            <canvas id="meadow" class="absolute inset-0 w-full h-full"></canvas>
+          </div>
+        </div>
+
+        <!-- Live chart -->
+        <div class="glass rounded-2xl p-3 sm:p-4 h-[260px] flex flex-col">
+          <div class="flex items-center justify-between mb-2 px-1">
+            <h2 class="text-sm font-semibold text-slate-200">Population over time</h2>
+            <span class="text-[11px] text-slate-400">oscillation phase portrait</span>
+          </div>
+          <div class="relative flex-1">
+            <canvas id="chart"></canvas>
+          </div>
+        </div>
+
+      </section>
+    </main>
+  </div>
+
+  <script>
+  /* ============================================================
+     LOTKA–VOLTERRA ECOSYSTEM SIMULATOR
+     ------------------------------------------------------------
+     Math model (Euler integration with small dt + sub-stepping):
+       dZ/dt = (alpha * Z) - (beta * Z * L)
+       dL/dt = (-gamma * L) + (delta * Z * L)
+       Z_next = Z + dZ/dt * dt
+       L_next = L + dL/dt * dt
+     ============================================================ */
+
+  // ---------- Configuration ----------
+  const DT = 0.01;                 // integration time step (small for stability)
+  const BASE_STEPS_PER_FRAME = 6;  // sub-steps per frame at 1x speed
+  const MAX_POP = 5000;            // hard clamp to avoid numerical blow-up
+  const MAX_RABBIT_DOTS = 140;     // visual cap for rabbits
+  const MAX_FOX_DOTS = 45;         // visual cap for foxes
+  const CHART_MAX_POINTS = 220;    // rolling window for the chart
+
+  // ---------- State ----------
+  const state = {
+    Z: 40, L: 9,            // current populations
+    alpha: 1.0, beta: 0.1, gamma: 1.5, delta: 0.075,
+    initRabbits: 40, initFoxes: 9,
+    speed: 1,
+    running: true,
+    time: 0
+  };
+
+  // ---------- DOM refs ----------
+  const $ = (id) => document.getElementById(id);
+  const meadow = $('meadow');
+  const mctx = meadow.getContext('2d');
+  const rabbitCountEl = $('rabbitCount');
+  const foxCountEl = $('foxCount');
+  const timeReadout = $('timeReadout');
+  const statusDot = $('statusDot');
+  const statusText = $('statusText');
+  const extinctNote = $('extinctNote');
+  const scaleNote = $('scaleNote');
+  const scaleVal = $('scaleVal');
+
+  // ---------- Math engine ----------
+  function step() {
+    const { Z, L, alpha, beta, gamma, delta } = state;
+    const dZ = (alpha * Z) - (beta * Z * L);
+    const dL = (-gamma * L) + (delta * Z * L);
+    state.Z = Math.max(0, Math.min(MAX_POP, Z + dZ * DT));
+    state.L = Math.max(0, Math.min(MAX_POP, L + dL * DT));
+    state.time += DT;
+  }
+
+  function resetSimulation() {
+    state.Z = state.initRabbits;
+    state.L = state.initFoxes;
+    state.time = 0;
+    rabbits.length = 0;
+    foxes.length = 0;
+    poofs.length = 0;
+    chartData.labels.length = 0;
+    chartData.datasets[0].data.length = 0;
+    chartData.datasets[1].data.length = 0;
+    chart.update('none');
+    syncVisuals(true);
+  }
+
+  // ---------- Visual entities ----------
+  const rabbits = []; // {x,y,vx,vy,r,phase}
+  const foxes = [];   // {x,y,vx,vy,r,energy,phase}
+  const poofs = [];   // {x,y,age,maxAge}
+
+  let cw = 0, ch = 0, dpr = 1;
+
+  function resizeCanvas() {
+    const rect = meadow.getBoundingClientRect();
+    dpr = window.devicePixelRatio || 1;
+    cw = Math.max(1, rect.width);
+    ch = Math.max(1, rect.height);
+    meadow.width = Math.round(cw * dpr);
+    meadow.height = Math.round(ch * dpr);
+    mctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function rand(min, max) { return min + Math.random() * (max - min); }
+
+  function spawnRabbit() {
+    rabbits.push({
+      x: rand(10, cw - 10), y: rand(10, ch - 10),
+      vx: rand(-1, 1), vy: rand(-1, 1),
+      r: rand(3.2, 4.6), phase: rand(0, Math.PI * 2)
+    });
+  }
+  function spawnFox() {
+    foxes.push({
+      x: rand(10, cw - 10), y: rand(10, ch - 10),
+      vx: rand(-0.8, 0.8), vy: rand(-0.8, 0.8),
+      r: rand(6, 8), energy: 0, phase: rand(0, Math.PI * 2)
+    });
+  }
+
+  // Proportional scaling: when population exceeds the visual cap,
+  // each dot represents multiple animals.
+  function rabbitScale() { return state.Z > MAX_RABBIT_DOTS ? state.Z / MAX_RABBIT_DOTS : 1; }
+  function foxScale()    { return state.L > MAX_FOX_DOTS    ? state.L / MAX_FOX_DOTS    : 1; }
+
+  function syncVisuals(force = false) {
+    const targetR = Math.min(Math.round(state.Z / rabbitScale()), MAX_RABBIT_DOTS);
+    const targetF = Math.min(Math.round(state.L / foxScale()), MAX_FOX_DOTS);
+
+    while (rabbits.length < targetR) spawnRabbit();
+    while (rabbits.length > targetR) rabbits.pop();
+    while (foxes.length < targetF) spawnFox();
+    while (foxes.length > targetF) foxes.pop();
+
+    // Show scaling note when active
+    const maxScale = Math.max(rabbitScale(), foxScale());
+    if (maxScale > 1.05) {
+      scaleNote.classList.remove('hidden');
+      scaleVal.textContent = maxScale.toFixed(1);
+    } else {
+      scaleNote.classList.add('hidden');
+    }
+
+    if (force) { /* nothing extra */ }
+  }
+
+  // ---------- Movement & collisions ----------
+  function updateVisuals(dtFrame) {
+    // Rabbits: wander + flee nearby foxes
+    for (const r of rabbits) {
+      r.phase += 0.05;
+      // wander
+      r.vx += Math.cos(r.phase) * 0.06 + rand(-0.05, 0.05);
+      r.vy += Math.sin(r.phase * 1.3) * 0.06 + rand(-0.05, 0.05);
+      // flee from nearest fox
+      let nearest = null, nd = Infinity;
+      for (const f of foxes) {
+        const dx = r.x - f.x, dy = r.y - f.y;
+        const d = dx * dx + dy * dy;
+        if (d < nd) { nd = d; nearest = f; }
+      }
+      if (nearest && nd < 90 * 90) {
+        const d = Math.sqrt(nd) || 1;
+        const flee = 0.9;
+        r.vx += ((r.x - nearest.x) / d) * flee;
+        r.vy += ((r.y - nearest.y) / d) * flee;
+      }
+      // clamp speed (rabbits are fast)
+      const sp = Math.hypot(r.vx, r.vy);
+      const maxSp = 2.6;
+      if (sp > maxSp) { r.vx = (r.vx / sp) * maxSp; r.vy = (r.vy / sp) * maxSp; }
+      r.x += r.vx; r.y += r.vy;
+      // bounce off walls
+      if (r.x < r.r) { r.x = r.r; r.vx *= -1; }
+      if (r.x > cw - r.r) { r.x = cw - r.r; r.vx *= -1; }
+      if (r.y < r.r) { r.y = r.r; r.vy *= -1; }
+      if (r.y > ch - r.r) { r.y = ch - r.r; r.vy *= -1; }
+    }
+
+    // Foxes: wander + seek nearest rabbit
+    for (const f of foxes) {
+      f.phase += 0.03;
+      f.vx += Math.cos(f.phase) * 0.04 + rand(-0.03, 0.03);
+      f.vy += Math.sin(f.phase * 0.9) * 0.04 + rand(-0.03, 0.03);
+      // seek nearest rabbit
+      let nearest = null, nd = Infinity;
+      for (const r of rabbits) {
+        const dx = r.x - f.x, dy = r.y - f.y;
+        const d = dx * dx + dy * dy;
+        if (d < nd) { nd = d; nearest = r; }
+      }
+      if (nearest && nd < 160 * 160) {
+        const d = Math.sqrt(nd) || 1;
+        const seek = 0.55;
+        f.vx += ((nearest.x - f.x) / d) * seek;
+        f.vy += ((nearest.y - f.y) / d) * seek;
+      }
+      // clamp speed (foxes slower)
+      const sp = Math.hypot(f.vx, f.vy);
+      const maxSp = 1.7;
+      if (sp > maxSp) { f.vx = (f.vx / sp) * maxSp; f.vy = (f.vy / sp) * maxSp; }
+      f.x += f.vx; f.y += f.vy;
+      if (f.x < f.r) { f.x = f.r; f.vx *= -1; }
+      if (f.x > cw - f.r) { f.x = cw - f.r; f.vx *= -1; }
+      if (f.y < f.r) { f.y = f.r; f.vy *= -1; }
+      if (f.y > ch - f.r) { f.y = ch - f.r; f.vy *= -1; }
+      // energy slowly decays (visual flourish)
+      if (f.energy > 0) f.energy = Math.max(0, f.energy - 0.02);
+    }
+
+    // Collisions: fox catches rabbit -> poof + remove rabbit dot + fox energy
+    for (let i = foxes.length - 1; i >= 0; i--) {
+      const f = foxes[i];
+      for (let j = rabbits.length - 1; j >= 0; j--) {
+        const r = rabbits[j];
+        const dx = f.x - r.x, dy = f.y - r.y;
+        const rr = f.r + r.r;
+        if (dx * dx + dy * dy < rr * rr) {
+          poofs.push({ x: r.x, y: r.y, age: 0, maxAge: 28 });
+          rabbits.splice(j, 1);
+          f.energy = 1.0; // visual "fed" glow
+          break;
+        }
+      }
+    }
+
+    // Update poof particles
+    for (let i = poofs.length - 1; i >= 0; i--) {
+      poofs[i].age++;
+      if (poofs[i].age >= poofs[i].maxAge) poofs.splice(i, 1);
+    }
+  }
+
+  // ---------- Rendering ----------
+  function drawMeadow() {
+    mctx.clearRect(0, 0, cw, ch);
+
+    // soft meadow vignette
+    const g = mctx.createRadialGradient(cw / 2, ch / 2, 40, cw / 2, ch / 2, Math.max(cw, ch) * 0.7);
+    g.addColorStop(0, 'rgba(16, 80, 50, 0.18)');
+    g.addColorStop(1, 'rgba(2, 6, 12, 0.0)');
+    mctx.fillStyle = g;
+    mctx.fillRect(0, 0, cw, ch);
+
+    // Rabbits
+    for (const r of rabbits) {
+      mctx.beginPath();
+      mctx.fillStyle = '#34d399';
+      mctx.arc(r.x, r.y, r.r, 0, Math.PI * 2);
+      mctx.fill();
+      // tiny ears
+      mctx.fillStyle = '#10b981';
+      mctx.beginPath();
+      mctx.arc(r.x - r.r * 0.5, r.y - r.r * 0.9, r.r * 0.4, 0, Math.PI * 2);
+      mctx.arc(r.x + r.r * 0.5, r.y - r.r * 0.9, r.r * 0.4, 0, Math.PI * 2);
+      mctx.fill();
+      // outline
+      mctx.strokeStyle = 'rgba(236,253,245,0.55)';
+      mctx.lineWidth = 0.8;
+      mctx.beginPath();
+      mctx.arc(r.x, r.y, r.r, 0, Math.PI * 2);
+      mctx.stroke();
+    }
+
+    // Foxes
+    for (const f of foxes) {
+      const fed = f.energy > 0;
+      // glow when recently fed
+      if (fed) {
+        mctx.beginPath();
+        mctx.fillStyle = `rgba(251, 113, 133, ${0.25 * f.energy})`;
+        mctx.arc(f.x, f.y, f.r + 6 * f.energy, 0, Math.PI * 2);
+        mctx.fill();
+      }
+      // body
+      mctx.beginPath();
+      mctx.fillStyle = fed ? '#fb7185' : '#e11d48';
+      mctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+      mctx.fill();
+      // pointed ears
+      mctx.fillStyle = '#9f1239';
+      mctx.beginPath();
+      mctx.moveTo(f.x - f.r * 0.7, f.y - f.r * 0.5);
+      mctx.lineTo(f.x - f.r * 0.2, f.y - f.r * 1.4);
+      mctx.lineTo(f.x + f.r * 0.1, f.y - f.r * 0.6);
+      mctx.closePath();
+      mctx.moveTo(f.x + f.r * 0.7, f.y - f.r * 0.5);
+      mctx.lineTo(f.x + f.r * 0.2, f.y - f.r * 1.4);
+      mctx.lineTo(f.x - f.r * 0.1, f.y - f.r * 0.6);
+      mctx.closePath();
+      mctx.fill();
+      // outline
+      mctx.strokeStyle = 'rgba(255,228,230,0.5)';
+      mctx.lineWidth = 0.9;
+      mctx.beginPath();
+      mctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+      mctx.stroke();
+    }
+
+    // Poof effects (expanding ring + fading puff)
+    for (const p of poofs) {
+      const t = p.age / p.maxAge;
+      const radius = 4 + t * 22;
+      mctx.beginPath();
+      mctx.strokeStyle = `rgba(253, 224, 71, ${1 - t})`;
+      mctx.lineWidth = 2 * (1 - t) + 0.5;
+      mctx.arc(p.x, p.y, radius, 0, Math.PI * 2);
+      mctx.stroke();
+      mctx.beginPath();
+      mctx.fillStyle = `rgba(253, 224, 71, ${0.5 * (1 - t)})`;
+      mctx.arc(p.x, p.y, radius * 0.6, 0, Math.PI * 2);
+      mctx.fill();
+    }
+  }
+
+  // ---------- Chart ----------
+  const chartCtx = $('chart').getContext('2d');
+  const chartData = {
+    labels: [],
+    datasets: [
+      {
+        label: 'Rabbits Z',
+        data: [],
+        borderColor: '#34d399',
+        backgroundColor: 'rgba(52,211,153,0.12)',
+        borderWidth: 2,
+        tension: 0.35,
+        pointRadius: 0,
+        fill: true
+      },
+      {
+        label: 'Foxes L',
+        data: [],
+        borderColor: '#fb7185',
+        backgroundColor: 'rgba(251,113,133,0.12)',
+        borderWidth: 2,
+        tension: 0.35,
+        pointRadius: 0,
+        fill: true
+      }
+    ]
+  };
+  const chart = new Chart(chartCtx, {
+    type: 'line',
+    data: chartData,
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: false,
+      interaction: { mode: 'nearest', intersect: false },
+      plugins: {
+        legend: {
+          display: true,
+          labels: { color: '#cbd5e1', boxWidth: 12, font: { size: 11 } }
+        },
+        tooltip: { enabled: true }
+      },
+      scales: {
+        x: {
+          title: { display: true, text: 'time (s)', color: '#64748b', font: { size: 10 } },
+          ticks: { color: '#64748b', maxTicksLimit: 8, font: { size: 10 } },
+          grid: { color: 'rgba(255,255,255,0.05)' }
+        },
+        y: {
+          title: { display: true, text: 'population', color: '#64748b', font: { size: 10 } },
+          ticks: { color: '#64748b', font: { size: 10 } },
+          grid: { color: 'rgba(255,255,255,0.05)' },
+          beginAtZero: true
+        }
+      }
+    }
+  });
+
+  let chartTickCounter = 0;
+  function updateChart() {
+    // sample every few frames to keep the chart readable
+    chartTickCounter++;
+    if (chartTickCounter % 2 !== 0) return;
+    const label = state.time.toFixed(1);
+    chartData.labels.push(label);
+    chartData.datasets[0].data.push(state.Z);
+    chartData.datasets[1].data.push(state.L);
+    while (chartData.labels.length > CHART_MAX_POINTS) {
+      chartData.labels.shift();
+      chartData.datasets[0].data.shift();
+      chartData.datasets[1].data.shift();
+    }
+    chart.update('none');
+  }
+
+  // ---------- UI wiring ----------
+  function bindSlider(id, key, valId, formatter, onChange) {
+    const el = $(id);
+    const valEl = $(valId);
+    el.addEventListener('input', () => {
+      const v = parseFloat(el.value);
+      state[key] = v;
+      valEl.textContent = formatter(v);
+      if (onChange) onChange(v);
+    });
+  }
+
+  bindSlider('alpha', 'alpha', 'alphaVal', v => v.toFixed(2));
+  bindSlider('beta', 'beta', 'betaVal', v => v.toFixed(2));
+  bindSlider('gamma', 'gamma', 'gammaVal', v => v.toFixed(2));
+  bindSlider('delta', 'delta', 'deltaVal', v => v.toFixed(3));
+  bindSlider('initRabbits', 'initRabbits', 'initRabbitsVal', v => v.toFixed(0));
+  bindSlider('initFoxes', 'initFoxes', 'initFoxesVal', v => v.toFixed(0));
+
+  // Play / Pause
+  const playPauseBtn = $('playPauseBtn');
+  function setRunning(run) {
+    state.running = run;
+    playPauseBtn.textContent = run ? '⏸ Pause' : '▶ Play';
+    playPauseBtn.classList.toggle('active', run);
+    statusDot.style.background = run ? '#34d399' : '#f59e0b';
+    statusText.textContent = run ? 'Running' : 'Paused';
+    statusDot.classList.toggle('live-dot', run);
+  }
+  playPauseBtn.addEventListener('click', () => setRunning(!state.running));
+
+  // Reset
+  $('resetBtn').addEventListener('click', () => {
+    resetSimulation();
+    setRunning(true);
+  });
+
+  // Speed buttons
+  document.querySelectorAll('.speed-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      state.speed = parseInt(btn.dataset.speed, 10);
+    });
+  });
+
+  // Inject animals
+  $('injectRabbits').addEventListener('click', () => {
+    state.Z = Math.min(MAX_POP, state.Z + 10);
+    for (let i = 0; i < 10 && rabbits.length < MAX_RABBIT_DOTS; i++) spawnRabbit();
+  });
+  $('injectFoxes').addEventListener('click', () => {
+    state.L = Math.min(MAX_POP, state.L + 5);
+    for (let i = 0; i < 5 && foxes.length < MAX_FOX_DOTS; i++) spawnFox();
+  });
+
+  // ---------- Main loop ----------
+  function loop() {
+    if (state.running) {
+      const steps = BASE_STEPS_PER_FRAME * state.speed;
+      for (let i = 0; i < steps; i++) step();
+    }
+    syncVisuals();
+    updateVisuals();
+    drawMeadow();
+
+    // Update readouts
+    rabbitCountEl.textContent = Math.round(state.Z);
+    foxCountEl.textContent = Math.round(state.L);
+    timeReadout.textContent = state.time.toFixed(1);
+
+    // Extinction notice
+    const extinct = state.Z <= 0 || state.L <= 0;
+    extinctNote.classList.toggle('hidden', !extinct);
+
+    if (state.running) updateChart();
+
+    requestAnimationFrame(loop);
+  }
+
+  // ---------- Init ----------
+  function init() {
+    resizeCanvas();
+    syncVisuals(true);
+    // seed chart with a starting point
+    chartData.labels.push('0.0');
+    chartData.datasets[0].data.push(state.Z);
+    chartData.datasets[1].data.push(state.L);
+    chart.update('none');
+    loop();
+  }
+
+  // Responsive resize
+  const ro = new ResizeObserver(() => resizeCanvas());
+  ro.observe(meadow);
+  window.addEventListener('resize', resizeCanvas);
+
+  // Start once chart lib is ready
+  if (typeof Chart !== 'undefined') {
+    init();
+  } else {
+    window.addEventListener('load', init);
+  }
+  </script>
+</body>
+</html>

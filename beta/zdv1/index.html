@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Naravni zdravilni gaj Tunjice</title>
+  <meta name="description" content="Luksuzni leseni glamping, zasebni wellness in energijske točke zdravilnega gaja v objemu neokrnjene narade nad Kamnikom." />
+  <link rel="icon" href="img/icon.png" />
+  <link rel="apple-touch-icon" href="img/apple-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400;1,9..144,500&family=Hanken+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="grain"></div>
+
+  <header class="site-header" id="siteHeader">
+    <a href="#top" class="logo">
+      <img src="img/logo.jpg" alt="Zdravilni gaj" width="40" height="40" />
+      <span>Zdravilni gaj</span>
+    </a>
+    <nav class="desktop-nav">
+      <a href="#glamping">Glamping</a>
+      <a href="#wellness">Wellness</a>
+      <a href="#gaj">Zdravilni gaj</a>
+      <a href="#galerija">Doživetja</a>
+      <a href="#kontakt">Kontakt</a>
+    </nav>
+    <div class="header-actions">
+      <a href="tel:+38640351464" class="phone-link">040 351 464</a>
+      <a href="#kontakt" class="btn btn-primary btn-sm">Rezervirajte</a>
+    </div>
+    <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <nav>
+      <a href="#glamping">Glamping</a>
+      <a href="#wellness">Wellness</a>
+      <a href="#gaj">Zdravilni gaj</a>
+      <a href="#galerija">Doživetja</a>
+      <a href="#kontakt">Kontakt</a>
+      <a href="tel:+38640351464" class="mobile-phone">040 351 464</a>
+      <a href="#kontakt" class="btn btn-primary">Rezervirajte</a>
+    </nav>
+  </div>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero" id="top">
+      <div class="hero-video-wrap">
+        <video autoplay muted loop playsinline poster="img/glamping.jpg">
+          <source src="video/hero-landing.mp4" type="video/mp4" />
+        </video>
+      </div>
+      <div class="hero-overlay"></div>
+      <div class="hero-side-gradient"></div>
+      <div class="hero-content">
+        <span class="eyebrow">Tunjice nad Kamnikom</span>
+        <h1 class="display-xl hero-title">
+          Prespite pod <em>stoletnim</em> hrastom.
+        </h1>
+        <p class="hero-sub">
+          Lesene glamping hišice, zasebni wellness in devet energijskih točk — le 4&nbsp;km iz Kamnika.
+        </p>
+        <div class="hero-ctas">
+          <a href="tel:+38640351464" class="btn btn-light">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 8.81 19.79 19.79 0 010 2.18 2 2 0 012.01 0h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+            Pokličite 040 351 464
+          </a>
+          <a href="#kontakt" class="btn btn-outline-light">Preverite razpoložljivost</a>
+        </div>
+      </div>
+      <div class="scroll-indicator">
+        <div class="scroll-line"></div>
+        <span>Odkrijte več</span>
+      </div>
+    </section>
+
+    <!-- MARQUEE -->
+    <section class="marquee-section">
+      <div class="marquee-track">
+        <div class="marquee-inner">
+          <span>Glamping</span><span class="dot"></span>
+          <span>Wellness</span><span class="dot"></span>
+          <span>Energijske točke</span><span class="dot"></span>
+          <span>Živa voda</span><span class="dot"></span>
+          <span>Zeliščne masaže</span><span class="dot"></span>
+          <span>Tišina</span><span class="dot"></span>
+          <span>Narava</span><span class="dot"></span>
+          <span>Glamping</span><span class="dot"></span>
+          <span>Wellness</span><span class="dot"></span>
+          <span>Energijske točke</span><span class="dot"></span>
+          <span>Živa voda</span><span class="dot"></span>
+          <span>Zeliščne masaže</span><span class="dot"></span>
+          <span>Tišina</span><span class="dot"></span>
+          <span>Narava</span><span class="dot"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- WELCOME -->
+    <section class="section welcome-section">
+      <div class="wrap">
+        <div class="welcome-grid">
+          <div class="welcome-text reveal-up">
+            <span class="eyebrow">Dobrodošli v gaju</span>
+            <h2 class="display-lg">Kjer se čas upočasni, dih pa postane globlji.</h2>
+            <p>
+              Naravni zdravilni gaj je kraj, kjer se gozd, voda in energija srečajo v popolnem ravnovesju. 
+              Naše lesene hišice stojijo pod stoletnimi hrasti, kjer lahko prisluhnete tišini ali pa se razvajate 
+              v našem zasebnem wellnessu.
+            </p>
+            <p>
+              Od leta 1998 ustvarjamo prostor, ki zdravi — skozi naravo, skozi mir, skozi vaš lastni ritem.
+            </p>
+          </div>
+          <div class="stats-grid reveal-up" style="--delay: 0.2s">
+            <div class="stat-card">
+              <span class="stat-num">1998</span>
+              <span class="stat-label">Začetek</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-num">3</span>
+              <span class="stat-label">Lesene hišice</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-num">9</span>
+              <span class="stat-label">Energijskih točk</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-num">75</span>
+              <span class="stat-label">Elementov v živi vodi</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GLAMPING -->
+    <section class="section glamping-section" id="glamping">
+      <div class="wrap">
+        <div class="section-header reveal-up">
+          <span class="eyebrow">Glamping</span>
+          <h2 class="display-lg">Tri hiške. En hrast. Neskončen&nbsp;mir.</h2>
+        </div>
+        <div class="glamping-hero-img reveal-up" style="--delay: 0.15s">
+          <img src="img/glamping.jpg" alt="Glamping hišice ob sončnem zahodu" loading="lazy" />
+          <div class="img-glow"></div>
+        </div>
+        <div class="glamping-grid">
+          <div class="glamping-text reveal-up" style="--delay: 0.1s">
+            <p>
+              Tri luksuzne lesene hiške iz borovega lesa, vsaka zasnovana za dva gosta. 
+              Zasebna kopalnica, terasa z ležalniki in pogled, ki ga ne boste pozabili.
+            </p>
+            <ul class="feature-list">
+              <li>Zasebna kopalnica</li>
+              <li>Terasa z ležalniki</li>
+              <li>Brezplačno parkirišče in Wi-Fi</li>
+              <li>Izposoja koles</li>
+              <li>Dostop do wellnessa</li>
+              <li>Vodeni ogledi gaja</li>
+            </ul>
+            <div class="price-tag">
+              <span class="price-label">od</span>
+              <span class="price-value">420€</span>
+              <span class="price-detail">/ 2–3 noči za dva</span>
+            </div>
+          </div>
+          <div class="glamping-interior reveal-up" style="--delay: 0.25s">
+            <img src="img/interier.jpg" alt="Notranjost glamping hiške" loading="lazy" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WELLNESS -->
+    <section class="section wellness-section" id="wellness">
+      <div class="wrap">
+        <div class="section-header reveal-up">
+          <span class="eyebrow">Wellness</span>
+          <h2 class="display-lg">Wellness, ki je samo vaš.</h2>
+          <p class="section-intro">
+            Zasebni wellness program, prilagojen vašim potrebam — od zeliščnih masaž do infrardeče terapije.
+          </p>
+        </div>
+        <div class="bento-grid">
+          <div class="bento-card bento-large reveal-up" style="--delay: 0.05s">
+            <div class="bento-img">
+              <img src="img/zeliscni-snopek.jpg" alt="Zeliščni masažni snopek" loading="lazy" />
+            </div>
+            <div class="bento-content">
+              <h3>Zeliščne masaže</h3>
+              <p>Topli zeliščni snopi iz domačih zelišč, ki sproščajo napetosti in obnavljajo telo.</p>
+            </div>
+          </div>
+          <div class="bento-card reveal-up" style="--delay: 0.1s">
+            <div class="bento-icon">
+              <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 0v20M2 12h20"/><circle cx="12" cy="12" r="3"/></svg>
+            </div>
+            <h3>Terapevtske masaže</h3>
+            <p>Globinska sprostitev mišic in vezivnega tkiva.</p>
+          </div>
+          <div class="bento-card reveal-up" style="--delay: 0.15s">
+            <div class="bento-icon">
+              <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <h3>Ročna limfna drenaža</h3>
+            <p>Nežna tehnika za razstrupljanje in lahkotnost.</p>
+          </div>
+          <div class="bento-card reveal-up" style="--delay: 0.2s">
+            <div class="bento-icon">
+              <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/></svg>
+            </div>
+            <h3>Infrardeča terapija</h3>
+            <p>Toplotna terapija za regeneracijo celotnega telesa.</p>
+          </div>
+          <div class="bento-card reveal-up" style="--delay: 0.25s">
+            <div class="bento-icon">
+              <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></svg>
+            </div>
+            <h3>Nega obraza & Magic Lifting</h3>
+            <p>Naravni lifting obraza brez invazivnih posegov.</p>
+          </div>
+          <div class="bento-card bento-wide reveal-up" style="--delay: 0.3s">
+            <div class="bento-content-inline">
+              <div>
+                <h3>Regeneracijska komora</h3>
+                <p>Hladna terapija za hitrejše okrevanje in boljši spanec.</p>
+              </div>
+              <a href="#kontakt" class="btn btn-primary">Sestavite svoj program</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STATEMENT -->
+    <section class="section statement-section">
+      <div class="wrap">
+        <div class="statement-content reveal-up">
+          <div class="statement-orb"></div>
+          <p class="display-md statement-text">
+            Pustite mesto za seboj. Tukaj ostanejo le <em>drevesa, tišina</em> in vaš lastni <em>ritem.</em>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- GAJ -->
+    <section class="section gaj-section" id="gaj">
+      <div class="wrap">
+        <div class="section-header reveal-up">
+          <span class="eyebrow eyebrow-light">Zdravilni gaj</span>
+          <h2 class="display-lg text-light">Prostor, ki zna pomiriti.</h2>
+        </div>
+        <div class="gaj-grid">
+          <div class="gaj-video reveal-up" style="--delay: 0.1s">
+            <video autoplay muted loop playsinline poster="img/energijska-tocka.jpg">
+              <source src="video/hoja-po-naravi.mp4" type="video/mp4" />
+            </video>
+            <div class="gaj-quote">
+              <span class="quote-mark">&ldquo;</span>
+              Objemi drevo — in dan se upočasni.
+            </div>
+          </div>
+          <div class="gaj-items">
+            <div class="gaj-item reveal-up" style="--delay: 0.1s">
+              <span class="gaj-num">01</span>
+              <h3>Devet energijskih točk</h3>
+              <p>Sprehodite se po poti devetih energijskih točk v srcu gozda.</p>
+            </div>
+            <div class="gaj-item reveal-up" style="--delay: 0.2s">
+              <span class="gaj-num">02</span>
+              <h3>Živa voda</h3>
+              <p>Voda s 75 elementi, ki revitalizira telo in duha.</p>
+            </div>
+            <div class="gaj-item reveal-up" style="--delay: 0.3s">
+              <span class="gaj-num">03</span>
+              <h3>Doživetje gaja</h3>
+              <p>Vodeno doživetje narave z vsemi čuti.</p>
+            </div>
+            <div class="gaj-item reveal-up" style="--delay: 0.4s">
+              <span class="gaj-num">04</span>
+              <h3>Slikanje avre</h3>
+              <p>Odkrijte svojo energijski odtis z moderno tehnologijo.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TRUST -->
+    <section class="section trust-section">
+      <div class="wrap">
+        <div class="section-header reveal-up">
+          <span class="eyebrow">Zaupanje</span>
+          <h2 class="display-lg">Zaupanje, ki raste od 1998.</h2>
+        </div>
+        <div class="trust-grid">
+          <div class="trust-pillars reveal-up" style="--delay: 0.1s">
+            <div class="trust-pillar">
+              <div class="pillar-icon">
+                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              </div>
+              <h4>Od leta 1998</h4>
+              <p>Več kot četrt stoletja izkušenj.</p>
+            </div>
+            <div class="trust-pillar">
+              <div class="pillar-icon">
+                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"/></svg>
+              </div>
+              <h4>Pristna lokalnost</h4>
+              <p>Povezani z naravo in tradicijo Kamnika.</p>
+            </div>
+            <div class="trust-pillar">
+              <div class="pillar-icon">
+                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              </div>
+              <h4>Vse na enem mestu</h4>
+              <p>Glamping, wellness in narava na dosegu roke.</p>
+            </div>
+            <div class="trust-pillar">
+              <div class="pillar-icon">
+                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+              </div>
+              <h4>Popolna zasebnost</h4>
+              <p>Vaš prostor, vaš čas, vaš mir.</p>
+            </div>
+          </div>
+          <div class="testimonials reveal-up" style="--delay: 0.2s">
+            <div class="testimonial-card">
+              <div class="stars">★★★★★</div>
+              <p>"Čudovit kraj za sprostitev. Hišice so prekrasne, wellness odličen, narava pa naravnost magična."</p>
+              <span class="testimonial-author">— Ana K., Ljubljana</span>
+            </div>
+            <div class="testimonial-card">
+              <div class="stars">★★★★★</div>
+              <p>"Najboljši oddih v Sloveniji. Energija gaja je resnično nekaj posebnega."</p>
+              <span class="testimonial-author">— Marko P., Maribor</span>
+            </div>
+            <div class="testimonial-card">
+              <div class="stars">★★★★★</div>
+              <p>"Popolna zasebnost in mir. Masaže so bile fantastične. Se vrnemo!"</p>
+              <span class="testimonial-author">— Petra S., Celje</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GALLERY -->
+    <section class="section gallery-section" id="galerija">
+      <div class="wrap">
+        <div class="section-header reveal-up">
+          <span class="eyebrow eyebrow-light">Doživetja</span>
+          <h2 class="display-lg text-light">Utrinki iz gaja.</h2>
+        </div>
+        <div class="gallery-grid">
+          <div class="gallery-item gallery-tall reveal-up" style="--delay: 0.05s">
+            <img src="img/energijska-tocka.jpg" alt="Energijska točka v gozdu" loading="lazy" />
+            <div class="gallery-overlay"><span>Sprehod skozi gaj</span></div>
+          </div>
+          <div class="gallery-item reveal-up" style="--delay: 0.1s">
+            <img src="img/glamping.jpg" alt="Glamping ob sončnem zahodu" loading="lazy" />
+            <div class="gallery-overlay"><span>Sončni zahod</span></div>
+          </div>
+          <div class="gallery-item reveal-up" style="--delay: 0.15s">
+            <img src="img/ziva-voda.jpg" alt="Živa voda" loading="lazy" />
+            <div class="gallery-overlay"><span>Živa voda</span></div>
+          </div>
+          <div class="gallery-item gallery-wide reveal-up" style="--delay: 0.2s">
+            <img src="img/kristalna-krogla.jpg" alt="Kristalna krogla" loading="lazy" />
+            <div class="gallery-overlay"><span>Kristalna krogla</span></div>
+          </div>
+          <div class="gallery-item gallery-wide reveal-up" style="--delay: 0.25s">
+            <img src="img/interier.jpg" alt="Notranjost hiške" loading="lazy" />
+            <div class="gallery-overlay"><span>Notranjost hiške</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LOCATION -->
+    <section class="section location-section" id="lokacija">
+      <div class="wrap">
+        <div class="section-header reveal-up">
+          <span class="eyebrow">Lokacija</span>
+          <h2 class="display-lg">Skrit v gozdu, blizu vsega.</h2>
+        </div>
+        <div class="location-grid">
+          <div class="location-info reveal-up" style="--delay: 0.1s">
+            <div class="location-detail">
+              <h4>Naslov</h4>
+              <p>Tunjice 14a, 1241 Kamnik</p>
+            </div>
+            <div class="location-detail">
+              <h4>Razdalje</h4>
+              <p>4 km od Kamnika<br />15 km od letališča Brnik</p>
+            </div>
+            <div class="location-detail">
+              <h4>Odprto</h4>
+              <p>Celo leto, po predhodnem dogovoru.</p>
+            </div>
+            <a href="https://maps.google.com/?q=Naravni+zdravilni+gaj+Tunjice+Kamnik" target="_blank" rel="noopener" class="btn btn-ghost">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+              Odpri v Google Maps
+            </a>
+          </div>
+          <div class="location-map reveal-up" style="--delay: 0.2s">
+            <iframe 
+              src="https://www.google.com/maps?q=Naravni+zdravilni+gaj+Tunjice+Kamnik&z=14&output=embed"
+              loading="lazy" 
+              referrerpolicy="no-referrer-when-downgrade"
+              title="Lokacija Zdravilni gaj">
+            </iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="section contact-section" id="kontakt">
+      <div class="wrap">
+        <div class="section-header reveal-up">
+          <span class="eyebrow eyebrow-light">Kontakt</span>
+          <h2 class="display-lg text-light">Vaš mir vas čaka.</h2>
+        </div>
+        <div class="contact-grid">
+          <div class="contact-info reveal-up" style="--delay: 0.1s">
+            <div class="contact-card">
+              <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 8.81 19.79 19.79 0 010 2.18 2 2 0 012.01 0h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+              <div>
+                <h4>Mobilni</h4>
+                <a href="tel:+38640351464">040 351 464</a>
+              </div>
+            </div>
+            <div class="contact-card">
+              <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+              <div>
+                <h4>Pisarna</h4>
+                <a href="tel:+38618317085">01 831 70 85</a>
+              </div>
+            </div>
+            <div class="contact-card">
+              <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+              <div>
+                <h4>E-pošta</h4>
+                <a href="mailto:info@zdravilnigaj.si">info@zdravilnigaj.si</a>
+              </div>
+            </div>
+            <div class="contact-card">
+              <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              <div>
+                <h4>Naslov</h4>
+                <p>Tunjice 14a, 1241 Kamnik</p>
+              </div>
+            </div>
+            <div class="social-links">
+              <a href="https://facebook.com/zdravilnigaj" target="_blank" rel="noopener" aria-label="Facebook">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+              </a>
+              <a href="https://instagram.com/zdravilnigaj" target="_blank" rel="noopener" aria-label="Instagram">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+              </a>
+            </div>
+          </div>
+          <div class="contact-form-wrap reveal-up" style="--delay: 0.2s">
+            <form class="contact-form" action="https://formsubmit.co/info@zdravilnigaj.si" method="POST">
+              <div class="form-group">
+                <label for="name">Ime in priimek</label>
+                <input type="text" id="name" name="name" required />
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="phone">Telefon</label>
+                  <input type="tel" id="phone" name="phone" />
+                </div>
+                <div class="form-group">
+                  <label for="email">E-pošta</label>
+                  <input type="email" id="email" name="email" required />
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="date">Želeni datum</label>
+                <input type="date" id="date" name="date" />
+              </div>
+              <div class="form-group">
+                <label for="message">Sporočilo</label>
+                <textarea id="message" name="message" rows="4"></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary btn-full">
+                Pošljite povpraševanje
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+              </button>
+              <p class="form-privacy">Z oddajo obrazca se strinjate s <a href="/zasebnost">politiko zasebnosti</a>.</p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <img src="img/logo.jpg" alt="Zdravilni gaj" width="48" height="48" />
+            <div>
+              <strong>Naravni zdravilni gaj</strong>
+              <span>Tunjice · od 1998</span>
+            </div>
+          </div>
+          <p>Luksuzni leseni glamping, zasebni wellness in energijske točke zdravilnega gaja v objemu neokrnjene narade nad Kamnikom.</p>
+          <div class="social-links">
+            <a href="https://facebook.com/zdravilnigaj" target="_blank" rel="noopener" aria-label="Facebook">
+              <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            </a>
+            <a href="https://instagram.com/zdravilnigaj" target="_blank" rel="noopener" aria-label="Instagram">
+              <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+            </a>
+          </div>
+        </div>
+        <div class="footer-links">
+          <h5>Odkrijte</h5>
+          <a href="#glamping">Glamping</a>
+          <a href="#wellness">Wellness</a>
+          <a href="#gaj">Zdravilni gaj</a>
+          <a href="#galerija">Doživetja</a>
+          <a href="#kontakt">Kontakt</a>
+        </div>
+        <div class="footer-contact">
+          <h5>Kontakt</h5>
+          <a href="tel:+38640351464">040 351 464</a>
+          <a href="tel:+38618317085">01 831 70 85</a>
+          <a href="mailto:info@zdravilnigaj.si">info@zdravilnigaj.si</a>
+          <p>Tunjice 14a, 1241 Kamnik</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2026 Naravni zdravilni gaj Tunjice. Vse pravice pridržane.</span>
+        <a href="/zasebnost">Politika zasebnosti</a>
+      </div>
+    </div>
+  </footer>
+
+  <div class="mobile-bottom-bar">
+    <a href="tel:+38640351464" class="btn btn-ghost btn-sm">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 8.81 19.79 19.79 0 010 2.18 2 2 0 012.01 0h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+      Pokličite
+    </a>
+    <a href="#kontakt" class="btn btn-primary btn-sm">Rezervirajte</a>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>

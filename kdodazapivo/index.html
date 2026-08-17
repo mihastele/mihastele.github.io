@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Primary SEO Meta Tags -->
+  <title>Kdo da za pivo? 🍺 — Interaktivno obteženo kolo sreče</title>
+  <meta name="title" content="Kdo da za pivo? 🍺 — Interaktivno obteženo kolo sreče">
+  <meta name="description" content="Kdo časti naslednji krog piva? Obteženo interaktivno kolo usode za pravično in zabavno izbiro plačnika s fiziko, zvokom in zgodovino piv.">
+  <meta name="keywords" content="kdo da za pivo, kolo sreče, decision wheel, pivski krog, kDO častil, spinner, slovenia pivo, pravična izbira">
+  <meta name="author" content="Decision Wheel">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#f59e0b">
+
+  <!-- Open Graph / Facebook / Messenger / Discord -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Kdo da za pivo?">
+  <meta property="og:url" content="https://decisionwheel.app/">
+  <meta property="og:title" content="Kdo da za pivo? 🍺 — Obteženo kolo usode">
+  <meta property="og:description" content="Kdo časti naslednji krog piva? Obteženo interaktivno kolo usode za pravično in zabavno izbiro plačnika. Zavrti in ugotovi usodo!">
+  <meta property="og:image" content="assets/og-image.jpg">
+  <meta property="og:image:secure_url" content="assets/og-image.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="675">
+  <meta property="og:image:alt" content="Kdo da za pivo? - Interaktivno obteženo kolo sreče v ambientu pivnice">
+  <meta property="og:locale" content="sl_SI">
+
+  <!-- Twitter / X Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://decisionwheel.app/">
+  <meta name="twitter:title" content="Kdo da za pivo? 🍺 — Obteženo kolo usode">
+  <meta name="twitter:description" content="Pravična in zabava odločitev, kdo plača naslednji krog piva v vaši pivski ekipi!">
+  <meta name="twitter:image" content="assets/og-image.jpg">
+  <meta name="twitter:image:alt" content="Kdo da za pivo? - Interaktivno obteženo kolo sreče">
+
+  <!-- Schema.org JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Kdo da za pivo?",
+    "url": "https://decisionwheel.app/",
+    "description": "Obteženo kolo usode za pravično izbiro naslednjega plačnika piva s prilagodljivimi utežmi in zgodovino.",
+    "applicationCategory": "EntertainmentApplication",
+    "operatingSystem": "All",
+    "inLanguage": "sl",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "EUR"
+    }
+  }
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="background-effects">
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+    <div class="bubble-container" id="bubbleContainer"></div>
+  </div>
+
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="logo-area">
+        <div class="beer-badge">🍺</div>
+        <div>
+          <h1>Kdo da za pivo?</h1>
+          <p class="subtitle">Obteženo kolo usode za pravično izbiro naslednjega plačnika</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button id="soundToggleBtn" class="btn btn-icon" title="Zvok vklopljen/izklopljen">
+          <svg id="soundOnIcon" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          </svg>
+          <svg id="soundOffIcon" class="icon hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="1" y1="1" x2="23" y2="23"></line>
+            <path d="M9 9v6a1 1 0 0 0 1 1h2l4 4V9"></path>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          </svg>
+        </button>
+        <button id="historyToggleBtn" class="btn btn-secondary">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          <span>Zgodovina</span>
+          <span class="badge" id="historyBadge">0</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Layout -->
+    <main class="app-layout">
+      <!-- Left Panel: Participants & Settings -->
+      <section class="panel panel-left">
+        <div class="panel-header">
+          <h2>
+            <svg class="icon text-amber" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+            Pivska družba
+          </h2>
+          <span class="member-count" id="memberCountText">0 članov</span>
+        </div>
+
+        <!-- Add Member Input Form -->
+        <form id="addMemberForm" class="add-member-form" onsubmit="return false;">
+          <div class="input-row-main">
+            <input type="text" id="memberNameInput" placeholder="Vnesite ime prijatelja..." required maxlength="25" autocomplete="off">
+          </div>
+          <div class="input-row-controls">
+            <div class="weight-input-wrapper" title="Začetna teža (večja teža = večja možnost)">
+              <span class="weight-label">Teža:</span>
+              <input type="number" id="memberWeightInput" value="1" min="1" max="50" required>
+            </div>
+            <button type="submit" id="addMemberBtn" class="btn btn-primary btn-add">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              <span>Dodaj v kolesce</span>
+            </button>
+          </div>
+        </form>
+
+        <!-- Presets Bar -->
+        <div class="presets-container">
+          <span class="presets-label">Prednastavitve:</span>
+          <div class="preset-buttons">
+            <button class="btn-chip" data-preset="standard">🍺 Pivska ekipa</button>
+            <button class="btn-chip" data-preset="equalize">⚖️ Enakovredno</button>
+            <button class="btn-chip" data-preset="boss">👑 Šef plača</button>
+            <button class="btn-chip btn-chip-danger" id="clearAllMembersBtn">🗑️ Pobriši vse</button>
+          </div>
+        </div>
+
+        <!-- Members List Container -->
+        <div class="members-list-wrapper">
+          <ul id="membersList" class="members-list">
+            <!-- Dynamic members injected here -->
+          </ul>
+        </div>
+      </section>
+
+      <!-- Center Panel: The Interactive Wheel -->
+      <section class="panel panel-center">
+        <div class="wheel-stage">
+          <!-- Canvas Confetti Overlay -->
+          <canvas id="confettiCanvas" class="confetti-canvas"></canvas>
+
+          <!-- Ticker Peg / Pointer -->
+          <div class="wheel-pointer" id="wheelPointer">
+            <div class="pointer-arrow"></div>
+          </div>
+
+          <!-- Wheel Canvas -->
+          <div class="canvas-container">
+            <canvas id="wheelCanvas" width="600" height="600"></canvas>
+            
+            <!-- Dynamic Center Spin Button -->
+            <button id="spinBtn" class="spin-center-btn" title="Klikni ali pritisni PRESLEDEK za vrtenje!">
+              <div class="spin-inner">
+                <span class="spin-beer-icon">🍺</span>
+                <span class="spin-text">ZAVRTI!</span>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Action Controls under Wheel -->
+        <div class="wheel-controls">
+          <button id="bigSpinBtn" class="btn btn-accent btn-large">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+            </svg>
+            ZAVRTI KOLESCE (Presledek)
+          </button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Winner Modal -->
+  <div id="winnerModal" class="modal-backdrop hidden">
+    <div class="modal-card winner-card">
+      <div class="winner-glow"></div>
+      <div class="winner-beer-header">
+        <span class="beer-anim">🍺</span>
+        <span class="beer-toast" id="modalToast">Na zdravje!</span>
+        <span class="beer-anim">🍻</span>
+      </div>
+
+      <h3 class="winner-subtitle">Danes časti naslednji krog piva:</h3>
+      <div class="winner-name-banner" id="winnerNameBanner">
+        Luka
+      </div>
+      <p class="winner-stats-info" id="winnerStatsInfo">
+        Verjetnost izbire je bila 25% (Teža 3 od 12)
+      </p>
+
+      <div class="modal-actions">
+        <button id="modalSpinAgainBtn" class="btn btn-accent btn-large">
+          🔄 Zavrti znova
+        </button>
+        <button id="modalCloseBtn" class="btn btn-secondary btn-large">
+          Za zapornico (Zapri)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- History Drawer / Modal -->
+  <div id="historyModal" class="modal-backdrop hidden">
+    <div class="modal-card history-card">
+      <div class="modal-header">
+        <h2>
+          <svg class="icon text-amber" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          Zgodovina zapadlih piv
+        </h2>
+        <button id="closeHistoryBtn" class="btn-close" title="Zapri">&times;</button>
+      </div>
+
+      <div class="history-summary" id="historySummary">
+        <!-- Summary tallies injected here -->
+      </div>
+
+      <div class="history-list-wrapper">
+        <ul id="historyList" class="history-list">
+          <!-- Dynamic history items -->
+        </ul>
+      </div>
+
+      <div class="modal-footer">
+        <button id="clearHistoryBtn" class="btn btn-chip btn-chip-danger">
+          🗑️ Izprazni zgodovino
+        </button>
+        <button id="closeHistoryFooterBtn" class="btn btn-secondary">
+          Zapri
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript Files -->
+  <script src="js/audio.js"></script>
+  <script src="js/confetti.js"></script>
+  <script src="js/wheel.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

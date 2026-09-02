@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>SYNAPSE — Neuro-Motor Reaction Lab</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              bg: '#07090e',
+              surface: '#0f141f',
+              border: '#1f293d',
+              accent: '#38bdf8',
+              success: '#10b981',
+              danger: '#f43f5e',
+              warn: '#fbbf24',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+            mono: ['JetBrains Mono', 'Menlo', 'Monaco', 'Courier New', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Prevent mobile tap highlight and browser zoom delays */
+    * {
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+    }
+    
+    body {
+      background-color: #07090e;
+      color: #f1f5f9;
+      overflow-x: hidden;
+      font-feature-settings: "tnum" 1, "cv02" 1, "cv03" 1;
+    }
+
+    .pulse-glow {
+      box-shadow: 0 0 50px -10px rgba(56, 189, 248, 0.35);
+    }
+    .pulse-danger {
+      box-shadow: 0 0 50px -10px rgba(244, 63, 94, 0.45);
+    }
+    .pulse-success {
+      box-shadow: 0 0 50px -10px rgba(16, 185, 129, 0.45);
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-track { background: #07090e; }
+    ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between antialiased selection:bg-brand-accent selection:text-black">
+
+  <!-- Top Navigation & Mode Switcher -->
+  <header class="w-full border-b border-brand-border/60 bg-brand-surface/40 backdrop-blur-xl sticky top-0 z-30 px-4 py-3">
+    <div class="max-w-4xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      
+      <!-- Brand Logo -->
+      <div class="flex items-center space-x-2.5">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-sky-500/20">
+          <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+          </svg>
+        </div>
+        <div>
+          <span class="font-bold tracking-wider text-sm text-white">SYNAPSE</span>
+          <span class="text-[10px] text-zinc-400 block tracking-widest uppercase font-mono">Cognitive Lab</span>
+        </div>
+      </div>
+
+      <!-- Mode Selector -->
+      <div class="flex items-center bg-brand-bg/80 p-1 rounded-xl border border-brand-border text-xs">
+        <button id="mode-pvt" onclick="setMode('pvt')" class="px-3 py-1.5 rounded-lg font-medium transition-all bg-sky-500/10 text-sky-400 border border-sky-500/30">
+          Vigilance (PVT)
+        </button>
+        <button id="mode-gonogo" onclick="setMode('gonogo')" class="px-3 py-1.5 rounded-lg font-medium transition-all text-zinc-400 hover:text-white">
+          Go / No-Go
+        </button>
+        <button id="mode-spatial" onclick="setMode('spatial')" class="px-3 py-1.5 rounded-lg font-medium transition-all text-zinc-400 hover:text-white">
+          Spatial Grid
+        </button>
+      </div>
+
+      <!-- Controls & Modals -->
+      <div class="flex items-center space-x-2">
+        <button id="sound-btn" onclick="toggleSound()" title="Toggle Sound Feedback" class="p-2 rounded-lg border border-brand-border bg-brand-surface text-zinc-400 hover:text-white transition">
+          <svg id="sound-icon-on" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+          </svg>
+          <svg id="sound-icon-off" class="w-4 h-4 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+          </svg>
+        </button>
+        
+        <button onclick="openInfoModal()" title="Scientific Validation" class="p-2 rounded-lg border border-brand-border bg-brand-surface text-zinc-400 hover:text-white transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" stroke-width="2"></circle>
+            <path stroke-width="2" stroke-linecap="round" d="M12 16v-4m0-4h.01"></path>
+          </svg>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Interactive Training Arena -->
+  <main class="max-w-4xl w-full mx-auto p-4 flex-1 flex flex-col justify-center items-center">
+    
+    <!-- Arena Container -->
+    <div id="arena-card" class="w-full relative min-h-[380px] sm:min-h-[440px] rounded-3xl border border-brand-border/80 bg-brand-surface/60 backdrop-blur-2xl flex flex-col items-center justify-center p-6 sm:p-10 transition-all duration-300 shadow-2xl cursor-pointer overflow-hidden">
+      
+      <!-- Ambient Background Radial Glow -->
+      <div id="arena-glow" class="absolute inset-0 opacity-10 pointer-events-none transition-all duration-500 bg-gradient-to-b from-sky-500/20 to-transparent"></div>
+
+      <!-- Mode: Standard PVT & Go/No-Go View -->
+      <div id="standard-view" class="w-full h-full flex flex-col items-center justify-center text-center z-10 space-y-6">
+        
+        <!-- Status Badge / Prompt -->
+        <div id="state-badge" class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full text-xs font-mono tracking-wider border border-brand-border bg-brand-bg/60 text-zinc-400 uppercase">
+          <span class="w-2 h-2 rounded-full bg-zinc-500 animate-pulse"></span>
+          <span id="badge-text">IDLE — READY</span>
+        </div>
+
+        <!-- Main Dynamic Trigger Orb / Graphic -->
+        <div class="relative flex items-center justify-center">
+          <div id="trigger-halo" class="w-44 h-44 sm:w-56 sm:h-56 rounded-full border border-brand-border flex items-center justify-center transition-all duration-200">
+            <div id="trigger-core" class="w-28 h-28 sm:w-36 sm:h-36 rounded-full bg-brand-bg border-2 border-brand-border flex flex-col items-center justify-center transition-all duration-150">
+              <span id="core-icon" class="text-3xl sm:text-4xl text-zinc-400">⚡</span>
+              <span id="live-timer" class="font-mono text-xs text-zinc-500 mt-1">READY</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Instructions / Dynamic Feedback -->
+        <div class="space-y-1">
+          <h2 id="main-heading" class="text-xl sm:text-2xl font-bold tracking-tight text-white">Tap anywhere or press Space</h2>
+          <p id="sub-heading" class="text-xs sm:text-sm text-zinc-400 max-w-sm mx-auto">
+            Wait for the orb to ignite green, then strike immediately. Premature clicks count as false starts.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Mode: Spatial Saccade Grid (Hidden by default) -->
+      <div id="spatial-view" class="w-full max-w-md hidden grid-cols-2 gap-4 z-10">
+        <button id="spatial-0" onclick="handleSpatialClick(0)" class="spatial-btn h-32 sm:h-36 rounded-2xl border-2 border-brand-border bg-brand-bg/80 hover:border-zinc-500 transition-all flex items-center justify-center text-zinc-600 font-mono text-xl font-bold">1</button>
+        <button id="spatial-1" onclick="handleSpatialClick(1)" class="spatial-btn h-32 sm:h-36 rounded-2xl border-2 border-brand-border bg-brand-bg/80 hover:border-zinc-500 transition-all flex items-center justify-center text-zinc-600 font-mono text-xl font-bold">2</button>
+        <button id="spatial-2" onclick="handleSpatialClick(2)" class="spatial-btn h-32 sm:h-36 rounded-2xl border-2 border-brand-border bg-brand-bg/80 hover:border-zinc-500 transition-all flex items-center justify-center text-zinc-600 font-mono text-xl font-bold">3</button>
+        <button id="spatial-3" onclick="handleSpatialClick(3)" class="spatial-btn h-32 sm:h-36 rounded-2xl border-2 border-brand-border bg-brand-bg/80 hover:border-zinc-500 transition-all flex items-center justify-center text-zinc-600 font-mono text-xl font-bold">4</button>
+      </div>
+
+    </div>
+
+    <!-- Quick Stat Cards & Performance Metrics -->
+    <div class="w-full grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4">
+      
+      <!-- Average RT -->
+      <div class="p-3.5 rounded-2xl border border-brand-border/80 bg-brand-surface/40 backdrop-blur-md">
+        <span class="text-[10px] uppercase font-mono tracking-widest text-zinc-400 block mb-0.5">Average RT</span>
+        <div class="flex items-baseline space-x-1.5">
+          <span id="stat-avg" class="text-xl sm:text-2xl font-bold font-mono text-white">--</span>
+          <span class="text-xs text-zinc-400">ms</span>
+        </div>
+      </div>
+
+      <!-- Best RT -->
+      <div class="p-3.5 rounded-2xl border border-brand-border/80 bg-brand-surface/40 backdrop-blur-md">
+        <span class="text-[10px] uppercase font-mono tracking-widest text-zinc-400 block mb-0.5">Best Strike</span>
+        <div class="flex items-baseline space-x-1.5">
+          <span id="stat-best" class="text-xl sm:text-2xl font-bold font-mono text-emerald-400">--</span>
+          <span class="text-xs text-zinc-400">ms</span>
+        </div>
+      </div>
+
+      <!-- Consistency (Sigma / SD) -->
+      <div class="p-3.5 rounded-2xl border border-brand-border/80 bg-brand-surface/40 backdrop-blur-md">
+        <span class="text-[10px] uppercase font-mono tracking-widest text-zinc-400 block mb-0.5" title="Standard deviation of reaction speed">Consistency (σ)</span>
+        <div class="flex items-baseline space-x-1.5">
+          <span id="stat-sd" class="text-xl sm:text-2xl font-bold font-mono text-sky-400">--</span>
+          <span class="text-xs text-zinc-400">ms</span>
+        </div>
+      </div>
+
+      <!-- Reflex Tier -->
+      <div class="p-3.5 rounded-2xl border border-brand-border/80 bg-brand-surface/40 backdrop-blur-md">
+        <span class="text-[10px] uppercase font-mono tracking-widest text-zinc-400 block mb-0.5">Neural Tier</span>
+        <span id="stat-tier" class="text-sm sm:text-base font-semibold text-zinc-300 truncate block mt-0.5">Calibrating...</span>
+      </div>
+
+    </div>
+
+    <!-- Trial History Sparkline Canvas -->
+    <div class="w-full mt-3 p-4 rounded-2xl border border-brand-border/70 bg-brand-surface/30 backdrop-blur-md flex flex-col space-y-2">
+      <div class="flex items-center justify-between text-xs font-mono text-zinc-400">
+        <span>TRIAL SPEED TRAJECTORY</span>
+        <span id="trial-count">0 TRIALS COMPLETED</span>
+      </div>
+      <div class="w-full h-16 relative">
+        <canvas id="sparkline" class="w-full h-full"></canvas>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Scientific Reference Modal (Custom UI, No alerts) -->
+  <div id="info-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4 opacity-0 transition-opacity duration-200">
+    <div class="max-w-md w-full bg-brand-surface border border-brand-border rounded-3xl p-6 space-y-5 shadow-2xl">
+      
+      <div class="flex items-start justify-between">
+        <div class="flex items-center space-x-2">
+          <div class="w-7 h-7 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold text-xs">Ψ</div>
+          <h3 class="text-lg font-bold text-white">The Science of Reflex</h3>
+        </div>
+        <button onclick="closeInfoModal()" class="text-zinc-400 hover:text-white p-1">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="space-y-3 text-xs sm:text-sm text-zinc-300 leading-relaxed font-sans">
+        <p>
+          <strong class="text-sky-400 font-semibold">1. Psychomotor Vigilance (PVT):</strong> Measures visual pathway conduction from retinal photoreceptors via the optic tract to primary motor cortex actuation. The human physiological limit is roughly <span class="font-mono text-zinc-200">140–180ms</span>.
+        </p>
+        <p>
+          <strong class="text-emerald-400 font-semibold">2. Go / No-Go Inhibition:</strong> Engages the prefrontal cortex to assess executive impulse suppression. Inhibiting response to decoy cues exercises neuro-motor brake circuits.
+        </p>
+        <p>
+          <strong class="text-amber-400 font-semibold">3. Hick-Hyman Law:</strong> Reaction time increases logarithmically as the number of spatial alternatives increases ($RT = a + b \log_2(n)$). Spatial Grid trains saccadic eye movement and peripheral attention.
+        </p>
+      </div>
+
+      <div class="pt-2 border-t border-brand-border">
+        <button onclick="closeInfoModal()" class="w-full py-2.5 rounded-xl bg-white text-black font-semibold text-xs hover:bg-zinc-200 transition">
+          Understood — Continue Training
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer Stats / Shortcuts -->
+  <footer class="w-full border-t border-brand-border/40 py-3 px-4 text-center text-xs text-zinc-500 font-mono">
+    <div class="max-w-4xl mx-auto flex flex-wrap justify-between items-center gap-2">
+      <span>SYNAPSE v2.5 — SUB-MILLISECOND PRECISION</span>
+      <button onclick="resetStats()" class="hover:text-zinc-300 transition text-zinc-500 hover:underline">Clear History Data</button>
+    </div>
+  </footer>
+
+  <script>
+    /* ==========================================================
+       SYNAPSE NEURO-MOTOR ENGINE (Pure High-Precision JS)
+       ========================================================== */
+
+    // Audio Synthesizer via Web Audio API (Zero external assets needed)
+    let audioCtx = null;
+    let soundEnabled = true;
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function playTone(freq, type = 'sine', duration = 0.08, gainVal = 0.1) {
+      if (!soundEnabled) return;
+      try {
+        initAudio();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(gainVal, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {
+        // Audio fallback
+      }
+    }
+
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      document.getElementById('sound-icon-on').classList.toggle('hidden', !soundEnabled);
+      document.getElementById('sound-icon-off').classList.toggle('hidden', soundEnabled);
+      if (soundEnabled) playTone(587.33, 'sine', 0.1, 0.15); // D5 chime
+    }
+
+    // Modal Controls
+    const infoModal = document.getElementById('info-modal');
+    function openInfoModal() {
+      infoModal.classList.remove('hidden');
+      infoModal.classList.add('flex');
+      setTimeout(() => infoModal.classList.remove('opacity-0'), 10);
+    }
+    function closeInfoModal() {
+      infoModal.classList.add('opacity-0');
+      setTimeout(() => {
+        infoModal.classList.add('hidden');
+        infoModal.classList.remove('flex');
+      }, 200);
+    }
+
+    // State Variables
+    let currentMode = 'pvt'; // 'pvt' | 'gonogo' | 'spatial'
+    let gameState = 'IDLE';   // 'IDLE' | 'WAITING' | 'TRIGGERED' | 'RESULT' | 'PENALTY'
+    let startTime = 0;
+    let timerTimeout = null;
+    let rafTimerId = null;
+    let activeSpatialIndex = null;
+    let isDecoyGoNoGo = false;
+
+    // Biometric History
+    let historyData = {
+      pvt: [],
+      gonogo: [],
+      spatial: []
+    };
+
+    // UI Element References
+    const arenaCard = document.getElementById('arena-card');
+    const arenaGlow = document.getElementById('arena-glow');
+    const stateBadge = document.getElementById('state-badge');
+    const badgeText = document.getElementById('badge-text');
+    const triggerHalo = document.getElementById('trigger-halo');
+    const triggerCore = document.getElementById('trigger-core');
+    const coreIcon = document.getElementById('core-icon');
+    const liveTimer = document.getElementById('live-timer');
+    const mainHeading = document.getElementById('main-heading');
+    const subHeading = document.getElementById('sub-heading');
+    const standardView = document.getElementById('standard-view');
+    const spatialView = document.getElementById('spatial-view');
+
+    // Mode Selector
+    function setMode(mode) {
+      if (gameState === 'WAITING' || gameState === 'TRIGGERED') {
+        cancelGame();
+      }
+      currentMode = mode;
+      
+      // Update Tab styling
+      ['pvt', 'gonogo', 'spatial'].forEach(m => {
+        const btn = document.getElementById(`mode-${m}`);
+        if (m === mode) {
+          btn.className = "px-3 py-1.5 rounded-lg font-medium transition-all bg-sky-500/10 text-sky-400 border border-sky-500/30";
+        } else {
+          btn.className = "px-3 py-1.5 rounded-lg font-medium transition-all text-zinc-400 hover:text-white";
+        }
+      });
+
+      // Switch Layout Views
+      if (mode === 'spatial') {
+        standardView.classList.add('hidden');
+        spatialView.classList.remove('hidden');
+        spatialView.classList.add('grid');
+      } else {
+        standardView.classList.remove('hidden');
+        spatialView.classList.add('hidden');
+        spatialView.classList.remove('grid');
+      }
+
+      resetToIdle();
+      updateStatsUI();
+      renderSparkline();
+    }
+
+    // State Reset
+    function resetToIdle() {
+      gameState = 'IDLE';
+      clearTimeout(timerTimeout);
+      cancelAnimationFrame(rafTimerId);
+
+      arenaCard.className = "w-full relative min-h-[380px] sm:min-h-[440px] rounded-3xl border border-brand-border/80 bg-brand-surface/60 backdrop-blur-2xl flex flex-col items-center justify-center p-6 sm:p-10 transition-all duration-300 shadow-2xl cursor-pointer overflow-hidden";
+      arenaGlow.className = "absolute inset-0 opacity-10 pointer-events-none transition-all duration-500 bg-gradient-to-b from-sky-500/20 to-transparent";
+      
+      stateBadge.className = "inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full text-xs font-mono tracking-wider border border-brand-border bg-brand-bg/60 text-zinc-400 uppercase";
+      stateBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-zinc-500 animate-pulse"></span><span>IDLE — READY</span>`;
+
+      triggerHalo.className = "w-44 h-44 sm:w-56 sm:h-56 rounded-full border border-brand-border flex items-center justify-center transition-all duration-200";
+      triggerCore.className = "w-28 h-28 sm:w-36 sm:h-36 rounded-full bg-brand-bg border-2 border-brand-border flex flex-col items-center justify-center transition-all duration-150";
+      
+      coreIcon.innerHTML = "⚡";
+      coreIcon.className = "text-3xl sm:text-4xl text-zinc-400";
+      liveTimer.innerText = "READY";
+      liveTimer.className = "font-mono text-xs text-zinc-500 mt-1";
+
+      if (currentMode === 'pvt') {
+        mainHeading.innerText = "Tap anywhere or press Space";
+        subHeading.innerText = "Wait for emerald ignition, then tap as fast as humanly possible.";
+      } else if (currentMode === 'gonogo') {
+        mainHeading.innerText = "Tap to Begin Go / No-Go Test";
+        subHeading.innerText = "STRIKE only on GREEN orb. DO NOT tap if a RED decoy appears.";
+      } else if (currentMode === 'spatial') {
+        resetSpatialButtons();
+      }
+    }
+
+    function resetSpatialButtons() {
+      for (let i = 0; i < 4; i++) {
+        const btn = document.getElementById(`spatial-${i}`);
+        btn.className = "spatial-btn h-32 sm:h-36 rounded-2xl border-2 border-brand-border bg-brand-bg/80 hover:border-zinc-500 transition-all flex items-center justify-center text-zinc-600 font-mono text-xl font-bold";
+        btn.innerHTML = `${i + 1}`;
+      }
+    }
+
+    // Start Waiting State
+    function startTrial() {
+      initAudio();
+      gameState = 'WAITING';
+      
+      // Random non-anticipatory delay (1.8s to 4.8s)
+      const randomDelay = Math.floor(Math.random() * 3000) + 1800;
+
+      // Update UI for Waiting phase
+      arenaCard.className = "w-full relative min-h-[380px] sm:min-h-[440px] rounded-3xl border border-amber-500/30 bg-amber-950/10 backdrop-blur-2xl flex flex-col items-center justify-center p-6 sm:p-10 transition-all duration-300 shadow-2xl cursor-pointer overflow-hidden";
+      arenaGlow.className = "absolute inset-0 opacity-20 pointer-events-none transition-all duration-500 bg-gradient-to-b from-amber-500/20 to-transparent";
+
+      stateBadge.className = "inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full text-xs font-mono tracking-wider border border-amber-500/40 bg-amber-500/10 text-amber-300 uppercase";
+      stateBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span><span>SYNAPSES PRIMED... WAIT</span>`;
+
+      triggerHalo.className = "w-44 h-44 sm:w-56 sm:h-56 rounded-full border-2 border-amber-500/40 flex items-center justify-center transition-all duration-200 animate-pulse";
+      triggerCore.className = "w-28 h-28 sm:w-36 sm:h-36 rounded-full bg-amber-500/10 border-2 border-amber-500/60 flex flex-col items-center justify-center transition-all duration-150";
+
+      coreIcon.innerHTML = "👁️";
+      coreIcon.className = "text-3xl sm:text-4xl text-amber-400";
+      liveTimer.innerText = "WAIT FOR IT";
+      liveTimer.className = "font-mono text-xs text-amber-400 mt-1";
+
+      mainHeading.innerText = "Focus on the signal...";
+      subHeading.innerText = "Do not anticipate. False starts are penalized.";
+
+      playTone(330, 'sine', 0.05, 0.05); // low priming click
+
+      // Timer trigger
+      timerTimeout = setTimeout(() => {
+        triggerCue();
+      }, randomDelay);
+    }
+
+    // Trigger the Visual Cue
+    function triggerCue() {
+      if (gameState !== 'WAITING') return;
+
+      startTime = performance.now();
+
+      if (currentMode === 'pvt') {
+        gameState = 'TRIGGERED';
+        triggerPVTCue();
+      } else if (currentMode === 'gonogo') {
+        gameState = 'TRIGGERED';
+        triggerGoNoGoCue();
+      } else if (currentMode === 'spatial') {
+        gameState = 'TRIGGERED';
+        triggerSpatialCue();
+      }
+    }
+
+    function triggerPVTCue() {
+      playTone(880, 'triangle', 0.08, 0.2); // A5 high flash
+
+      arenaCard.className = "w-full relative min-h-[380px] sm:min-h-[440px] rounded-3xl border-2 border-emerald-400 bg-emerald-950/25 pulse-success backdrop-blur-2xl flex flex-col items-center justify-center p-6 sm:p-10 transition-all duration-75 shadow-2xl cursor-pointer overflow-hidden";
+      arenaGlow.className = "absolute inset-0 opacity-40 pointer-events-none transition-all duration-100 bg-gradient-to-b from-emerald-500/40 to-transparent";
+
+      stateBadge.className = "inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full text-xs font-mono tracking-wider border border-emerald-400 bg-emerald-500/20 text-emerald-300 uppercase";
+      stateBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span><span>TRIGGER FIRED</span>`;
+
+      triggerHalo.className = "w-44 h-44 sm:w-56 sm:h-56 rounded-full border-4 border-emerald-400 flex items-center justify-center transition-all duration-75 scale-110";
+      triggerCore.className = "w-28 h-28 sm:w-36 sm:h-36 rounded-full bg-emerald-500 border-2 border-white flex flex-col items-center justify-center transition-all duration-75 shadow-lg shadow-emerald-500/50";
+
+      coreIcon.innerHTML = "⚡";
+      coreIcon.className = "text-3xl sm:text-4xl text-black font-black";
+
+      mainHeading.innerText = "STRIKE NOW!";
+      mainHeading.className = "text-2xl sm:text-3xl font-black tracking-tight text-emerald-300";
+
+      // Live tick counter
+      function updateLiveTimer() {
+        if (gameState === 'TRIGGERED') {
+          const currentElapsed = Math.round(performance.now() - startTime);
+          liveTimer.innerText = `${currentElapsed} ms`;
+          rafTimerId = requestAnimationFrame(updateLiveTimer);
+        }
+      }
+      rafTimerId = requestAnimationFrame(updateLiveTimer);
+    }
+
+    function triggerGoNoGoCue() {
+      // 25% chance of being a decoy NO-GO (Crimson)
+      isDecoyGoNoGo = Math.random() < 0.25;
+
+      if (!isDecoyGoNoGo) {
+        // GREEN GO SIGNAL
+        playTone(880, 'triangle', 0.08, 0.2);
+        arenaCard.className = "w-full relative min-h-[380px] sm:min-h-[440px] rounded-3xl border-2 border-emerald-400 bg-emerald-950/25 pulse-success backdrop-blur-2xl flex flex-col items-center justify-center p-6 sm:p-10 transition-all duration-75 shadow-2xl cursor-pointer overflow-hidden";
+        triggerCore.className = "w-28 h-28 sm:w-36 sm:h-36 rounded-full bg-emerald-500 border-2 border-white flex flex-col items-center justify-center shadow-lg shadow-emerald-500/50";
+        coreIcon.innerHTML = "GO!";
+        coreIcon.className = "text-2xl sm:text-3xl text-black font-black";
+        mainHeading.innerText = "TAP! (GO TARGET)";
+        mainHeading.className = "text-2xl sm:text-3xl font-black text-emerald-300";
+      } else {
+        // RED NO-GO DECOY SIGNAL
+        playTone(220, 'sawtooth', 0.15, 0.15); // Low warning buzz
+        arenaCard.className = "w-full relative min-h-[380px] sm:min-h-[440px] rounded-3xl border-2 border-rose-500 bg-rose-950/30 pulse-danger backdrop-blur-2xl flex flex-col items-center justify-center p-6 sm:p-10 transition-all duration-75 shadow-2xl cursor-pointer overflow-hidden";
+        triggerCore.className = "w-28 h-28 sm:w-36 sm:h-36 rounded-full bg-rose-600 border-2 border-white flex flex-col items-center justify-center shadow-lg shadow-rose-500/50";
+        coreIcon.innerHTML = "STOP";
+        coreIcon.className = "text-xl sm:text-2xl text-white font-black";
+        mainHeading.innerText = "HOLD! (NO-GO DECOY)";
+        mainHeading.className = "text-2xl sm:text-3xl font-black text-rose-400";
+
+        // Auto-success for successful inhibition after 1200ms
+        timerTimeout = setTimeout(() => {
+          if (gameState === 'TRIGGERED' && isDecoyGoNoGo) {
+            handleInhibitionSuccess();
+          }
+        }, 1200);
+      }
+    }
+
+    function triggerSpatialCue() {
+      activeSpatialIndex = Math.floor(Math.random() * 4);
+      playTone(700 + activeSpatialIndex * 100, 'triangle', 0.08, 0.2);
+
+      resetSpatialButtons();
+      const targetBtn = document.getElementById(`spatial-${activeSpatialIndex}`);
+      targetBtn.className = "spatial-btn h-32 sm:h-36 rounded-2xl border-4 border-emerald-400 bg-emerald-500 text-black font-mono text-3xl font-black shadow-lg shadow-emerald-500/40 scale-105 transition-all flex items-center justify-center";
+      targetBtn.innerHTML = `TARGET`;
+    }
+
+    // Handle User Click / Interaction
+    function handleAction() {
+      if (gameState === 'IDLE') {
+        startTrial();
+      } else if (gameState === 'WAITING') {
+        handleFalseStart();
+      } else if (gameState === 'TRIGGERED') {
+        if (currentMode === 'pvt') {
+          handleSuccessReaction();
+        } else if (currentMode === 'gonogo') {
+          if (isDecoyGoNoGo) {
+            handleInhibitionFailure();
+          } else {
+            handleSuccessReaction();
+          }
+        }
+      } else if (gameState === 'RESULT' || gameState === 'PENALTY') {
+        resetToIdle();
+      }
+    }
+
+    // Spatial Specific Click
+    function handleSpatialClick(index) {
+      if (gameState === 'IDLE') {
+        startTrial();
+        return;
+      }
+      if (gameState === 'WAITING') {
+        handleFalseStart();
+        return;
+      }
+      if (gameState === 'TRIGGERED') {
+        if (index === activeSpatialIndex) {
+          handleSuccessReaction();
+        } else {
+          // Wrong target penalty
+          handleFalseStart("Wrong Target Clicked!");
+        }
+      }
+    }
+
+    // Success Handling
+    function handleSuccessReaction() {
+      cancelAnimationFrame(rafTimerId);
+      const reactionTime = Math.round(performance.now() - startTime);
+      gameState = 'RESULT';
+
+      playTone(1046.5, 'sine', 0.1, 0.2); // High C6 reward tone
+
+      // Save Data
+      historyData[currentMode].push(reactionTime);
+      updateStatsUI();
+      renderSparkline();
+
+      // UI result rendering
+      arenaCard.className = "w-full relative min-h-[380px] sm:min-h-[440px] rounded-3xl border border-sky-500/40 bg-brand-surface/90 backdrop-blur-2xl flex flex-col items-center justify-center p-6 sm:p-10 transition-all duration-200 shadow-2xl cursor-pointer overflow-hidden";
+      arenaGlow.className = "absolute inset-0 opacity-20 pointer-events-none transition-all duration-300 bg-gradient-to-b from-sky-500/20 to-transparent";
+
+      stateBadge.className = "inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full text-xs font-mono tracking-wider border border-sky-500/40 bg-sky-500/10 text-sky-400 uppercase";
+      stateBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-sky-400"></span><span>TRIAL RECORDED</span>`;
+
+      triggerHalo.className = "w-44 h-44 sm:w-56 sm:h-56 rounded-full border border-sky-500/30 flex items-center justify-center";
+      triggerCore.className = "w-28 h-28 sm:w-36 sm:h-36 rounded-full bg-sky-500/10 border-2 border-sky-400 flex flex-col items-center justify-center";
+
+      coreIcon.innerHTML = `<span class="font-mono text-2xl sm:text-3xl font-bold text-white">${reactionTime}</span>`;
+      liveTimer.innerText = "MILLISECONDS";
+      liveTimer.className = "font-mono text-[10px] text-sky-400 mt-0.5 tracking-wider";
+
+      const rating = getTier(reactionTime);
+      mainHeading.innerText = `${rating.title} (${reactionTime} ms)`;
+      mainHeading.className = `text-xl sm:text-2xl font-bold tracking-tight ${rating.color}`;
+      subHeading.innerText = "Click anywhere or press Space to initiate next trial.";
+    }
+
+    // Successful Inhibition in Go/No-Go
+    function handleInhibitionSuccess() {
+      clearTimeout(timerTimeout);
+      gameState = 'RESULT';
+      playTone(659.25, 'sine', 0.1, 0.15); // E5
+
+      arenaCard.className = "w-full relative min-h-[380px] sm:min-h-[440px] rounded-3xl border border-emerald-500/40 bg-emerald-950/20 backdrop-blur-2xl flex flex-col items-center justify-center p-6 sm:p-10 shadow-2xl cursor-pointer";
+      stateBadge.className = "inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full text-xs font-mono tracking-wider border border-emerald-500/40 bg-emerald-500/10 text-emerald-400 uppercase";
+      stateBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400"></span><span>INHIBITION SUCCESS</span>`;
+
+      coreIcon.innerHTML = "🛡️";
+      coreIcon.className = "text-3xl text-emerald-400";
+      liveTimer.innerText = "INHIBITED";
+
+      mainHeading.innerText = "Perfect Motor Restraint!";
+      mainHeading.className = "text-xl sm:text-2xl font-bold text-emerald-300";
+      subHeading.innerText = "You successfully suppressed the urge to tap on the decoy cue.";
+    }
+
+    // Failed Inhibition
+    function handleInhibitionFailure() {
+      clearTimeout(timerTimeout);
+      handleFalseStart("Inhibition Failure: Tapped on NO-GO decoy!");
+    }
+
+    // False Start Penalty
+    function handleFalseStart(customMsg = "Too early! Visual impulse had not fired.") {
+      clearTimeout(timerTimeout);
+      cancelAnimationFrame(rafTimerId);
+      gameState = 'PENALTY';
+
+      playTone(150, 'sawtooth', 0.2, 0.3); // Error buzz
+
+      arenaCard.className = "w-full relative min-h-[380px] sm:min-h-[440px] rounded-3xl border-2 border-rose-500/80 bg-rose-950/30 pulse-danger backdrop-blur-2xl flex flex-col items-center justify-center p-6 sm:p-10 transition-all duration-150 shadow-2xl cursor-pointer overflow-hidden";
+      stateBadge.className = "inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full text-xs font-mono tracking-wider border border-rose-500/50 bg-rose-500/20 text-rose-300 uppercase";
+      stateBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span><span>FALSE START</span>`;
+
+      triggerHalo.className = "w-44 h-44 sm:w-56 sm:h-56 rounded-full border-2 border-rose-500/40 flex items-center justify-center";
+      triggerCore.className = "w-28 h-28 sm:w-36 sm:h-36 rounded-full bg-rose-500/20 border-2 border-rose-500 flex flex-col items-center justify-center";
+
+      coreIcon.innerHTML = "❌";
+      coreIcon.className = "text-3xl text-rose-400";
+      liveTimer.innerText = "PENALIZED";
+      liveTimer.className = "font-mono text-xs text-rose-400 mt-1";
+
+      mainHeading.innerText = "Premature Reaction";
+      mainHeading.className = "text-xl sm:text-2xl font-bold text-rose-400";
+      subHeading.innerText = `${customMsg} Tap to reset.`;
+    }
+
+    function cancelGame() {
+      clearTimeout(timerTimeout);
+      cancelAnimationFrame(rafTimerId);
+      resetToIdle();
+    }
+
+    // Performance Metrics Calculations
+    function getTier(ms) {
+      if (ms < 170) return { title: "⚡ Godlike (F1 Driver Tier)", color: "text-amber-400" };
+      if (ms < 210) return { title: "🎯 Elite (Esports Pro Tier)", color: "text-emerald-400" };
+      if (ms < 250) return { title: "🚀 High Alert (Superior)", color: "text-sky-400" };
+      if (ms < 290) return { title: "👍 Optimal (Healthy Human Range)", color: "text-blue-300" };
+      return { title: "💤 Sluggish (Fatigue / Distracted)", color: "text-zinc-400" };
+    }
+
+    function updateStatsUI() {
+      const data = historyData[currentMode];
+      const count = data.length;
+
+      document.getElementById('trial-count').innerText = `${count} ${count === 1 ? 'TRIAL' : 'TRIALS'} COMPLETED`;
+
+      if (count === 0) {
+        document.getElementById('stat-avg').innerText = '--';
+        document.getElementById('stat-best').innerText = '--';
+        document.getElementById('stat-sd').innerText = '--';
+        document.getElementById('stat-tier').innerText = 'Calibrating...';
+        document.getElementById('stat-tier').className = 'text-sm sm:text-base font-semibold text-zinc-400 truncate block mt-0.5';
+        return;
+      }
+
+      // Mean
+      const sum = data.reduce((a, b) => a + b, 0);
+      const avg = Math.round(sum / count);
+      document.getElementById('stat-avg').innerText = avg;
+
+      // Best (Minimum RT)
+      const best = Math.min(...data);
+      document.getElementById('stat-best').innerText = best;
+
+      // Standard Deviation (Consistency / Neuromotor Stability)
+      let sd = 0;
+      if (count > 1) {
+        const variance = data.reduce((acc, val) => acc + Math.pow(val - avg, 2), 0) / count;
+        sd = Math.round(Math.sqrt(variance));
+      }
+      document.getElementById('stat-sd').innerText = `±${sd}`;
+
+      // Tier description based on average
+      const tier = getTier(avg);
+      const tierEl = document.getElementById('stat-tier');
+      tierEl.innerText = tier.title.split(' ')[1] + ' ' + (tier.title.split(' ')[2] || '');
+      tierEl.className = `text-sm sm:text-base font-semibold truncate block mt-0.5 ${tier.color}`;
+    }
+
+    function resetStats() {
+      historyData = { pvt: [], gonogo: [], spatial: [] };
+      resetToIdle();
+      updateStatsUI();
+      renderSparkline();
+    }
+
+    // Sparkline Canvas Rendering
+    const sparkCanvas = document.getElementById('sparkline');
+    const sparkCtx = sparkCanvas.getContext('2d');
+
+    function renderSparkline() {
+      const data = historyData[currentMode];
+      const width = sparkCanvas.parentElement.clientWidth;
+      const height = sparkCanvas.parentElement.clientHeight;
+      
+      sparkCanvas.width = width * window.devicePixelRatio;
+      sparkCanvas.height = height * window.devicePixelRatio;
+      sparkCtx.scale(window.devicePixelRatio, window.devicePixelRatio);
+      sparkCtx.clearRect(0, 0, width, height);
+
+      if (data.length < 2) {
+        // Placeholder guideline
+        sparkCtx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+        sparkCtx.lineWidth = 1;
+        sparkCtx.setLineDash([4, 4]);
+        sparkCtx.beginPath();
+        sparkCtx.moveTo(0, height / 2);
+        sparkCtx.lineTo(width, height / 2);
+        sparkCtx.stroke();
+        return;
+      }
+
+      const min = Math.min(...data) * 0.85;
+      const max = Math.max(...data) * 1.15;
+      const step = width / (data.length - 1);
+
+      // Gradient Fill
+      const gradient = sparkCtx.createLinearGradient(0, 0, 0, height);
+      gradient.addColorStop(0, 'rgba(56, 189, 248, 0.25)');
+      gradient.addColorStop(1, 'rgba(56, 189, 248, 0.0)');
+
+      sparkCtx.beginPath();
+      data.forEach((val, i) => {
+        const x = i * step;
+        const y = height - ((val - min) / (max - min)) * height;
+        if (i === 0) sparkCtx.moveTo(x, y);
+        else sparkCtx.lineTo(x, y);
+      });
+
+      // Fill area under line
+      sparkCtx.lineTo(width, height);
+      sparkCtx.lineTo(0, height);
+      sparkCtx.fillStyle = gradient;
+      sparkCtx.fill();
+
+      // Stroke line
+      sparkCtx.setLineDash([]);
+      sparkCtx.beginPath();
+      data.forEach((val, i) => {
+        const x = i * step;
+        const y = height - ((val - min) / (max - min)) * height;
+        if (i === 0) sparkCtx.moveTo(x, y);
+        else sparkCtx.lineTo(x, y);
+      });
+      sparkCtx.strokeStyle = '#38bdf8';
+      sparkCtx.lineWidth = 2.5;
+      sparkCtx.stroke();
+
+      // Plot data points
+      data.forEach((val, i) => {
+        const x = i * step;
+        const y = height - ((val - min) / (max - min)) * height;
+        sparkCtx.beginPath();
+        sparkCtx.arc(x, y, 3.5, 0, Math.PI * 2);
+        sparkCtx.fillStyle = '#07090e';
+        sparkCtx.fill();
+        sparkCtx.strokeStyle = '#38bdf8';
+        sparkCtx.lineWidth = 2;
+        sparkCtx.stroke();
+      });
+    }
+
+    // Window Resize handler for Canvas
+    window.addEventListener('resize', () => {
+      renderSparkline();
+    });
+
+    // Event Listeners (Universal Mouse, Touch & Spacebar)
+    arenaCard.addEventListener('pointerdown', (e) => {
+      // Avoid triggering when clicking child buttons directly in Spatial mode
+      if (e.target.classList.contains('spatial-btn')) return;
+      handleAction();
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.code === 'Space') {
+        e.preventDefault();
+        handleAction();
+      }
+      // Number keys 1-4 for Spatial Grid
+      if (currentMode === 'spatial' && ['Digit1', 'Digit2', 'Digit3', 'Digit4', 'Numpad1', 'Numpad2', 'Numpad3', 'Numpad4'].includes(e.code)) {
+        const keyNum = parseInt(e.key) - 1;
+        if (keyNum >= 0 && keyNum <= 3) {
+          handleSpatialClick(keyNum);
+        }
+      }
+    });
+
+    // Initial Setup
+    window.onload = () => {
+      setMode('pvt');
+    };
+  </script>
+</body>
+</html>

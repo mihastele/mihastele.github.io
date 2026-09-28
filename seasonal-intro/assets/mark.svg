@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-label="Seasonal mark: a paintbrush drawing a stroke">
+  <defs>
+    <linearGradient id="handle" x1="150" y1="20" x2="190" y2="70" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#8A6E5A"/>
+      <stop offset="1" stop-color="#5B4A3E"/>
+    </linearGradient>
+    <linearGradient id="ferrule" x1="150" y1="86" x2="196" y2="120" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#C9BEB2"/>
+      <stop offset="0.5" stop-color="#9A8B7C"/>
+      <stop offset="1" stop-color="#6F6155"/>
+    </linearGradient>
+    <linearGradient id="bristle" x1="150" y1="112" x2="210" y2="176" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#D18A4E"/>
+      <stop offset="1" stop-color="#B4633A"/>
+    </linearGradient>
+    <linearGradient id="paint" x1="34" y1="220" x2="150" y2="130" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#A9532F"/>
+      <stop offset="0.6" stop-color="#C97B44"/>
+      <stop offset="1" stop-color="#E0A659"/>
+    </linearGradient>
+  </defs>
+
+  <!-- The painted stroke: a broad, tapering swash the brush has just made -->
+  <path d="M22 216
+           C 40 200 62 192 86 184
+           C 112 175 132 164 146 148
+           C 150 144 153 141 156 139
+           C 153 156 145 174 128 190
+           C 106 212 72 226 42 228
+           C 32 229 24 224 22 216 Z"
+        fill="url(#paint)" opacity="0.95"/>
+
+  <!-- The brush itself, tilted: handle up-right, bristle tip pointing down-left -->
+  <g transform="rotate(38 128 128)">
+    <!-- Handle -->
+    <path d="M116 14
+             C 116 8 121 4 128 4
+             C 135 4 140 8 140 14
+             L 137 92
+             L 119 92 Z"
+          fill="url(#handle)"/>
+
+    <!-- Ferrule -->
+    <rect x="112" y="90" width="32" height="28" rx="4" fill="url(#ferrule)"/>
+    <rect x="112" y="99" width="32" height="3" fill="#5B4A3E" opacity="0.3"/>
+    <rect x="112" y="108" width="32" height="3" fill="#5B4A3E" opacity="0.3"/>
+
+    <!-- Bristles tapering to a fine point -->
+    <path d="M112 116
+             L144 116
+             L138 158
+             C 136 176 132 190 128 202
+             C 124 190 120 176 118 158
+             Z"
+          fill="url(#bristle)"/>
+    <!-- A sliver of paint on the tip -->
+    <path d="M122 186
+             C 124 192 126 198 128 202
+             C 130 198 132 192 134 186
+             Z"
+          fill="#A9532F"/>
+  </g>
+</svg>

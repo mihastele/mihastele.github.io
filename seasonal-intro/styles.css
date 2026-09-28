@@ -1,0 +1,298 @@
+:root {
+  --paper: #fbf7f2;
+  --linen: #f3e9de;
+  --white: #ffffff;
+  --ember: #b4633a;
+  --amber: #d99a4e;
+  --bark: #5b4a3e;
+  --ink: #3e332b;
+  --clay: #6b5d50;
+  --stone: #8a7a6b;
+  --moss: #6e7b56;
+
+  --max: 760px;
+  --radius: 22px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: Inter, Roboto, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 18px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+a {
+  color: var(--ember);
+}
+
+/* Header */
+header {
+  padding: 28px 0 8px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand img {
+  width: 44px;
+  height: 44px;
+}
+
+.brand span {
+  font-size: 13px;
+  letter-spacing: 6px;
+  font-weight: 700;
+  color: var(--stone);
+}
+
+/* Hero */
+.hero {
+  padding: 72px 0 40px;
+  text-align: center;
+}
+
+.hero img.mark {
+  width: 128px;
+  height: 128px;
+}
+
+.hero h1 {
+  font-size: clamp(34px, 6vw, 54px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 28px 0 18px;
+}
+
+.hero p.tagline {
+  font-size: clamp(18px, 2.4vw, 22px);
+  color: var(--clay);
+  max-width: 34ch;
+  margin: 0 auto;
+}
+
+.hero .cta {
+  display: inline-block;
+  margin-top: 30px;
+  background: var(--ember);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 14px 28px;
+  border-radius: 999px;
+}
+
+.hero .cta:hover {
+  background: #9c522f;
+}
+
+/* Sections */
+section {
+  padding: 48px 0;
+}
+
+h2 {
+  font-size: 26px;
+  letter-spacing: -0.01em;
+  margin: 0 0 18px;
+}
+
+p {
+  margin: 0 0 18px;
+}
+
+.lede {
+  font-size: 21px;
+  color: var(--clay);
+}
+
+blockquote {
+  margin: 32px 0;
+  padding: 22px 26px;
+  background: var(--white);
+  border-left: 4px solid var(--ember);
+  border-radius: 12px;
+  font-size: 21px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.rule {
+  border: 0;
+  border-top: 1px solid var(--linen);
+  margin: 8px 0;
+}
+
+/* Cards */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin: 28px 0;
+}
+
+.card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 22px;
+}
+
+.card h3 {
+  margin: 0 0 8px;
+  font-size: 17px;
+}
+
+.card p {
+  margin: 0;
+  color: var(--clay);
+  font-size: 16px;
+}
+
+/* Timeline */
+.timeline {
+  position: relative;
+  margin: 32px 0;
+  padding-left: 28px;
+}
+
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 7px;
+  top: 6px;
+  bottom: 6px;
+  width: 2px;
+  background: var(--linen);
+}
+
+.timeline .item {
+  position: relative;
+  margin-bottom: 26px;
+}
+
+.timeline .item::before {
+  content: "";
+  position: absolute;
+  left: -26px;
+  top: 9px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--amber);
+}
+
+.timeline .when {
+  font-size: 13px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--stone);
+}
+
+.timeline .what {
+  font-weight: 600;
+}
+
+/* Palette */
+.swatches {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 14px;
+  margin: 28px 0;
+}
+
+.swatch {
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--white);
+}
+
+.swatch .chip {
+  height: 88px;
+}
+
+.swatch .meta {
+  padding: 12px 14px;
+}
+
+.swatch .name {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.swatch .hex {
+  font-size: 13px;
+  color: var(--stone);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Story */
+.story {
+  background: var(--linen);
+  border-radius: var(--radius);
+  padding: 40px 32px;
+}
+
+/* Footer */
+footer {
+  padding: 56px 0 64px;
+  color: var(--stone);
+  font-size: 15px;
+  text-align: center;
+}
+
+footer .three {
+  color: var(--clay);
+  font-style: italic;
+  margin-bottom: 20px;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #211b16;
+    color: #f3ece4;
+  }
+  .lede,
+  .card p,
+  .hero p.tagline {
+    color: #cbb9a9;
+  }
+  .card,
+  blockquote,
+  .swatch {
+    background: #2c241d;
+  }
+  blockquote {
+    color: #f3ece4;
+  }
+  .story {
+    background: #2c241d;
+  }
+  .timeline::before {
+    background: #43372c;
+  }
+  header .brand span,
+  .timeline .when,
+  .swatch .hex,
+  footer {
+    color: #a99683;
+  }
+}

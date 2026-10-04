@@ -1,0 +1,18 @@
+{
+  "name": "Hundred Open Web Tools",
+  "short_name": "Hundred Tools",
+  "description": "100 free browser-based utilities for image, text, developer, security, design, math, audio, and productivity tasks.",
+  "start_url": "/hundred-open-web-tools/",
+  "scope": "/hundred-open-web-tools/",
+  "display": "standalone",
+  "background_color": "#f6f7fb",
+  "theme_color": "#4f46e5",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

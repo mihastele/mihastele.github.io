@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Classic Xonix - Brick Phone Edition</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&display=swap');
+
+    :root {
+      --lcd-bg: #98b375;
+      --lcd-pixel: #1f3014;
+      --lcd-trail: #2e4a1e;
+      --lcd-grid: rgba(31, 48, 20, 0.08);
+      --phone-case: #38424b;
+      --phone-accent: #20272c;
+    }
+
+    body {
+      font-family: 'Press Start 2P', monospace;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+      background-color: #121517;
+      color: #1f3014;
+    }
+
+    /* Pixelated screen look */
+    .lcd-screen {
+      background-color: var(--lcd-bg);
+      box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.25), inset 0 2px 4px rgba(0,0,0,0.4);
+      image-rendering: pixelated;
+    }
+
+    .lcd-text {
+      color: var(--lcd-pixel);
+      text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.2);
+    }
+
+    /* Retro button styling */
+    .btn-key {
+      background: linear-gradient(145deg, #444f59, #2b333a);
+      box-shadow: 0 4px 0 #181d21, 0 5px 6px rgba(0,0,0,0.5);
+      border-top: 1px solid #5a6773;
+      transition: all 0.05s ease-out;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn-key:active, .btn-key.active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #181d21, 0 2px 4px rgba(0,0,0,0.6);
+      background: linear-gradient(145deg, #373f47, #262c32);
+    }
+
+    /* Scanlines effect */
+    .scanlines {
+      background: linear-gradient(
+        rgba(18, 16, 16, 0) 50%, 
+        rgba(0, 0, 0, 0.08) 50%
+      ), linear-gradient(
+        90deg,
+        rgba(255, 0, 0, 0.02),
+        rgba(0, 255, 0, 0.01),
+        rgba(0, 0, 255, 0.02)
+      );
+      background-size: 100% 3px, 3px 100%;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-2 sm:p-4">
+
+  <!-- Brick Phone Body -->
+  <div class="w-full max-w-sm rounded-[36px] p-5 shadow-2xl border-4 border-[#4f5c66] flex flex-col items-center" 
+       style="background: radial-gradient(circle at 50% 20%, #46535e, #293036);">
+    
+    <!-- Phone Top Speaker & Classic Branding -->
+    <div class="w-full flex flex-col items-center mb-3">
+      <div class="w-16 h-1.5 bg-[#1a1f23] rounded-full mb-1 border-b border-gray-600"></div>
+      <div class="text-[9px] tracking-[4px] text-gray-400 font-bold uppercase mt-1">NOKIO 3310 • XONIX</div>
+    </div>
+
+    <!-- LCD Bezel -->
+    <div class="w-full p-3 rounded-2xl bg-[#1d2226] border-2 border-[#121517] shadow-inner relative">
+      
+      <!-- LCD Screen Container -->
+      <div class="lcd-screen relative rounded-lg p-2.5 flex flex-col border border-[#7d965e] overflow-hidden">
+        <div class="scanlines absolute inset-0 z-10"></div>
+
+        <!-- Header / Status Bar -->
+        <div class="flex justify-between items-center text-[10px] pb-1.5 border-b-2 border-[#2b401c] lcd-text tracking-tight z-20">
+          <div>
+            <span>LV:</span><span id="level-txt">1</span>
+          </div>
+          <div>
+            <span>CLAIM:</span><span id="percent-txt">0%</span>
+            <span class="text-[8px] opacity-75">/75%</span>
+          </div>
+          <div class="flex items-center space-x-1">
+            <span id="lives-container" class="flex gap-0.5">
+              <i class="fa-solid fa-heart text-[10px]"></i>
+              <i class="fa-solid fa-heart text-[10px]"></i>
+              <i class="fa-solid fa-heart text-[10px]"></i>
+            </span>
+          </div>
+        </div>
+
+        <!-- Score bar -->
+        <div class="flex justify-between items-center text-[9px] py-1 lcd-text z-20">
+          <div>SCORE: <span id="score-txt">00000</span></div>
+          <button id="sound-btn" class="hover:opacity-80 active:scale-95 text-[10px]">
+            <i id="sound-icon" class="fa-solid fa-volume-high"></i>
+          </button>
+        </div>
+
+        <!-- Game Canvas Area -->
+        <div class="relative w-full aspect-[4/3] bg-transparent my-1 rounded border border-[#2b401c] overflow-hidden flex items-center justify-center">
+          <canvas id="game-canvas" class="w-full h-full block"></canvas>
+
+          <!-- Overlay Dialog (Title, Game Over, Win) -->
+          <div id="game-overlay" class="absolute inset-0 z-30 flex flex-col items-center justify-center p-3 text-center bg-[#98b375]/95 backdrop-blur-[1px]">
+            <div id="overlay-title" class="text-xs font-extrabold mb-2 tracking-wider lcd-text">XONIX CLASSIC</div>
+            <p id="overlay-msg" class="text-[8px] leading-relaxed mb-3 lcd-text">
+              Cut territory! If enemies are on both sides of a cut, it forms a dividing wall. Clear 75% to advance!
+            </p>
+            <button id="start-btn" class="px-3 py-2 bg-[#1f3014] text-[#98b375] text-[9px] rounded font-bold shadow active:translate-y-0.5 tracking-wider">
+              START GAME
+            </button>
+          </div>
+        </div>
+
+        <!-- Bottom Tip Bar -->
+        <div class="text-[7px] text-center text-[#2b401c] pt-1 z-20 truncate">
+          [ARROWS/SWIPE/D-PAD] RETURN TO BORDER TO CAPTURE
+        </div>
+      </div>
+    </div>
+
+    <!-- Hardware Navigation / Controls section -->
+    <div class="w-full mt-4 flex flex-col items-center">
+      <!-- Soft Keys (Left/Right action) -->
+      <div class="w-full flex justify-between px-4 mb-3">
+        <button id="restart-btn" class="btn-key px-3 py-1.5 rounded-full text-[9px] text-gray-300 font-bold active:scale-95">
+          RESET
+        </button>
+        <button id="pause-btn" class="btn-key px-3 py-1.5 rounded-full text-[9px] text-gray-300 font-bold active:scale-95">
+          PAUSE
+        </button>
+      </div>
+
+      <!-- Retro D-PAD -->
+      <div class="relative w-36 h-36 flex items-center justify-center">
+        <!-- Central Pivot Plate -->
+        <div class="absolute w-12 h-12 rounded-full bg-[#1e2429] border border-[#111417]"></div>
+
+        <!-- UP -->
+        <button id="btn-up" class="btn-key absolute top-0 w-11 h-12 rounded-t-xl flex items-center justify-center text-gray-300 text-sm">
+          <i class="fa-solid fa-caret-up"></i>
+        </button>
+        <!-- DOWN -->
+        <button id="btn-down" class="btn-key absolute bottom-0 w-11 h-12 rounded-b-xl flex items-center justify-center text-gray-300 text-sm">
+          <i class="fa-solid fa-caret-down"></i>
+        </button>
+        <!-- LEFT -->
+        <button id="btn-left" class="btn-key absolute left-0 h-11 w-12 rounded-l-xl flex items-center justify-center text-gray-300 text-sm">
+          <i class="fa-solid fa-caret-left"></i>
+        </button>
+        <!-- RIGHT -->
+        <button id="btn-right" class="btn-key absolute right-0 h-11 w-12 rounded-r-xl flex items-center justify-center text-gray-300 text-sm">
+          <i class="fa-solid fa-caret-right"></i>
+        </button>
+        
+        <!-- Center decorative button -->
+        <div class="z-10 w-7 h-7 rounded-full bg-[#2a3239] shadow-inner flex items-center justify-center border border-[#181d22]">
+          <div class="w-2.5 h-2.5 rounded-full bg-[#1b2024]"></div>
+        </div>
+      </div>
+
+      <!-- Quick Instruction footer -->
+      <div class="text-[8px] text-gray-400 mt-3 text-center tracking-wider">
+        DESKTOP: USE ARROW KEYS OR WASD
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- Audio Synthesizer (Retro 8-bit sound effects) ---
+    class SoundFX {
+      constructor() {
+        this.ctx = null;
+        this.enabled = true;
+      }
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          this.ctx = new AudioContext();
+        }
+        if (this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
+      playTone(freq, type = 'square', duration = 0.08, gainVal = 0.1) {
+        if (!this.enabled) return;
+        try {
+          this.init();
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+          gain.gain.setValueAtTime(gainVal, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start();
+          osc.stop(this.ctx.currentTime + duration);
+        } catch (e) {}
+      }
+      move() { this.playTone(340, 'square', 0.03, 0.04); }
+      cut() { this.playTone(520, 'square', 0.04, 0.05); }
+      splitWall() {
+        // Sound for wall splitting (enemies on both sides)
+        this.playTone(280, 'triangle', 0.12, 0.15);
+        setTimeout(() => this.playTone(220, 'triangle', 0.16, 0.15), 100);
+      }
+      captureArea() {
+        // High ascending chime for land captured
+        this.playTone(440, 'square', 0.08, 0.1);
+        setTimeout(() => this.playTone(660, 'square', 0.08, 0.1), 70);
+        setTimeout(() => this.playTone(880, 'square', 0.14, 0.12), 140);
+      }
+      hit() {
+        if (!this.enabled) return;
+        this.init();
+        try {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(180, this.ctx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(40, this.ctx.currentTime + 0.3);
+          gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.3);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start();
+          osc.stop(this.ctx.currentTime + 0.3);
+        } catch(e) {}
+      }
+      win() {
+        const notes = [440, 554, 659, 880];
+        notes.forEach((f, i) => {
+          setTimeout(() => this.playTone(f, 'square', 0.15, 0.12), i * 120);
+        });
+      }
+    }
+
+    const sound = new SoundFX();
+
+    // --- Grid Constants ---
+    // High resolution grid for smooth retro feel
+    const COLS = 72;
+    const ROWS = 54;
+    const TOTAL_PLAYABLE_TILES = (COLS - 2) * (ROWS - 2);
+
+    // Cell States
+    const EMPTY = 0;   // Unclaimed territory (open space for enemies)
+    const SOLID = 1;   // Claimed land / borders / solid walls
+    const TRAIL = 2;   // Current active cut line
+
+    class XonixGame {
+      constructor() {
+        this.canvas = document.getElementById('game-canvas');
+        this.ctx = this.canvas.getContext('2d');
+        
+        // Logical Dimensions
+        this.canvas.width = COLS * 8;
+        this.canvas.height = ROWS * 8;
+
+        this.grid = new Uint8Array(COLS * ROWS);
+        this.player = {
+          x: 0,
+          y: 0,
+          dx: 0,
+          dy: 0,
+          nextDx: 0,
+          nextDy: 0,
+          isCutting: false,
+          trail: []
+        };
+
+        this.enemies = [];
+        this.level = 1;
+        this.lives = 3;
+        this.score = 0;
+        this.targetPercent = 75;
+        this.claimedCount = 0;
+        this.state = 'START'; // 'START', 'PLAYING', 'PAUSED', 'GAMEOVER', 'LEVEL_CLEAR'
+        
+        this.initGrid();
+        this.bindEvents();
+        this.updateUI();
+        this.render();
+      }
+
+      index(x, y) {
+        return y * COLS + x;
+      }
+
+      initGrid() {
+        this.grid.fill(EMPTY);
+        // Outer boundaries are pre-claimed / solid safe zone
+        for (let x = 0; x < COLS; x++) {
+          this.grid[this.index(x, 0)] = SOLID;
+          this.grid[this.index(x, ROWS - 1)] = SOLID;
+        }
+        for (let y = 0; y < ROWS; y++) {
+          this.grid[this.index(0, y)] = SOLID;
+          this.grid[this.index(COLS - 1, y)] = SOLID;
+        }
+      }
+
+      startLevel(levelNum) {
+        this.level = levelNum;
+        this.initGrid();
+        
+        // Spawn player on safe top border
+        this.player.x = Math.floor(COLS / 2);
+        this.player.y = 0;
+        this.player.dx = 0;
+        this.player.dy = 0;
+        this.player.nextDx = 0;
+        this.player.nextDy = 0;
+        this.player.isCutting = false;
+        this.player.trail = [];
+
+        // Spawn bouncing enemies (orbs) inside the EMPTY region
+        this.enemies = [];
+        const enemyCount = Math.min(1 + levelNum, 7);
+        for (let i = 0; i < enemyCount; i++) {
+          this.enemies.push({
+            x: 5 + Math.random() * (COLS - 10),
+            y: 5 + Math.random() * (ROWS - 10),
+            vx: (Math.random() > 0.5 ? 0.38 : -0.38) * (1 + (levelNum - 1) * 0.08),
+            vy: (Math.random() > 0.5 ? 0.38 : -0.38) * (1 + (levelNum - 1) * 0.08),
+            radius: 1.8
+          });
+        }
+
+        this.recalculateClaimedArea();
+        this.state = 'PLAYING';
+        this.hideOverlay();
+        this.updateUI();
+      }
+
+      setDirection(dx, dy) {
+        if (this.state !== 'PLAYING') return;
+
+        // Disallow immediate 180° turnaround on the cutting trail to prevent instant suicide
+        if (this.player.isCutting) {
+          if (dx === -this.player.dx && dy === -this.player.dy && (dx !== 0 || dy !== 0)) {
+            return;
+          }
+        }
+        this.player.nextDx = dx;
+        this.player.nextDy = dy;
+      }
+
+      stepPlayer() {
+        const p = this.player;
+        
+        // Apply pending directional input
+        if (p.nextDx !== 0 || p.nextDy !== 0) {
+          p.dx = p.nextDx;
+          p.dy = p.nextDy;
+        }
+
+        if (p.dx === 0 && p.dy === 0) return;
+
+        const nextX = p.x + p.dx;
+        const nextY = p.y + p.dy;
+
+        // Boundaries check
+        if (nextX < 0 || nextX >= COLS || nextY < 0 || nextY >= ROWS) {
+          p.dx = 0;
+          p.dy = 0;
+          return;
+        }
+
+        const nextCell = this.grid[this.index(nextX, nextY)];
+
+        // Crossing own active trail = death
+        if (nextCell === TRAIL) {
+          this.handlePlayerDeath("Hit own trail!");
+          return;
+        }
+
+        p.x = nextX;
+        p.y = nextY;
+
+        if (nextCell === EMPTY) {
+          // Venturing out into uncaptured field
+          this.grid[this.index(p.x, p.y)] = TRAIL;
+          p.trail.push({ x: p.x, y: p.y });
+          p.isCutting = true;
+          sound.move();
+        } else if (nextCell === SOLID) {
+          // Reconnected with safe claimed territory!
+          if (p.isCutting && p.trail.length > 0) {
+            this.finalizeTrailCapture();
+          }
+          p.isCutting = false;
+        }
+      }
+
+      // --- Core Xonix Split Mechanic ---
+      finalizeTrailCapture() {
+        // 1. Temporarily solidify the trail so it acts as barrier during flood fill
+        for (const pt of this.player.trail) {
+          this.grid[this.index(pt.x, pt.y)] = SOLID;
+        }
+
+        // 2. Identify all contiguous uncaptured (EMPTY) regions
+        const visited = new Uint8Array(COLS * ROWS);
+        const regions = [];
+
+        for (let y = 1; y < ROWS - 1; y++) {
+          for (let x = 1; x < COLS - 1; x++) {
+            const idx = this.index(x, y);
+            if (this.grid[idx] === EMPTY && !visited[idx]) {
+              const region = [];
+              const queue = [{ x, y }];
+              visited[idx] = 1;
+
+              while (queue.length > 0) {
+                const cur = queue.pop();
+                region.push(cur);
+
+                const dirs = [
+                  { dx: 1, dy: 0 }, { dx: -1, dy: 0 },
+                  { dx: 0, dy: 1 }, { dx: 0, dy: -1 }
+                ];
+                for (const d of dirs) {
+                  const nx = cur.x + d.dx;
+                  const ny = cur.y + d.dy;
+                  if (nx >= 0 && nx < COLS && ny >= 0 && ny < ROWS) {
+                    const nIdx = this.index(nx, ny);
+                    if (this.grid[nIdx] === EMPTY && !visited[nIdx]) {
+                      visited[nIdx] = 1;
+                      queue.push({ x: nx, y: ny });
+                    }
+                  }
+                }
+              }
+              regions.push(region);
+            }
+          }
+        }
+
+        // 3. Check enemy presence in each region
+        const regionsWithEnemies = [];
+        const regionsWithoutEnemies = [];
+
+        for (let i = 0; i < regions.length; i++) {
+          const reg = regions[i];
+          // Quick bounding box + point-in-region check for enemies
+          let hasEnemy = false;
+          for (const e of this.enemies) {
+            const ex = Math.floor(e.x);
+            const ey = Math.floor(e.y);
+            // Check if (ex, ey) is in this region
+            if (reg.some(tile => tile.x === ex && tile.y === ey)) {
+              hasEnemy = true;
+              break;
+            }
+          }
+
+          if (hasEnemy) {
+            regionsWithEnemies.push(reg);
+          } else {
+            regionsWithoutEnemies.push(reg);
+          }
+        }
+
+        // 4. THE ICONIC RULE:
+        // If there are regions without enemies, fill them with SOLID claimed land!
+        // If enemies were present in BOTH / ALL separated compartments, NO side is cleared!
+        // Instead, the trail remains permanent as a dividing wall splitting them apart.
+        let filledTilesCount = 0;
+
+        if (regionsWithoutEnemies.length > 0) {
+          // Fill all empty regions
+          for (const reg of regionsWithoutEnemies) {
+            for (const tile of reg) {
+              this.grid[this.index(tile.x, tile.y)] = SOLID;
+              filledTilesCount++;
+            }
+          }
+          this.score += filledTilesCount * 10;
+          sound.captureArea();
+        } else {
+          // Enemies in both/all sides: Wall was built, separating them
+          sound.splitWall();
+          this.score += this.player.trail.length * 20;
+        }
+
+        // Reset trail
+        this.player.trail = [];
+        this.recalculateClaimedArea();
+      }
+
+      recalculateClaimedArea() {
+        let insideSolid = 0;
+        for (let y = 1; y < ROWS - 1; y++) {
+          for (let x = 1; x < COLS - 1; x++) {
+            if (this.grid[this.index(x, y)] === SOLID) {
+              insideSolid++;
+            }
+          }
+        }
+        this.claimedCount = insideSolid;
+        const percent = Math.min(100, Math.floor((this.claimedCount / TOTAL_PLAYABLE_TILES) * 100));
+        
+        document.getElementById('percent-txt').innerText = `${percent}%`;
+        document.getElementById('score-txt').innerText = String(this.score).padStart(5, '0');
+
+        // Check level win condition
+        if (percent >= this.targetPercent) {
+          this.handleLevelWin();
+        }
+      }
+
+      stepEnemies() {
+        for (const e of this.enemies) {
+          // Predict next position
+          const nextX = e.x + e.vx;
+          const nextY = e.y + e.vy;
+
+          // Check collisions with solid walls
+          const checkLeft = Math.floor(nextX - e.radius);
+          const checkRight = Math.floor(nextX + e.radius);
+          const checkTop = Math.floor(nextY - e.radius);
+          const checkBottom = Math.floor(nextY + e.radius);
+
+          let bounceX = false;
+          let bounceY = false;
+
+          // Bouncing against horizontal boundaries or solid tiles
+          if (this.isSolidAt(checkLeft, Math.floor(e.y)) || this.isSolidAt(checkRight, Math.floor(e.y))) {
+            bounceX = true;
+          }
+          if (this.isSolidAt(Math.floor(e.x), checkTop) || this.isSolidAt(Math.floor(e.x), checkBottom)) {
+            bounceY = true;
+          }
+
+          if (bounceX) e.vx = -e.vx;
+          if (bounceY) e.vy = -e.vy;
+
+          // Apply displacement
+          e.x += e.vx;
+          e.y += e.vy;
+
+          // Clamping to playable bounds
+          e.x = Math.max(1.5, Math.min(COLS - 2.5, e.x));
+          e.y = Math.max(1.5, Math.min(ROWS - 2.5, e.y));
+
+          // Check collision with the active cutting trail
+          const curCellX = Math.floor(e.x);
+          const curCellY = Math.floor(e.y);
+          if (this.grid[this.index(curCellX, curCellY)] === TRAIL) {
+            this.handlePlayerDeath("Enemy struck your line!");
+            return;
+          }
+        }
+      }
+
+      isSolidAt(x, y) {
+        if (x < 0 || x >= COLS || y < 0 || y >= ROWS) return true;
+        return this.grid[this.index(x, y)] === SOLID;
+      }
+
+      handlePlayerDeath(reason) {
+        sound.hit();
+        this.lives--;
+        this.updateLivesDisplay();
+
+        // Clear player trail from board
+        for (const pt of this.player.trail) {
+          this.grid[this.index(pt.x, pt.y)] = EMPTY;
+        }
+        this.player.trail = [];
+        this.player.isCutting = false;
+        this.player.dx = 0;
+        this.player.dy = 0;
+        this.player.nextDx = 0;
+        this.player.nextDy = 0;
+
+        // Reset player to safe border
+        this.player.x = Math.floor(COLS / 2);
+        this.player.y = 0;
+
+        if (this.lives <= 0) {
+          this.state = 'GAMEOVER';
+          this.showOverlay("GAME OVER", `Final Score: ${this.score}`, "PLAY AGAIN");
+        }
+      }
+
+      handleLevelWin() {
+        sound.win();
+        this.state = 'LEVEL_CLEAR';
+        this.score += 1000 * this.level;
+        this.showOverlay(`LEVEL ${this.level} CLEAR!`, `Target of ${this.targetPercent}% Reached!`, "NEXT LEVEL");
+      }
+
+      updateLivesDisplay() {
+        const container = document.getElementById('lives-container');
+        container.innerHTML = '';
+        for (let i = 0; i < 3; i++) {
+          const heart = document.createElement('i');
+          heart.className = `fa-solid fa-heart text-[10px] ${i < this.lives ? 'text-[#1f3014]' : 'opacity-20'}`;
+          container.appendChild(heart);
+        }
+      }
+
+      updateUI() {
+        document.getElementById('level-txt').innerText = this.level;
+        document.getElementById('score-txt').innerText = String(this.score).padStart(5, '0');
+        this.updateLivesDisplay();
+      }
+
+      showOverlay(title, msg, btnText) {
+        document.getElementById('overlay-title').innerText = title;
+        document.getElementById('overlay-msg').innerText = msg;
+        document.getElementById('start-btn').innerText = btnText;
+        document.getElementById('game-overlay').classList.remove('hidden');
+      }
+
+      hideOverlay() {
+        document.getElementById('game-overlay').classList.add('hidden');
+      }
+
+      render() {
+        const ctx = this.ctx;
+        const cellW = this.canvas.width / COLS;
+        const cellH = this.canvas.height / ROWS;
+
+        // Clear background with authentic LCD tinted green
+        ctx.fillStyle = '#98b375';
+        ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+        // Subtle background grid pattern
+        ctx.fillStyle = 'rgba(31, 48, 20, 0.05)';
+        for (let y = 0; y < ROWS; y += 2) {
+          ctx.fillRect(0, y * cellH, this.canvas.width, cellH * 0.5);
+        }
+
+        // Draw solid captured territory & active trails
+        for (let y = 0; y < ROWS; y++) {
+          for (let x = 0; x < COLS; x++) {
+            const val = this.grid[this.index(x, y)];
+            if (val === SOLID) {
+              // Solid dark LCD pixel block
+              ctx.fillStyle = '#1f3014';
+              ctx.fillRect(x * cellW, y * cellH, cellW, cellH);
+            } else if (val === TRAIL) {
+              // Active cut line (slightly lighter hatched or solid)
+              ctx.fillStyle = '#375724';
+              ctx.fillRect(x * cellW, y * cellH, cellW, cellH);
+              // Draw bright center dot
+              ctx.fillStyle = '#98b375';
+              ctx.fillRect(x * cellW + 1, y * cellH + 1, cellW - 2, cellH - 2);
+            }
+          }
+        }
+
+        // Draw bouncing enemies (Orbs with animated spikes/core)
+        const time = Date.now() * 0.008;
+        for (const e of this.enemies) {
+          const ex = e.x * cellW;
+          const ey = e.y * cellH;
+          const r = e.radius * cellW;
+
+          ctx.fillStyle = '#1f3014';
+          ctx.beginPath();
+          ctx.arc(ex, ey, r, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Inner rotating retro spark cross
+          ctx.strokeStyle = '#98b375';
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          const cos = Math.cos(time) * (r * 0.8);
+          const sin = Math.sin(time) * (r * 0.8);
+          ctx.moveTo(ex - cos, ey - sin);
+          ctx.lineTo(ex + cos, ey + sin);
+          ctx.moveTo(ex + sin, ey - cos);
+          ctx.lineTo(ex - sin, ey + cos);
+          ctx.stroke();
+        }
+
+        // Draw Player
+        const px = this.player.x * cellW;
+        const py = this.player.y * cellH;
+        
+        // Player blinking marker / reticle
+        const blink = Math.floor(Date.now() / 150) % 2 === 0;
+        ctx.fillStyle = blink ? '#1f3014' : '#44662d';
+        ctx.fillRect(px, py, cellW, cellH);
+
+        // Player crosshair cursor
+        ctx.strokeStyle = '#1f3014';
+        ctx.lineWidth = 1.2;
+        ctx.strokeRect(px - 1, py - 1, cellW + 2, cellH + 2);
+      }
+
+      bindEvents() {
+        // Overlay button
+        document.getElementById('start-btn').addEventListener('click', () => {
+          sound.init();
+          if (this.state === 'GAMEOVER') {
+            this.lives = 3;
+            this.score = 0;
+            this.startLevel(1);
+          } else if (this.state === 'LEVEL_CLEAR') {
+            this.startLevel(this.level + 1);
+          } else {
+            this.startLevel(1);
+          }
+        });
+
+        // Reset softkey
+        document.getElementById('restart-btn').addEventListener('click', () => {
+          this.lives = 3;
+          this.score = 0;
+          this.startLevel(1);
+        });
+
+        // Pause softkey
+        document.getElementById('pause-btn').addEventListener('click', () => {
+          if (this.state === 'PLAYING') {
+            this.state = 'PAUSED';
+            this.showOverlay("PAUSED", "Game is currently paused", "RESUME");
+          } else if (this.state === 'PAUSED') {
+            this.state = 'PLAYING';
+            this.hideOverlay();
+          }
+        });
+
+        // Sound Toggle
+        document.getElementById('sound-btn').addEventListener('click', () => {
+          sound.enabled = !sound.enabled;
+          const icon = document.getElementById('sound-icon');
+          icon.className = sound.enabled ? 'fa-solid fa-volume-high' : 'fa-solid fa-volume-xmark';
+        });
+
+        // Keyboard Controls
+        window.addEventListener('keydown', (e) => {
+          switch (e.key) {
+            case 'ArrowUp':
+            case 'w':
+            case 'W':
+              this.setDirection(0, -1);
+              this.highlightKey('btn-up');
+              break;
+            case 'ArrowDown':
+            case 's':
+            case 'S':
+              this.setDirection(0, 1);
+              this.highlightKey('btn-down');
+              break;
+            case 'ArrowLeft':
+            case 'a':
+            case 'A':
+              this.setDirection(-1, 0);
+              this.highlightKey('btn-left');
+              break;
+            case 'ArrowRight':
+            case 'd':
+            case 'D':
+              this.setDirection(1, 0);
+              this.highlightKey('btn-right');
+              break;
+          }
+        });
+
+        // Onscreen D-Pad Controls (Touch & Mouse)
+        const setupDpadBtn = (id, dx, dy) => {
+          const el = document.getElementById(id);
+          const trigger = (e) => {
+            e.preventDefault();
+            sound.init();
+            this.setDirection(dx, dy);
+            el.classList.add('active');
+          };
+          const release = () => el.classList.remove('active');
+
+          el.addEventListener('pointerdown', trigger);
+          el.addEventListener('pointerup', release);
+          el.addEventListener('pointerleave', release);
+        };
+
+        setupDpadBtn('btn-up', 0, -1);
+        setupDpadBtn('btn-down', 0, 1);
+        setupDpadBtn('btn-left', -1, 0);
+        setupDpadBtn('btn-right', 1, 0);
+
+        // Mobile Touch Gestures (Swipes on canvas)
+        let touchStartX = 0;
+        let touchStartY = 0;
+        const canvas = this.canvas;
+
+        canvas.addEventListener('touchstart', (e) => {
+          if (e.touches.length > 0) {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+          }
+        }, { passive: true });
+
+        canvas.addEventListener('touchend', (e) => {
+          if (e.changedTouches.length > 0) {
+            const dx = e.changedTouches[0].clientX - touchStartX;
+            const dy = e.changedTouches[0].clientY - touchStartY;
+            const absX = Math.abs(dx);
+            const absY = Math.abs(dy);
+
+            if (Math.max(absX, absY) > 20) {
+              if (absX > absY) {
+                this.setDirection(dx > 0 ? 1 : -1, 0);
+              } else {
+                this.setDirection(0, dy > 0 ? 1 : -1);
+              }
+            }
+          }
+        }, { passive: true });
+      }
+
+      highlightKey(id) {
+        const el = document.getElementById(id);
+        if (el) {
+          el.classList.add('active');
+          setTimeout(() => el.classList.remove('active'), 120);
+        }
+      }
+    }
+
+    // --- Main Game Loop with fixed game-tick timing ---
+    window.onload = function() {
+      const game = new XonixGame();
+      
+      let lastTick = performance.now();
+      const tickInterval = 55; // Speed of player grid movement
+
+      function loop(currentTime) {
+        requestAnimationFrame(loop);
+
+        if (game.state === 'PLAYING') {
+          // Update enemies continuously for silky bounce motion
+          game.stepEnemies();
+
+          // Step player movement on grid interval
+          if (currentTime - lastTick >= tickInterval) {
+            game.stepPlayer();
+            lastTick = currentTime;
+          }
+        }
+
+        game.render();
+      }
+
+      requestAnimationFrame(loop);
+    };
+  </script>
+</body>
+</html>

@@ -939,3 +939,375 @@ body {
 .badge-walker { background: #065f46; color: #a7f3d0; }
 .badge-attacker { background: #991b1b; color: #fecaca; }
 .badge-boss { background: #581c87; color: #f3e8ff; }
+
+/* Commander Tactical Abilities Bar */
+.commander-tactical-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 14px;
+    background: linear-gradient(90deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.85));
+    border-bottom: 1px solid rgba(56, 189, 248, 0.25);
+    flex-wrap: wrap;
+}
+
+.tactical-title {
+    font-size: 11px;
+    font-weight: 800;
+    color: #38bdf8;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.tactical-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex: 1;
+}
+
+.ability-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 6px;
+    padding: 5px 12px;
+    color: #f8fafc;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.ability-btn:hover:not(:disabled) {
+    background: #334155;
+    border-color: #38bdf8;
+    transform: translateY(-1px);
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+}
+
+.ability-btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    border-color: #1e293b;
+}
+
+.ability-btn.active {
+    background: #854d0e;
+    border-color: #fbbf24;
+    box-shadow: 0 0 12px rgba(251, 191, 36, 0.6);
+    animation: pulseGlow 1s infinite alternate;
+}
+
+.ability-key {
+    background: #0f172a;
+    color: #38bdf8;
+    border: 1px solid #38bdf8;
+    border-radius: 4px;
+    padding: 1px 5px;
+    font-size: 10px;
+    font-weight: 900;
+    font-family: monospace;
+}
+
+.ability-icon {
+    font-size: 14px;
+}
+
+.ability-cd-overlay {
+    background: rgba(15, 23, 42, 0.85);
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-size: 10px;
+    font-family: monospace;
+    color: #10b981;
+}
+
+.ability-btn:disabled .ability-cd-overlay {
+    color: #ef4444;
+}
+
+.surge-threat-indicator {
+    font-size: 11px;
+    font-weight: 800;
+    color: #f87171;
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid #ef4444;
+    padding: 4px 10px;
+    border-radius: 6px;
+    animation: pulseBorder 1.5s infinite;
+}
+
+.surge-badge {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    color: #fff;
+    font-size: 9px;
+    font-weight: 900;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 6px;
+    letter-spacing: 0.5px;
+    box-shadow: 0 0 8px rgba(220, 38, 38, 0.6);
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.priority-toggle-btn {
+    background: #0f172a;
+    border: 1px solid #38bdf8;
+    color: #38bdf8;
+    border-radius: 4px;
+    padding: 2px 7px;
+    font-size: 10px;
+    font-weight: 800;
+    cursor: pointer;
+    font-family: monospace;
+    transition: all 0.15s;
+    margin-left: 4px;
+}
+
+.priority-toggle-btn:hover {
+    background: #38bdf8;
+    color: #0f172a;
+}
+
+/* Surge Cataclysm Banner Overlay */
+.surge-banner-overlay {
+    position: fixed;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-20px);
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.surge-banner-overlay.visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.surge-banner-content {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: rgba(15, 23, 42, 0.95);
+    border: 2px solid #ef4444;
+    box-shadow: 0 0 30px rgba(239, 68, 68, 0.7);
+    border-radius: 8px;
+    padding: 12px 24px;
+}
+
+.surge-banner-icon {
+    font-size: 28px;
+    animation: shakeIcon 0.5s infinite;
+}
+
+.surge-banner-title {
+    font-size: 15px;
+    font-weight: 900;
+    color: #ef4444;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.surge-banner-sub {
+    font-size: 12px;
+    color: #fca5a5;
+    margin-top: 2px;
+}
+
+@keyframes pulseBorder {
+    0%, 100% { border-color: rgba(239, 68, 68, 0.4); box-shadow: 0 0 6px rgba(239, 68, 68, 0.2); }
+    50% { border-color: #ef4444; box-shadow: 0 0 14px rgba(239, 68, 68, 0.6); }
+}
+
+@keyframes pulseGlow {
+    from { box-shadow: 0 0 6px rgba(251, 191, 36, 0.4); }
+    to { box-shadow: 0 0 16px rgba(251, 191, 36, 0.9); }
+}
+
+@keyframes shakeIcon {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-8deg); }
+    75% { transform: rotate(8deg); }
+}
+
+/* Epic Boss Encounter Health Bar Overlay */
+.boss-hud-overlay {
+    position: absolute;
+    top: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 50;
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.boss-hud-overlay.hidden {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-15px);
+    pointer-events: none;
+}
+
+.boss-hud-card {
+    background: rgba(15, 23, 42, 0.92);
+    border: 2px solid #ef4444;
+    border-radius: 8px;
+    box-shadow: 0 0 24px rgba(239, 68, 68, 0.6), inset 0 0 12px rgba(239, 68, 68, 0.2);
+    padding: 8px 16px;
+    width: 380px;
+    max-width: 90vw;
+    backdrop-filter: blur(6px);
+}
+
+.boss-hud-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+}
+
+.boss-hud-icon {
+    font-size: 20px;
+}
+
+.boss-hud-meta {
+    flex: 1;
+}
+
+.boss-hud-name {
+    font-size: 13px;
+    font-weight: 900;
+    color: #fca5a5;
+    letter-spacing: 1px;
+}
+
+.boss-hud-affix {
+    font-size: 10px;
+    font-weight: 700;
+    color: #fbbf24;
+}
+
+.boss-hud-count {
+    font-size: 10px;
+    font-weight: 800;
+    color: #f87171;
+    background: rgba(239, 68, 68, 0.2);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.boss-hud-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.boss-shield-bar {
+    width: 100%;
+    height: 5px;
+    background: rgba(30, 41, 59, 0.8);
+    border-radius: 3px;
+    overflow: hidden;
+    border: 1px solid rgba(6, 182, 212, 0.5);
+}
+
+.boss-shield-fill {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, #06b6d4, #22d3ee);
+    box-shadow: 0 0 8px #06b6d4;
+    transition: width 0.15s ease-out;
+}
+
+.boss-hp-bar {
+    position: relative;
+    width: 100%;
+    height: 14px;
+    background: rgba(30, 41, 59, 0.9);
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid rgba(239, 68, 68, 0.6);
+}
+
+.boss-hp-fill {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, #dc2626, #ef4444);
+    box-shadow: 0 0 10px #ef4444;
+    transition: width 0.15s ease-out;
+}
+
+.boss-hp-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 9px;
+    font-weight: 900;
+    color: #fff;
+    text-shadow: 0 0 3px #000;
+    font-family: monospace;
+}
+
+/* Protocols & Database Tab Styling */
+.protocols-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-height: 60vh;
+    overflow-y: auto;
+    padding-right: 8px;
+}
+
+.protocol-section h3 {
+    font-size: 13px;
+    color: #38bdf8;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.protocol-section p {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+.protocol-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 8px;
+}
+
+.protocol-item {
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 6px;
+    padding: 8px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.protocol-item strong {
+    font-size: 11px;
+    color: #f8fafc;
+}
+
+.protocol-item span {
+    font-size: 10px;
+    color: #94a3b8;
+    line-height: 1.35;
+}
